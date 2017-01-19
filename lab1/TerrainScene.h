@@ -1,23 +1,20 @@
 #pragma once
 #include "Scene.h"
-
 #include "../DXFramework/SphereMesh.h"
 #include "../DXFramework/CubeMesh.h"
 #include "../DXFramework/QuadMesh.h"
 #include "../DXFramework/DoubleTriangleMesh.h"
 
 #include "ColourShader.h"
-
+#include "Terrain.h"
 #include "../DXFramework/CubeMesh.h"
 
-#include "Scene.h"
-
-class EmptyScene :
+ class TerrainScene :
 	public Scene
 {
 public:
-	EmptyScene(string sceneName);
-	~EmptyScene();
+	TerrainScene(string sceneName);
+	~TerrainScene();
 
 	/*
 	Initializes the given Scene
@@ -72,12 +69,11 @@ public:
 
 	/*
 	Scene information pop up will tell the user about the current scene
-	*/
+  	*/
 	virtual void SceneInformationPopUp(bool* is_open);
 
 private:
 	ColourShader* colourShader;
-	DoubleTriangleMesh* m_Mesh;
-
+	Terrain* terrain;
 };
 

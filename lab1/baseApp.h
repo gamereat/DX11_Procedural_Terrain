@@ -16,6 +16,7 @@
 #include "../DXFramework/Model.h"
 #include "PostProcessing.h"
 #include "EmptyScene.h"
+#include "TerrainScene.h"
 const int NUM_LIGHTS = 4;
 
 class BaseApp :	public BaseApplication
@@ -54,6 +55,7 @@ protected:
 
 private:
 
+	TerrainScene* terrainScene;
 	/*
 	The current Scene that is viewed the world
 	*/

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DXFramework", "DXFramework\DXFramework.vcxproj", "{E887C38B-1273-433A-9DAC-A153DA5CF145}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -10,9 +10,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DXFramework", "DXFramework\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTK_Desktop_2013", "DirectXTK\DirectXTK_Desktop_2013.vcxproj", "{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "procedural_methods", "procedural_methods\procedural_methods.vcxproj", "{33BE6974-518F-4F19-9894-1E6AEA0B03ED}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BaseApp", "procedural_methods\procedural_methods.vcxproj", "{33BE6974-518F-4F19-9894-1E6AEA0B03ED}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MiniIni", "MiniIni\MiniIni.vcxproj", "{AECEA20B-DFBE-4FCB-BD9A-0598CC2CC563}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lab1", "lab1\lab1.vcxproj", "{04150E23-567C-45E9-B836-FFA7F84EF4C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +64,14 @@ Global
 		{AECEA20B-DFBE-4FCB-BD9A-0598CC2CC563}.Release|Win32.Build.0 = Release|Win32
 		{AECEA20B-DFBE-4FCB-BD9A-0598CC2CC563}.Release|x64.ActiveCfg = Release|x64
 		{AECEA20B-DFBE-4FCB-BD9A-0598CC2CC563}.Release|x64.Build.0 = Release|x64
+		{04150E23-567C-45E9-B836-FFA7F84EF4C9}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{04150E23-567C-45E9-B836-FFA7F84EF4C9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{04150E23-567C-45E9-B836-FFA7F84EF4C9}.Debug|Win32.Build.0 = Debug|Win32
+		{04150E23-567C-45E9-B836-FFA7F84EF4C9}.Debug|x64.ActiveCfg = Debug|Win32
+		{04150E23-567C-45E9-B836-FFA7F84EF4C9}.Release|Any CPU.ActiveCfg = Release|Win32
+		{04150E23-567C-45E9-B836-FFA7F84EF4C9}.Release|Win32.ActiveCfg = Release|Win32
+		{04150E23-567C-45E9-B836-FFA7F84EF4C9}.Release|Win32.Build.0 = Release|Win32
+		{04150E23-567C-45E9-B836-FFA7F84EF4C9}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

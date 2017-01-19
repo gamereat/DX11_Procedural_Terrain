@@ -24,7 +24,7 @@ public:
 	~BaseMesh();
 
 	virtual void SendData(ID3D11DeviceContext*);
-	int GetIndexCount();
+	virtual int GetIndexCount();
 	ID3D11ShaderResourceView* GetTexture();
 
  
