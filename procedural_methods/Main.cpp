@@ -1,13 +1,17 @@
 // Main.cpp
 #include "../DXFramework/System.h"
 #include "BaseApp.h"
-
+#include "../ApplicationSettings.h"
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)
 {
+ 
+
+
 	BaseApp* app = new BaseApp();
 	System* m_System;
+	ApplicationSettings::Init(app);
 
-	// Create the system object.
+ 	// Create the system object.
 	m_System = new System(app);
 
 	// Initialize and run the system object.

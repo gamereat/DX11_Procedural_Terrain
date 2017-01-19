@@ -2,7 +2,7 @@
 #include "../DXFramework/RenderTexture.h"
 #include "../DXFramework/baseapplication.h"
 #include "../DXFramework/OrthoMesh.h"
-
+#include"../ApplicationSettings.h"
 #include "../DXFramework/D3D.h"
 class PostProcessingBase
 {

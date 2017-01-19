@@ -98,14 +98,14 @@ void BaseApp::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHe
 		lights[i]->SetPosition(0, 0, -4);
 		lights[i]->SetRange(255);
 
-		depthTextures[i] = new RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
+		depthTextures[i] = new RenderTexture(m_Direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
 	}
 
 
-	orthoMeshNormalScaled = new OrthoMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
-	upScaleTexture = new  RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
+	orthoMeshNormalScaled = new OrthoMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), screenWidth, screenHeight, 0, 0);
+	upScaleTexture = new  RenderTexture(m_Direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
 
-	sceneTexture = new  RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
+	sceneTexture = new  RenderTexture(m_Direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
 
 
 	postPro.Init(m_Direct3D, hwnd, m_Timer);

@@ -1,6 +1,6 @@
 //System.cpp
 #include "system.h"
-
+#include "../ApplicationSettings.h"
 
 System::System(BaseApplication* application)
 {
@@ -139,7 +139,7 @@ void System::InitializeWindows(int& screenWidth, int& screenHeight)
 	screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
 	// Setup the screen settings depending on whether it is running in full screen or in windowed mode.
-	if (FULL_SCREEN)
+	if (ApplicationSettings::isFullScreen)
 	{
 		// If full screen set the screen to maximum size of the users desktop and 32bit.
 		memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
@@ -158,8 +158,8 @@ void System::InitializeWindows(int& screenWidth, int& screenHeight)
 	else
 	{
 		// If windowed then set it to 800x600 resolution.
-		screenWidth = SCREEN_WIDTH;
-		screenHeight = SCREEN_HEIGHT;
+		screenWidth = ApplicationSettings::screenWidth;
+		screenHeight = ApplicationSettings::screenHeight;
 
 		// Place the window in the middle of the screen.
 		posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
@@ -192,7 +192,7 @@ void System::ShutdownWindows()
 	ShowCursor(true);
 
 	// Fix the display settings if leaving full screen mode.
-	if (FULL_SCREEN)
+	if (ApplicationSettings::isFullScreen)
 	{
 		ChangeDisplaySettings(NULL, 0);
 	}

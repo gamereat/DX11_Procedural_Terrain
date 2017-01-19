@@ -1,8 +1,8 @@
 #include "Scene.h"
 
 #include "../DXFramework/BaseApplication.h"
- 
 
+#include "../ApplicationSettings.h"
 
 Scene::Scene(std::string sceneName)
 {
@@ -17,7 +17,7 @@ void Scene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * deviceC
 {
 
 
-	depthTexture = new RenderTexture(device, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
+	depthTexture = new RenderTexture(device, ApplicationSettings::screenWidth, ApplicationSettings::screenHeight, ApplicationSettings::sceenNear, ApplicationSettings::screenDepth);
 
 }
 

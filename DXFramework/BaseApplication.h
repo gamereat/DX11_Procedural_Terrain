@@ -3,21 +3,15 @@
 #ifndef _BASEAPPLICATION_H_
 #define _BASEAPPLICATION_H_
 
-// Globals
-const bool FULL_SCREEN = false;
-const bool VSYNC_ENABLED = false;
-const float SCREEN_DEPTH = 200.0f;	// 1000.0f
-const float SCREEN_NEAR = 0.1f;		//0.1f
-const float SCREEN_WIDTH = 800;
-const float SCREEN_HEIGHT = 600;
+
+ 
 // Includes
 #include "input.h"
 #include "d3d.h"
 #include "camera.h"
 #include "timer.h"
 #include "../imgui/examples/directx11_example/imgui_impl_dx11.h"
-
-class BaseApplication
+ class BaseApplication
 {
 public:
 
@@ -26,6 +20,13 @@ public:
 	virtual void init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight, Input *in);
 
 	virtual bool Frame();
+	float screenWidth = 800;
+	float screenHeight = 600;
+	bool isFullScreen = false;
+	bool isVsyncEnabled = false;
+	float screenDepth = 200.0f;	// 1000.0f
+	float sceenNear = 0.1f;		//0.1f
+
 protected:
 	virtual void HandleInput(float);
 	virtual bool Render() = 0;

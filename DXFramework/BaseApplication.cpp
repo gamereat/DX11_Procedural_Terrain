@@ -48,7 +48,7 @@ void BaseApplication::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int 
 	sHeight = screenHeight;
 
 	// Create the Direct3D object.
-	m_Direct3D = new D3D(screenWidth, screenHeight, VSYNC_ENABLED, hwnd, FULL_SCREEN, SCREEN_DEPTH, SCREEN_NEAR);
+	m_Direct3D = new D3D(screenWidth, screenHeight, isVsyncEnabled, hwnd, isFullScreen, screenDepth, sceenNear);
 	// Initialize the Direct3D object.
 	if (!m_Direct3D)
 	{
@@ -259,7 +259,7 @@ void BaseApplication::OpenSubMenus()
 	if (applicationFPS)
 	{
 		// Put a fps monitor in bottom left cornor 
-		ImGui::SetNextWindowPos(ImVec2(10, SCREEN_HEIGHT -40));
+		ImGui::SetNextWindowPos(ImVec2(10, screenHeight -40));
 		if (!ImGui::Begin("Example: Fixed Overlay", &applicationFPS, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
 		{
 			ImGui::End();

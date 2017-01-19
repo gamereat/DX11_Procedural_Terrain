@@ -14,20 +14,21 @@
     <ProjectGuid>{33BE6974-518F-4F19-9894-1E6AEA0B03ED}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>E01_ColourShader</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -87,8 +88,13 @@
     <ProjectReference Include="..\DXFramework\DXFramework.vcxproj">
       <Project>{e887c38b-1273-433a-9dac-a153da5cf145}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\MiniIni\MiniIni.vcxproj">
+      <Project>{aecea20b-dfbe-4fcb-bd9a-0598cc2cc563}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\ApplicationSettings.cpp" />
+    <ClCompile Include="..\MiniIni\minIni.cpp" />
     <ClCompile Include="baseApp.cpp" />
     <ClCompile Include="ColourShader.cpp" />
     <ClCompile Include="EmptyScene.cpp" />
@@ -101,6 +107,9 @@
     <ClCompile Include="TextureShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ApplicationSettings.h" />
+    <ClInclude Include="..\MiniIni\minGlue.h" />
+    <ClInclude Include="..\MiniIni\minIni.hpp" />
     <ClInclude Include="baseApp.h" />
     <ClInclude Include="ColourShader.h" />
     <ClInclude Include="EmptyScene.h" />

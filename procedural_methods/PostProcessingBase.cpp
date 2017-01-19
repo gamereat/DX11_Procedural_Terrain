@@ -4,7 +4,7 @@
 
 PostProcessingBase::PostProcessingBase(D3D * directX3D, HWND hwnd, float downscaleValue)
 {	
-	renderTexture = new RenderTexture(directX3D->GetDevice(), SCREEN_WIDTH / downscaleValue, SCREEN_HEIGHT / downscaleValue, SCREEN_NEAR, SCREEN_DEPTH);
+	renderTexture = new RenderTexture(directX3D->GetDevice(), ApplicationSettings::screenWidth / downscaleValue, ApplicationSettings::screenHeight / downscaleValue, ApplicationSettings::sceenNear, ApplicationSettings::screenDepth);
 
 }
 
