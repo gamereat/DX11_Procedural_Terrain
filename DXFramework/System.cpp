@@ -1,6 +1,7 @@
 //System.cpp
 #include "system.h"
 #include "../ApplicationSettings.h"
+#include "../imgui/imgui.h"
 
 System::System(BaseApplication* application)
 {

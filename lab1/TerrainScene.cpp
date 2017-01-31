@@ -1,5 +1,5 @@
 #include "TerrainScene.h"
-
+#include "../imgui/imgui.h"
 
 TerrainScene::TerrainScene(string sceneName)
 	: Scene(sceneName)

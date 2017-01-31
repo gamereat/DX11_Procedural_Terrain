@@ -2,6 +2,7 @@
 // Direct3D setup
 #include "d3d.h"
  
+#include "../imgui/imgui.h"
 D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen, float screenDepth, float screenNear)
 {
 
