@@ -37,6 +37,9 @@
     <Filter Include="Header Files\IMGUI">
       <UniqueIdentifier>{eb3af1b0-43c6-4c23-9027-29d682a9e71c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Base">
+      <UniqueIdentifier>{8bdc1b5f-f789-4667-829d-81bf6d062cf9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseMesh.h">
@@ -128,6 +131,9 @@
     </ClInclude>
     <ClInclude Include="..\imgui\examples\directx11_example\imgui_impl_dx11.h">
       <Filter>Header Files\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Base\bass.h">
+      <Filter>Header Files\Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

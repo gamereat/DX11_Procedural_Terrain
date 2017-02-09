@@ -1,4 +1,5 @@
 #include "camera.h"
+#include <DirectXMath.h>
 
 Camera::Camera()
 {
@@ -73,7 +74,7 @@ void Camera::Update()
 
 	// Create the rotation matrix from the yaw, pitch, and roll values.
 	rotationMatrix = XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
-
+ 
 	// Transform the lookAt and up vector by the rotation matrix so the view is correctly rotated at the origin.
 	lookAt = XMVector3TransformCoord(lookAt, rotationMatrix);
 	up = XMVector3TransformCoord(up, rotationMatrix);

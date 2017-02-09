@@ -26,6 +26,11 @@ TerrainScene::~TerrainScene()
 		delete colourShader;
 		colourShader = 0;
 	}
+
+	tessSettings.maxDistance = 10;
+	tessSettings.maxTesselationAmmount = 6;
+	tessSettings.minDistance = 1;
+	tessSettings.minTesselationAmmount = 1;
 }
 
 void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * deviceContext)
@@ -38,6 +43,11 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
   	colourShader = new ColourShader(device, hwnd);
 	textureShader = new TextureShader(device, hwnd);
 	model = new Model(device, deviceContext, L"../res/bunny.png", L"../res/teapot.obj");
+	dbtShader = new DistanceBasedTesselation(device, hwnd);
+	sound = new Sound();
+
+	sound->Init(L"../res/BlownAway.mp3");
+
 
 }
 void TerrainScene::Update(Timer * timer)
@@ -48,7 +58,7 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 {
  
 	
-	terrain->GenerateHeightMap(device->GetDevice(), false);
+	terrain->GenerateHeightMap(device->GetDevice(), false,sound);
 
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrixs;
 
@@ -92,10 +102,17 @@ void TerrainScene::MenuOptions()
 			terrainOptions = terrainOptions ? false : true;
 
 		}
+		if (ImGui::MenuItem("Sound Settings"))
+		{
+			soundMenuOpen = soundMenuOpen ? false : true;
+
+		}
 		ImGui::EndMenu();
 
 	}
 	terrain->Settings(&terrainOptions);
+
+	sound->GUI_Menu(&soundMenuOpen);
 
 }
 

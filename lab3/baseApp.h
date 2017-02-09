@@ -18,8 +18,7 @@
 #include "EmptyScene.h"
 #include "TerrainScene.h"
 #include "../DXFramework/Model.h"
-const int NUM_LIGHTS = 4;
-
+#include "ShaderBuffers.h"
 class BaseApp :	public BaseApplication
 {
 public:

@@ -4,6 +4,7 @@
 Texture::Texture(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* filename)
 {
 	HRESULT result;
+	filename = L"../res/bunny.png";
 
 	// check if file exists
 	if (!filename)
@@ -36,16 +37,16 @@ Texture::Texture(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR
 	// Load the texture in.
 	if (extension == L"dds")
 	{
-		result = CreateDDSTextureFromFile(device, deviceContext, filename, NULL, &m_texture, 0, NULL);
+	//	result = CreateDDSTextureFromFile(device, deviceContext, filename, NULL, &m_texture, 0, NULL);
 	}
 	else
 	{
-		result = CreateWICTextureFromFile(device, deviceContext, filename, NULL, &m_texture, 0);
+	//	result = CreateWICTextureFromFile(device, deviceContext, filename, NULL, &m_texture, 0);
 	}
 	
-	if (FAILED(result))
+	//if (FAILED(result))
 	{
-		MessageBox(NULL, L"Texture loading error", L"ERROR", MB_OK);
+	//	MessageBox(NULL, L"Texture loading error", L"ERROR", MB_OK);
 	}
 }
 

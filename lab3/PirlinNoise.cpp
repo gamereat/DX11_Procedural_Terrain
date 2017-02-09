@@ -1,11 +1,11 @@
 #include "PirlinNoise.h"
 
-const double PirlinNoise::F2 = 0.5*(sqrt(3.0) - 1.0);
-const double PirlinNoise::G2 = (3.0 - sqrt(3.0)) / 6.0;
-const double PirlinNoise::F3 = 1.0 / 3.0;
-const double PirlinNoise::G3 = 1.0 / 6.0;
-const double PirlinNoise::F4 = (sqrt(5.0) - 1.0) / 4.0;
-const double PirlinNoise::G4 = (5.0 - sqrt(5.0)) / 20.0;
+double PirlinNoise::F2 = 0.5*(sqrt(3.0) - 1.0);
+double PirlinNoise::G2 = (3.0 - sqrt(3.0)) / 6.0;
+double PirlinNoise::F3 = 1.0 / 3.0;
+double PirlinNoise::G3 = 1.0 / 6.0;
+double PirlinNoise::F4 = (sqrt(5.0) - 1.0) / 4.0;
+double PirlinNoise::G4 = (5.0 - sqrt(5.0)) / 20.0;
 short PirlinNoise::perm[512];
 short PirlinNoise::permMod12[512];
 

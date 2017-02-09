@@ -56,8 +56,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>\\vmwfil01\homedrives23%24\p513692\Visual Studio 2013\Projects\Shaders\DirectXTK\Bin\Desktop_2013\Win32\Debug\DirectXT.E0B52AE7.tlog</AdditionalLibraryDirectories>
+      <AdditionalDependencies>DirectXTK.lib%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>\\vmwfil01\homedrives23%24\p513692\Visual Studio 2013\Projects\Shaders\DirectXTK\Bin\Desktop_2013\Win32\Debug\DirectXT.E0B52AE7.tlog;E:\Source\Repos\persodral\Base</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -78,6 +78,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Base\bass.h" />
     <ClInclude Include="..\imgui\examples\directx11_example\imgui_impl_dx11.h" />
     <ClInclude Include="..\imgui\imconfig.h" />
     <ClInclude Include="..\imgui\imgui.h" />

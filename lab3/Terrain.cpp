@@ -1,7 +1,7 @@
 #include "Terrain.h"
 #include <random>
 #include "../imgui/imgui.h"
-
+#include "Sound.h"
 #include "PirlinNoise.h"
  
 Terrain::Terrain(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, int resolution)
@@ -77,7 +77,7 @@ bool Terrain::InitializeTerrain(ID3D11Device* device, int terrainWidth, int terr
 	return true;
 }
 
-bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown)
+bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* sound)
 {
 
 	bool result;
@@ -95,14 +95,15 @@ bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown)
 
 		if (usingPerlinNoise)
 		{
-			GeneratePelinNoise(device);
+			GeneratePelinNoise(device,sound);
 		}	else if (usingHightField)
 		{
-			GenerateHieghtField(device);
+			GenerateHieghtField(device,sound);
  
 		}
 		else if(usingWaves)
 		{
+
 			for (int j = 0; j < terrainHeight; j++)
 			{
 				for (int i = 0; i < terrainWidth; i++)
@@ -110,8 +111,7 @@ bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown)
 					index = (terrainHeight * j) + i;
 
 					heightMap[index].x = (float)i;
-
-
+					 
 					switch (yAxisWaveSettings.waveType)
 					{
 					case waveSettings::sin:
@@ -167,8 +167,7 @@ void Terrain::InitBuffers(ID3D11Device* device)
 	// Set the index count to the same as the vertex count.
 	m_indexCount = m_vertexCount;
 
-	// Create the vertex array.
-	vertices = new VertexType[m_vertexCount];
+	// Create the vertex array.	vertices = new VertexType[m_vertexCount];
 
 	// Create the index array.
 	indices = new unsigned long[m_indexCount];
@@ -334,13 +333,23 @@ void Terrain::Settings(bool* is_open)
 
 		if (usingPerlinNoise)
 		{
+			ImGui::Separator();
+
+			float f2 = (float)PirlinNoise::get_SkewingFactor_2D();
+			float g2 = (float)PirlinNoise::get_unSkewingFactor_2D();
+
+			ImGui::SliderFloat("Skew Factor", &f2, 0.0f, 1.0f);
+
+				ImGui::SliderFloat("unSkew Factor", &g2, 0.0f, 1.0f);
+				ImGui::SliderFloat("Height Scale", &perlinNoiseHeightRange, 0.0f, 20.0f);
+				
+
+			PirlinNoise::set_SkewingFactor_2D(f2);
+			PirlinNoise::set_unSkewingFactor_2D(g2);
 
 		}
 
-		if (generateTerrain && (usingPerlinNoise || usingHightField))
-		{
-			terrainNeedReGeneration = ImGui::SmallButton("ReGen height field");
-		}
+	
 		if (generateTerrain && !usingPerlinNoise)
 		{
 			ImGui::Checkbox("Enable use of Hight Field", &usingHightField);
@@ -349,29 +358,27 @@ void Terrain::Settings(bool* is_open)
 		{	
 			ImGui::Separator();
 
-		//	ImGui::DragFloat("Maxium Height Field", &heightFieldMaxHight);
+			ImGui::DragFloat("Maxium Height Field", &heightFieldMaxHight);
 
 			ImGui::Separator();
 
-		}
-		else
-		{
-
-
-			/*const char* items[] = { "Sin", "Cos", "Tan" };
+			const char* items[] = { "Sin", "Cos", "Tan" };
 
 			int waveType = (int)yAxisWaveSettings.waveType;
 			ImGui::Separator();
 			ImGui::Text("Y-Axis Settings");
 			ImGui::Combo("Wave Type", &waveType, items, IM_ARRAYSIZE(items));
 
-			ImGui::SameLine();
 			ImGui::DragFloat("Amplitude", &yAxisWaveSettings.amplitude);
-			ImGui::SameLine();
 			ImGui::DragFloat("Period", &yAxisWaveSettings.period);
 			ImGui::Separator();
-			yAxisWaveSettings.waveType = (waveSettings::WaveType)waveType;*/
+			yAxisWaveSettings.waveType = (waveSettings::WaveType)waveType;
+		}
+ 
 
+		if (generateTerrain && (usingPerlinNoise || usingHightField))
+		{
+			terrainNeedReGeneration = ImGui::SmallButton("ReGen height field");
 		}
 		ImGui::End();
 
@@ -494,10 +501,12 @@ void Terrain::NormalizeHeightMap()
 	return;
 }
 
-void Terrain::GenerateHieghtField(ID3D11Device* device)
+void Terrain::GenerateHieghtField(ID3D11Device* device,Sound * sound)
 {
-	if (terrainNeedReGeneration)
+	//if (terrainNeedReGeneration)
 	{
+
+	
 		int index = 0;
 		std::random_device rd;
 		std::mt19937 gen(rd());
@@ -511,7 +520,7 @@ void Terrain::GenerateHieghtField(ID3D11Device* device)
 				index = (this->terrainHeight * j) + i;
 
 				this->heightMap[index].x = (float)i;
-				this->heightMap[index].y = (float)dis(gen);
+				this->heightMap[index].y = (float)dis(gen) * heightFieldMaxHight;
 				this->heightMap[index].z = (float)j;
 
 			}
@@ -521,17 +530,16 @@ void Terrain::GenerateHieghtField(ID3D11Device* device)
 	}
 }
 
-void Terrain::GeneratePelinNoise(ID3D11Device* device)
+void Terrain::GeneratePelinNoise(ID3D11Device* device, Sound * sound)
 {
-	if (terrainNeedReGeneration)
-	{
-
 	
+
+	float* f ;
+	f = sound->getData(BASS_DATA_FFT1024 | BASS_DATA_FFT_INDIVIDUAL | BASS_DATA_FLOAT, 1024);
+
 	 
 		int index = 0;
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::uniform_real_distribution<> dis(0, heightFieldMaxHight);
+
 
 		// Initialise the data in the height map (flat).
 		for (int j = 0; j < this->terrainHeight; j++)
@@ -543,15 +551,16 @@ void Terrain::GeneratePelinNoise(ID3D11Device* device)
 				this->heightMap[index].x = (float)i;
 
 				double pelinNoise = PirlinNoise::noise(j, i);
-				this->heightMap[index].y = (float)pelinNoise * 1;
+				this->heightMap[index].y = (float)pelinNoise * perlinNoiseHeightRange *f[i + j];
 				this->heightMap[index].z = (float)j;
 
 			}
 		}
 		InitBuffers(device);
 
-
-	}
+		delete[] f;
+		f =  0;
+	
 }
 
  

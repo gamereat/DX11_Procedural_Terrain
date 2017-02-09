@@ -4,8 +4,8 @@
 
 #include <math.h>
 // Inner class to speed upp gradient computations
-	// (In Java, array access is a lot slower than member access)
-	class Grad
+
+class Grad
 	{
 	public:
 		double x, y, z, w;
@@ -41,6 +41,25 @@ public:
 	static double noise(double xin, double yin);
 	static double noise(double x, double y, double z, double w);
 
+	static inline void set_SkewingFactor_2D(double skewFator) { F2 = skewFator; };
+	static inline void set_SkewingFactor_3D(double skewFator) { F3 = skewFator; };
+	static inline void set_SkewingFactor_4D(double skewFator) { F4 = skewFator; };
+
+
+	static inline double get_SkewingFactor_2D() { return F2; };
+	static inline double get_SkewingFactor_3D() { return F3; };
+	static inline double get_SkewingFactor_4D() { return F4; };
+
+
+
+	static inline void set_unSkewingFactor_2D(double unskewFator) { G2 = unskewFator; };
+	static inline void set_unSkewingFactor_3D(double unskewFator) { G3 = unskewFator; };
+	static inline void set_unSkewingFactor_4D(double unskewFator) { G4 = unskewFator; };
+
+
+	static inline double get_unSkewingFactor_2D() { return G2; };
+	static inline double get_unSkewingFactor_3D() { return G3; };
+	static inline double get_unSkewingFactor_4D() { return G4; };
 private:
 	static Grad grad3[12];
 	static Grad grad4[32];
@@ -62,12 +81,12 @@ private:
 	static short permMod12[512];
  
 	// Skewing and unskewing factors for 2, 3, and 4 dimensions
-	static  const double F2 ;
-	static const double G2 ;
-	static const double F3 ;
-	static const double G3 ;
-	static const double F4;
-	static const double G4;
+	static double F2 ;
+	static double G2 ;
+	static double F3 ;
+	static double G3 ;
+	static double F4;
+	static double G4;
 
 
 

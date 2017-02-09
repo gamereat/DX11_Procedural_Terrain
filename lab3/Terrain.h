@@ -38,7 +38,7 @@ public:
 	~Terrain();
 	bool CalculateNormals();
 	bool InitializeTerrain(ID3D11Device*, int terrainWidth, int terrainHeight);
-	bool GenerateHeightMap(ID3D11Device* device, bool keydown);
+ 	bool GenerateHeightMap(ID3D11Device * device, bool keydown, class Sound * sound);
 	void InitBuffers(ID3D11Device * device);
  	void SendData(ID3D11DeviceContext* deviceContext);
 	void Settings(bool* is_open);
@@ -46,16 +46,19 @@ private:
 	bool LoadHeightMap(char*);
 	void NormalizeHeightMap();
 
-	void GenerateHieghtField(ID3D11Device * device);
+	void GenerateHieghtField(ID3D11Device * device, Sound * sound);
 
-	void GeneratePelinNoise(ID3D11Device * device);
+	void GeneratePelinNoise(ID3D11Device * device, Sound * sound);
 
+
+ 
    
 private:
 
 	bool usingWaves;
 	bool usingPerlinNoise;
 	float heightFieldMaxHight;
+	float perlinNoiseHeightRange;
 	bool usingHightField;
 	bool terrainNeedReGeneration;
 	bool generateTerrain;

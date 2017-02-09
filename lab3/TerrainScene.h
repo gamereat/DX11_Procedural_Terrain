@@ -9,7 +9,9 @@
 #include "Terrain.h"
 #include "../DXFramework/CubeMesh.h"
 #include "TextureShader.h"
+#include "DistanceBasedTesselation.h"
 #include "../DXFramework/Model.h"
+#include "Sound.h"
  class TerrainScene :
 	public Scene
 {
@@ -74,6 +76,10 @@ public:
 	virtual void SceneInformationPopUp(bool* is_open);
 
 private:
+	bool soundMenuOpen;
+	Sound* sound;
+	TessellationBufferType tessSettings;
+	DistanceBasedTesselation* dbtShader;
 	Model* model;
 	TextureShader* textureShader;
 	ColourShader* colourShader;
