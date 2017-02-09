@@ -168,7 +168,7 @@ void Terrain::InitBuffers(ID3D11Device* device)
 	m_indexCount = m_vertexCount;
 
 	// Create the vertex array.	vertices = new VertexType[m_vertexCount];
-
+	vertices = new VertexType[m_indexCount];
 	// Create the index array.
 	indices = new unsigned long[m_indexCount];
 
