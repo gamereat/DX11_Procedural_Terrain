@@ -18,6 +18,7 @@
 #include "EmptyScene.h"
 #include "TerrainScene.h"
 #include "../DXFramework/Model.h"
+#include "RoadScene.h"
 #include "ShaderBuffers.h"
 class BaseApp :	public BaseApplication
 {
@@ -54,6 +55,9 @@ protected:
 
 
 private:
+
+
+	RoadScene* roadScene;
 
 	Model* model;
 

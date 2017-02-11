@@ -71,6 +71,8 @@
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="LSystem.cpp" />
+    <ClCompile Include="RoadScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseApp.h">
@@ -125,6 +127,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RoadScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

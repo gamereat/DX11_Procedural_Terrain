@@ -46,7 +46,17 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	dbtShader = new DistanceBasedTesselation(device, hwnd);
 	sound = new Sound();
 
-	sound->Init(L"../res/BlownAway.mp3");
+	//sound->Init(L"../res/BlownAway.mp3");
+	std::unordered_map<char, LShapedConstant> constants;
+
+	std::unordered_map<char, std::string> d{
+		{ '1',"11" },
+	{'0',"1[0]0"}
+	
+	};
+	lsystem.loadSystem(constants, d);
+
+std::string f =	lsystem.recustionValues("0", 3);
 
 
 }

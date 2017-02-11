@@ -12,6 +12,7 @@
 #include "DistanceBasedTesselation.h"
 #include "../DXFramework/Model.h"
 #include "Sound.h"
+#include "LSystem.h"
  class TerrainScene :
 	public Scene
 {
@@ -76,6 +77,8 @@ public:
 	virtual void SceneInformationPopUp(bool* is_open);
 
 private:
+
+	LSystem lsystem;
 	bool soundMenuOpen;
 	Sound* sound;
 	TessellationBufferType tessSettings;
