@@ -22,6 +22,7 @@ class Terrain :	public PlaneMesh
 
 		
 	};
+
 private:
 	struct HeightMapType
 	{
@@ -49,12 +50,15 @@ private:
 	void GenerateHieghtField(ID3D11Device * device, Sound * sound);
 
 	void GeneratePelinNoise(ID3D11Device * device, Sound * sound);
+	void GenerateFBmNoise(ID3D11Device * device, Sound * sound);
 
 
  
    
 private:
-
+	int octaves;
+	bool useFBm;
+	bool useMusicData;
 	bool usingWaves;
 	bool usingPerlinNoise;
 	float heightFieldMaxHight;

@@ -73,6 +73,7 @@
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="LSystem.cpp" />
     <ClCompile Include="RoadScene.cpp" />
+    <ClCompile Include="FractionalBrownianMotion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseApp.h">
@@ -135,6 +136,9 @@
     <ClInclude Include="RoadScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FractionalBrownianMotion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\colour_ps.hlsl">
@@ -153,6 +157,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\distanceBasedTesselation_hs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\noise_vs.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

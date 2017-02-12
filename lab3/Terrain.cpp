@@ -3,7 +3,7 @@
 #include "../imgui/imgui.h"
 #include "Sound.h"
 #include "PirlinNoise.h"
- 
+#include "FractionalBrownianMotion.h"
 Terrain::Terrain(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, int resolution)
 : PlaneMesh(device, deviceContext, textureFilename, resolution)
 {
@@ -135,6 +135,10 @@ bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* soun
 
 			InitBuffers(device);
 
+		}
+		else if (useFBm)
+		{
+			GenerateFBmNoise(device, sound);
 		}
 		// Initialize the vertex and index buffer that hold the geometry for the terrain.
 	 
@@ -324,61 +328,102 @@ void Terrain::Settings(bool* is_open)
 
 		if (generateTerrain)
 		{
-			if (ImGui::Checkbox("Use Pelin Noise", &usingPerlinNoise))
+			if (!usingHightField && !usingWaves && !useFBm)
 			{
-				terrainNeedReGeneration = true;
+				ImGui::Checkbox("Use Pelin Noise", &usingPerlinNoise);
+
+			}
+			 if (!usingHightField && !usingWaves && !usingPerlinNoise)
+			{
+				ImGui::Checkbox("Use FBm Noise", &useFBm);
+
+			}
+			if (!usingHightField && !useFBm && !usingPerlinNoise)
+			{
+				ImGui::Checkbox("Use waves Noise", &usingWaves);
+
 			}
 
-		}
+			if (!useFBm && !usingWaves && !usingPerlinNoise)
+			{
+				ImGui::Checkbox("Use random height", &usingHightField);
 
-		if (usingPerlinNoise)
-		{
+			}
+
+
 			ImGui::Separator();
 
-			float f2 = (float)PirlinNoise::get_SkewingFactor_2D();
-			float g2 = (float)PirlinNoise::get_unSkewingFactor_2D();
+			if (usingPerlinNoise)
+			{
 
-			ImGui::SliderFloat("Skew Factor", &f2, 0.0f, 1.0f);
+
+				float f2 = (float)PirlinNoise::get_SkewingFactor_2D();
+				float g2 = (float)PirlinNoise::get_unSkewingFactor_2D();
+
+				ImGui::SliderFloat("Skew Factor", &f2, 0.0f, 1.0f);
 
 				ImGui::SliderFloat("unSkew Factor", &g2, 0.0f, 1.0f);
 				ImGui::SliderFloat("Height Scale", &perlinNoiseHeightRange, 0.0f, 20.0f);
-				
 
-			PirlinNoise::set_SkewingFactor_2D(f2);
-			PirlinNoise::set_unSkewingFactor_2D(g2);
 
-		}
+				PirlinNoise::set_SkewingFactor_2D(f2);
+				PirlinNoise::set_unSkewingFactor_2D(g2);
 
-	
-		if (generateTerrain && !usingPerlinNoise)
-		{
-			ImGui::Checkbox("Enable use of Hight Field", &usingHightField);
-		}
-		if (usingHightField)
-		{	
-			ImGui::Separator();
+			}
+			else if (usingWaves)
+			{
 
-			ImGui::DragFloat("Maxium Height Field", &heightFieldMaxHight);
+				ImGui::DragFloat("Maxium Height Field", &heightFieldMaxHight);
 
-			ImGui::Separator();
+				ImGui::Separator();
 
-			const char* items[] = { "Sin", "Cos", "Tan" };
+				const char* items[] = { "Sin", "Cos", "Tan" };
 
-			int waveType = (int)yAxisWaveSettings.waveType;
-			ImGui::Separator();
-			ImGui::Text("Y-Axis Settings");
-			ImGui::Combo("Wave Type", &waveType, items, IM_ARRAYSIZE(items));
+				int waveType = (int)yAxisWaveSettings.waveType;
+				ImGui::Separator();
+				ImGui::Text("Y-Axis Settings");
+				ImGui::Combo("Wave Type", &waveType, items, IM_ARRAYSIZE(items));
 
-			ImGui::DragFloat("Amplitude", &yAxisWaveSettings.amplitude);
-			ImGui::DragFloat("Period", &yAxisWaveSettings.period);
-			ImGui::Separator();
-			yAxisWaveSettings.waveType = (waveSettings::WaveType)waveType;
-		}
+				ImGui::DragFloat("Amplitude", &yAxisWaveSettings.amplitude);
+				ImGui::DragFloat("Period", &yAxisWaveSettings.period);
+				ImGui::Separator();
+				yAxisWaveSettings.waveType = (waveSettings::WaveType)waveType;
+			}
+			else if (heightFieldMaxHight)
+			{
+				ImGui::DragFloat("Maxium Height Field", &heightFieldMaxHight);
+
+			}
+			else if (useFBm)
+			{
+
+				float amp = (float)FractionalBrownianMotion::get_amplitude();
+				float freq = (float)FractionalBrownianMotion::get_frequency();
+				float lacunarity = (float)FractionalBrownianMotion::get_lacunarity();
+				float persistence = (float)FractionalBrownianMotion::get_persistence();
+ 
+				ImGui::SliderFloat("amplitude", &amp, 0.0f, 10.0f);
+				ImGui::SliderFloat("freqancy", &freq, 0.0f, 10.0f);
+				ImGui::SliderFloat("lacunarity", &lacunarity, 0.0f, 10.0f);
+				ImGui::SliderFloat("persistence", &persistence, 0.0f, 10.0f);
+
  
 
-		if (generateTerrain && (usingPerlinNoise || usingHightField))
-		{
-			terrainNeedReGeneration = ImGui::SmallButton("ReGen height field");
+				FractionalBrownianMotion::set_amplitude(amp);
+				FractionalBrownianMotion::set_frequency(freq);
+				FractionalBrownianMotion::set_lacunarity(lacunarity);
+				FractionalBrownianMotion::set_persistence(persistence);
+				
+
+
+				ImGui::SliderInt("Octaves", &octaves, 0, 100);			
+				ImGui::SliderFloat("Height Scale", &perlinNoiseHeightRange, 0.0f, 20.0f);
+
+			}
+			if (generateTerrain && (usingPerlinNoise || usingHightField))
+			{
+				terrainNeedReGeneration = ImGui::SmallButton("ReGen height field");
+			}	
 		}
 		ImGui::End();
 
@@ -532,11 +577,12 @@ void Terrain::GenerateHieghtField(ID3D11Device* device,Sound * sound)
 
 void Terrain::GeneratePelinNoise(ID3D11Device* device, Sound * sound)
 {
-	
+			float* f = NULL;
 
-	float* f ;
-	f = sound->getData(BASS_DATA_FFT1024 | BASS_DATA_FFT_INDIVIDUAL | BASS_DATA_FLOAT, 1024);
-
+	if (useMusicData)
+	{
+		f = sound->getData(BASS_DATA_FFT1024 | BASS_DATA_FFT_INDIVIDUAL | BASS_DATA_FLOAT, 1024);
+	}
 	 
 		int index = 0;
 
@@ -551,7 +597,16 @@ void Terrain::GeneratePelinNoise(ID3D11Device* device, Sound * sound)
 				this->heightMap[index].x = (float)i;
 
 				double pelinNoise = PirlinNoise::noise(j, i);
-				this->heightMap[index].y = (float)pelinNoise * perlinNoiseHeightRange *f[i + j];
+				if (useMusicData)
+				{
+					this->heightMap[index].y = (float)pelinNoise * perlinNoiseHeightRange *f[i + j];
+				}
+				else
+				{
+					this->heightMap[index].y = (float)pelinNoise * perlinNoiseHeightRange;
+
+				}
+				
 				this->heightMap[index].z = (float)j;
 
 			}
@@ -561,6 +616,48 @@ void Terrain::GeneratePelinNoise(ID3D11Device* device, Sound * sound)
 		delete[] f;
 		f =  0;
 	
+}
+
+void Terrain::GenerateFBmNoise(ID3D11Device * device, Sound * sound)
+{
+	float* f = NULL;
+
+	if (useMusicData)
+	{
+		f = sound->getData(BASS_DATA_FFT1024 | BASS_DATA_FFT_INDIVIDUAL | BASS_DATA_FLOAT, 1024);
+	}
+
+	int index = 0;
+
+
+	// Initialise the data in the height map (flat).
+	for (int j = 0; j < this->terrainHeight; j++)
+	{
+		for (int i = 0; i < this->terrainWidth; i++)
+		{
+			index = (this->terrainHeight * j) + i;
+
+			this->heightMap[index].x = (float)i;
+
+			double fbm = FractionalBrownianMotion::FBm(i,j, octaves);
+			if (useMusicData)
+			{
+				this->heightMap[index].y = (float)fbm * perlinNoiseHeightRange *f[i + j];
+			}
+			else
+			{
+				this->heightMap[index].y = (float)fbm * perlinNoiseHeightRange;
+
+			}
+
+			this->heightMap[index].z = (float)j;
+
+		}
+	}
+	InitBuffers(device);
+
+	delete[] f;
+	f = 0;
 }
 
  

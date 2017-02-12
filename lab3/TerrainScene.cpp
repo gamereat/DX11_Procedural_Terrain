@@ -93,9 +93,9 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 	//// Send geometry data (from mesh)
 	terrain->SendData(device->GetDeviceContext());
 	//// Set shader parameters (matrices and texture)
-	textureShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture());
+	colourShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix );
 	//// Render object (combination of mesh geometry and shader process
-	textureShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
+	colourShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
 
 	device->SetBackBufferRenderTarget();
 
