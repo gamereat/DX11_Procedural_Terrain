@@ -20,6 +20,7 @@
 #include "../DXFramework/Model.h"
 #include "RoadScene.h"
 #include "ShaderBuffers.h"
+#include "Sound.h"
 class BaseApp :	public BaseApplication
 {
 public:
@@ -114,5 +115,10 @@ private:
 	Used to create a empty scene
 	*/
 	EmptyScene* emptyScene;
+
+	/*
+	Sound system used across the application
+	*/
+	Sound* sound;
 };
 

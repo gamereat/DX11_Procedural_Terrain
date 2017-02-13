@@ -27,9 +27,9 @@ EmptyScene::~EmptyScene()
 	}
 }
 
-void EmptyScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * deviceContext)
+void EmptyScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * deviceContext, Sound * sound)
 {
-	Scene::Init(hwnd, device, deviceContext);
+	Scene::Init(hwnd, device, deviceContext,sound);
 
 	// Create Mesh object
 	m_Mesh = new DoubleTriangleMesh(device, deviceContext, L"../res/DefaultDiffuse.png");

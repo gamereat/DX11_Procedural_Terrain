@@ -21,7 +21,7 @@ Terrain::Terrain(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR
 	yAxisWaveSettings.period = 1;
 	zAxisWaveSettings.period = 1;
 
-
+	octaves = 1;
 
 	xAxisWaveSettings.waveType = waveSettings::WaveType::cos;
 	yAxisWaveSettings.waveType = waveSettings::WaveType::cos;
@@ -80,6 +80,13 @@ bool Terrain::InitializeTerrain(ID3D11Device* device, int terrainWidth, int terr
 bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* sound)
 {
 
+	if (terrainNeedReGeneration)
+	{
+		terrainNeedReGeneration = false;
+		InitBuffers(device);
+
+	}
+
 	bool result;
 	//the toggle is just a bool that I use to make sure this is only called ONCE when you press a key
 	//until you release the key and start again. We dont want to be generating the terrain 500
@@ -133,8 +140,7 @@ bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* soun
 				}
 			}
 
-			InitBuffers(device);
-
+ 
 		}
 		else if (useFBm)
 		{
@@ -420,9 +426,15 @@ void Terrain::Settings(bool* is_open)
 				ImGui::SliderFloat("Height Scale", &perlinNoiseHeightRange, 0.0f, 20.0f);
 
 			}
-			if (generateTerrain && (usingPerlinNoise || usingHightField))
+			if (generateTerrain && (usingPerlinNoise || usingHightField || useFBm))
 			{
-				terrainNeedReGeneration = ImGui::SmallButton("ReGen height field");
+
+				if (ImGui::SmallButton("ReGen height field"))
+				{
+					terrainNeedReGeneration =true ;
+					
+
+				}
 			}	
 		}
 		ImGui::End();
@@ -570,8 +582,7 @@ void Terrain::GenerateHieghtField(ID3D11Device* device,Sound * sound)
 
 			}
 		}
-		InitBuffers(device);
-
+ 
 	}
 }
 
@@ -611,8 +622,7 @@ void Terrain::GeneratePelinNoise(ID3D11Device* device, Sound * sound)
 
 			}
 		}
-		InitBuffers(device);
-
+ 
 		delete[] f;
 		f =  0;
 	
@@ -654,7 +664,6 @@ void Terrain::GenerateFBmNoise(ID3D11Device * device, Sound * sound)
 
 		}
 	}
-	InitBuffers(device);
 
 	delete[] f;
 	f = 0;

@@ -4,6 +4,7 @@
 #include "../DXFramework/D3D.h"
 #include "../DXFramework/Camera.h"
 #include "../DXFramework/Timer.h"
+#include "Sound.h"
 /*
 A base scene interface to allow for different scene to be loaded
 */
@@ -25,7 +26,7 @@ public:
 	@param deviceContext	The directx11 device Context
 
 	*/
-	virtual void Init(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext);
+	virtual void Init(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext,	Sound* sound);
 
 	/*
 	Updates the current scene 
@@ -74,7 +75,8 @@ public:
 	
 protected:
  
-
+	Sound* sound;
+	
 
 	/*
 	Scene information pop up will tell the user about the current scene 

@@ -24,7 +24,7 @@ double FractionalBrownianMotion::FBm(float x, float y, int octaves)
 	float frequency = FractionalBrownianMotion::frequency;
 	float amplitude = FractionalBrownianMotion::amplitude;
 
-	for (size_t i = 0; i < octaves; i++) {
+	for (int i = 0; i < octaves; i++) {
 		output += (amplitude * PirlinNoise::noise(x * frequency, y * frequency));
 		denom += amplitude; 
 

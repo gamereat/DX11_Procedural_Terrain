@@ -33,16 +33,16 @@ TerrainScene::~TerrainScene()
 	tessSettings.minTesselationAmmount = 1;
 }
 
-void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * deviceContext)
+void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * deviceContext,Sound* sound)
 {
-	Scene::Init(hwnd, device, deviceContext);
+	Scene::Init(hwnd, device, deviceContext, sound);
 
 	// Create Mesh object
 	terrain = new Terrain(device, deviceContext, L"../res/bunny.png");
-	terrain->InitializeTerrain(device, 100, 100);
+ 	terrain->InitializeTerrain(device, 100, 100);
   	colourShader = new ColourShader(device, hwnd);
 	textureShader = new TextureShader(device, hwnd);
-	model = new Model(device, deviceContext, L"../res/bunny.png", L"../res/teapot.obj");
+ 	model = new Model(device, deviceContext, L"../res/bunny.png", L"../res/teapot.obj");
 	dbtShader = new DistanceBasedTesselation(device, hwnd);
 	sound = new Sound();
 
@@ -93,9 +93,9 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 	//// Send geometry data (from mesh)
 	terrain->SendData(device->GetDeviceContext());
 	//// Set shader parameters (matrices and texture)
-	colourShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix );
+	textureShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix,terrain->GetTexture() );
 	//// Render object (combination of mesh geometry and shader process
-	colourShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
+	textureShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
 
 	device->SetBackBufferRenderTarget();
 

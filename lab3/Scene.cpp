@@ -13,13 +13,12 @@ Scene::~Scene()
 {
 }
 
-void Scene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * deviceContext)
-{
-
-
-	depthTexture = new RenderTexture(device, ApplicationSettings::screenWidth, ApplicationSettings::screenHeight, ApplicationSettings::sceenNear, ApplicationSettings::screenDepth);
-
+void Scene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * deviceContext, Sound * sound)
+{	depthTexture = new RenderTexture(device, ApplicationSettings::screenWidth, ApplicationSettings::screenHeight, ApplicationSettings::sceenNear, ApplicationSettings::screenDepth);
+	this-> sound = sound;
 }
+
+ 
 
 void Scene::ResetLights(Light* lights[])
 {

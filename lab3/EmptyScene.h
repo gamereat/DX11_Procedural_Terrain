@@ -27,7 +27,7 @@ public:
 	@param deviceContext	The directx11 device Context
 
 	*/
-	void Init(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext);
+	virtual void Init(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext, Sound* sound);
 
 	/*
 	Updates the current scene

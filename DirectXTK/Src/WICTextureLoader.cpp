@@ -1068,6 +1068,7 @@ HRESULT DirectX::CreateWICTextureFromFileEx( ID3D11Device* d3dDevice,
 
     // Initialize WIC
     ComPtr<IWICBitmapDecoder> decoder;
+
     HRESULT hr = pWIC->CreateDecoderFromFilename( fileName, 0, GENERIC_READ, WICDecodeMetadataCacheOnDemand, decoder.GetAddressOf() );
     if ( FAILED(hr) )
         return hr;

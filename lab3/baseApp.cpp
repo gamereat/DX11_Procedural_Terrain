@@ -90,11 +90,18 @@ void BaseApp::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHe
 	// Call super init function (required!)
 	BaseApplication::init(hinstance, hwnd, screenWidth, screenHeight, in);
  
+
+	sound = new Sound();
 	terrainScene = new TerrainScene("Terrain Scene");
-	terrainScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext());
-	
+	terrainScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(),sound);
+	 
+	 
+
 	emptyScene = new EmptyScene("Empty Scene");
-	emptyScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext());
+	emptyScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), sound);
+	roadScene = new RoadScene("Road Sceme");
+	roadScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), sound);
+
 	textureShader = new TextureShader(m_Direct3D->GetDevice(), hwnd);
 
 	// Initialize lights and depth texture 
@@ -119,12 +126,8 @@ void BaseApp::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHe
 
 
 	postPro.Init(m_Direct3D, hwnd, m_Timer);
-
-
-	roadScene = new RoadScene("Road Sceme");
-	roadScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext());
 	// set starting scene to be terrain scene
-	currentScene = roadScene;
+	currentScene = terrainScene;
 
 	// set my lights up correcntly for current scene
 	currentScene->ResetLights(lights);

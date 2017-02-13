@@ -11,16 +11,13 @@ RoadScene::RoadScene(string sceneName)
 RoadScene::~RoadScene()
 {
 }
-void RoadScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * deviceContext)
+void RoadScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * deviceContext, Sound * sound)
 {
-	Scene::Init(hwnd, device, deviceContext);
+	Scene::Init(hwnd, device, deviceContext, sound);
 
 	// Create Mesh object
  	colourShader = new ColourShader(device, hwnd); 
-	sound = new Sound();
-
-	sound->Init(L"../res/BlownAway.mp3");
-
+ 
 	std::unordered_map<char, LShapedConstant> constants;
 
 	std::unordered_map<char, std::string> d{
@@ -32,8 +29,10 @@ void RoadScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * dev
 	interations = 5;
 	 rule = lsystem.recustionValues("F", interations);
 
-	cube = new CubeMesh(device, deviceContext, L"../res/bunny.png");
+ 	cube = new CubeMesh(device, deviceContext, L"../res/bunny.png");
 }
+
+
 
 void RoadScene::Update(Timer * timer)
 {
