@@ -124,7 +124,7 @@ void BaseApp::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHe
 	roadScene = new RoadScene("Road Sceme");
 	roadScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext());
 	// set starting scene to be terrain scene
-	currentScene = terrainScene;
+	currentScene = roadScene;
 
 	// set my lights up correcntly for current scene
 	currentScene->ResetLights(lights);

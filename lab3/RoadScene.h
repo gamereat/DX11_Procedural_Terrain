@@ -7,6 +7,11 @@
 #include "../DXFramework/QuadMesh.h"
 #include "../DXFramework/PointMesh.h"
 #include "../DXFramework/DoubleTriangleMesh.h"
+#include "../DirectXTK/Inc/PrimitiveBatch.h"
+#include "../DirectXTK/Inc/VertexTypes.h"
+#include "../DirectXTK/Inc/Effects.h"
+#include "../DirectXTK/Inc/CommonStates.h"
+#include "../DirectXTK/Inc/DirectXHelpers.h"
 
 #include "ColourShader.h"
 #include "Terrain.h"
@@ -16,6 +21,8 @@
 #include "../DXFramework/Model.h"
 #include "Sound.h"
  #include "LSystem.h"
+using namespace DirectX;
+
 class RoadScene :
 	public Scene
 {
@@ -81,12 +88,15 @@ public:
 	virtual void SceneInformationPopUp(bool* is_open);
 
 private:
+
+	 int a;
 	LSystem lsystem;
 	Sound* sound;
 	ColourShader* colourShader;
-	
+	std::string rule;
+	CubeMesh* cube;
 	int interations;
-
+	std::unique_ptr<PrimitiveBatch< VertexPositionColor>> primitiveBatch;
 	std::vector<PointMesh*> points;
 };
 

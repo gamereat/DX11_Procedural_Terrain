@@ -8,7 +8,6 @@ RoadScene::RoadScene(string sceneName)
 {
 }
 
-
 RoadScene::~RoadScene()
 {
 }
@@ -25,29 +24,24 @@ void RoadScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * dev
 	std::unordered_map<char, LShapedConstant> constants;
 
 	std::unordered_map<char, std::string> d{
-		{ 'A', "AB" },
-		{ 'B', "A" }
-
+		{ 'F', "F+F-F-F+F" },
+ 
 	};
 	lsystem.loadSystem(constants, d);
 
-	std::string f = lsystem.recustionValues("A-B", 3);
-		
-	for (int i = 0;i < 10; i++)
-	{
-		 
-			PointMesh * sm = new PointMesh(device, deviceContext, L"../res/bunny.png");
-		points.push_back(sm);
-	}
+	interations = 5;
+	 rule = lsystem.recustionValues("F", interations);
 
+	cube = new CubeMesh(device, deviceContext, L"../res/bunny.png");
 }
 
 void RoadScene::Update(Timer * timer)
 {
 	static float time = 0;
-	if (time > 10)
+	if (time > 1)
 	{
-		interations++;
+		time = 0;
+		//interations++;
 	}
 	else
 	{
@@ -72,40 +66,61 @@ void RoadScene::Render(RenderTexture * renderTexture, D3D * device, Camera * cam
 	device->GetWorldMatrix(worldMatrix);
 	camera->GetViewMatrix(viewMatrix);
 	device->GetProjectionMatrix(projectionMatrix);
-
-	interations = 4;
-		//	worldMatrix = XMMatrixScaling(0.1, 0.1, 0.1);
-
-	std::string rule = lsystem.recustionValues("A", interations);
-	int a = 0;
-	int b = 0;
-	for (auto itr : rule)
+ 
+ 
+	 
+	int g = 0;
+	  int b = 0;
+ 	for (auto itr : rule)
 	{
- 		if (itr == 'B')
+ 		if (itr == '+')
 		{
-			b++;
-			worldMatrix = XMMatrixTranslation(-100*b, 0, 0);
+			a++;
+ 		//	worldMatrix = worldMatrix *XMMatrixTranslation(0, 10 * a, 0);
 
  		}
 		if (itr == '-')
 		{
-			worldMatrix = XMMatrixTranslation(0, -100, 0);
-		}
-		if (itr == 'A')
-		{				
-			a++;
+			a--;
 
-			points[a]->SendData(device->GetDeviceContext());
-			colourShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix);
-			colourShader->Render(device->GetDeviceContext(), points[a]->GetIndexCount());
+			//worldMatrix = worldMatrix * XMMatrixTranslation(0,10 *a, 0);
 		}
-
-		if (a >= 10)
+		if (itr == 'F')
 		{
-			a = 9;
+
+			float radians =0;
+
+
+
+			// Convert degrees to radians.
+			radians = 90*a * 0.0174532925f;
+			 
+			if (g > a)
+			{
+			worldMatrix =  XMMatrixScaling(0.1, 0.1, 0.1) *  XMMatrixRotationX(90 * a)* XMMatrixTranslation(1 , 0, 0);
+
+			}
+			else
+			{
+				worldMatrix = XMMatrixScaling(0.1, 0.1, 0.1) *  XMMatrixRotationX(90 * a)* XMMatrixTranslation(-1, 0, 0);
+
+			}
+		
+
+			//// Send geometry data (from mesh)
+			cube->SendData(device->GetDeviceContext());
+			//// Set shader parameters (matrices and texture)
+			colourShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix);
+			//// Render object (combination of mesh geometry and shader process
+			colourShader->Render(device->GetDeviceContext(), cube->GetIndexCount());
+
+			g = a;
+			b++;
 		}
 	 }
  
+ 
+
 	device->SetBackBufferRenderTarget();
 
 }

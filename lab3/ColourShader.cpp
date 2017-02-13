@@ -4,7 +4,7 @@
 
 ColourShader::ColourShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, hwnd)
 {
-	InitShader(L"shaders/noise_vs.hlsl", L"shaders/colour_ps.hlsl");
+	InitShader(L"shaders/colour_vs.hlsl", L"shaders/colour_ps.hlsl");
 }
 
 
