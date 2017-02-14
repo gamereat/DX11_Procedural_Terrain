@@ -46,9 +46,11 @@ int PirlinNoise::fastfloor(double x) {
 	int xi = (int)x;
 	return x<xi ? xi - 1 : xi;
 }
-double PirlinNoise::noise(double xin, double yin)
+double PirlinNoise::noise(double xin, double yin, float freqancy)
 {
-	double n0, n1, n2; // Noise contributions from the three corners
+	xin *= freqancy;
+	yin *= freqancy;
+ 	double n0, n1, n2; // Noise contributions from the three corners
 					   // Skew the input space to determine which simplex cell we're in
 	double s = (xin + yin)*F2; // Hairy factor for 2D
 	int i = fastfloor(xin + s);
@@ -99,8 +101,11 @@ double PirlinNoise::noise(double xin, double yin)
 	// The result is scaled to return values in the interval [-1,1].
 	return 70.0 * (n0 + n1 + n2);
 }
-double PirlinNoise::noise(double xin, double yin, double zin)
+double PirlinNoise::noise(double xin, double yin, double zin, float freqancy)
 {
+	xin *= freqancy;
+	yin *= freqancy;
+	zin *= freqancy;
 	double n0, n1, n2, n3; // Noise contributions from the four corners
 						   // Skew the input space to determine which simplex cell we're in
 	double s = (xin + yin + zin)*F3; // Very nice and simple skew factor for 3D
@@ -183,8 +188,11 @@ double PirlinNoise::noise(double xin, double yin, double zin)
 	
 }
 
-double PirlinNoise::noise(double x, double y, double z, double w) {
-
+double PirlinNoise::noise(double x, double y, double z, double w, float freqancy) {
+	x *= freqancy;
+	y *= freqancy;
+	z *= freqancy;
+	w *= freqancy;
 	double n0, n1, n2, n3, n4; // Noise contributions from the five corners
 							   // Skew the (x,y,z,w) space to determine which cell of 24 simplices we're in
 	double s = (x + y + z + w) * F4; // Factor for 4D skewing

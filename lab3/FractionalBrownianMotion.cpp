@@ -17,7 +17,7 @@ FractionalBrownianMotion::~FractionalBrownianMotion()
 {
 }
 
-double FractionalBrownianMotion::FBm(float x, float y, int octaves)
+double FractionalBrownianMotion::FBm(float x, float y, int octaves, float pelinFrequancy)
 {
 	float output = 0.f;
 	float denom = 0.f;
@@ -25,7 +25,7 @@ double FractionalBrownianMotion::FBm(float x, float y, int octaves)
 	float amplitude = FractionalBrownianMotion::amplitude;
 
 	for (int i = 0; i < octaves; i++) {
-		output += (amplitude * PirlinNoise::noise(x * frequency, y * frequency));
+		output += (amplitude * PirlinNoise::noise(x * frequency, y * frequency, pelinFrequancy));
 		denom += amplitude; 
 
 		frequency *= lacunarity;

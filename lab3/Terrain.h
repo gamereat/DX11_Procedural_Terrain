@@ -56,6 +56,7 @@ private:
  
    
 private:
+	float frequancy;
 	int octaves;
 	bool useFBm;
 	bool useMusicData;
@@ -69,6 +70,12 @@ private:
 	bool isTerrainGeneratedEnabled;
 	int terrainWidth, terrainHeight;
 	HeightMapType* heightMap;
+	
+	double* perinNoiseValues;
+	bool perlinNeedingRegnerated;
+
+	double* fbmNoiseValues;
+	bool fbmNeedingRegnerated;
 
 	waveSettings xAxisWaveSettings, yAxisWaveSettings, zAxisWaveSettings;
 };

@@ -37,9 +37,9 @@ public:
 	~PirlinNoise();
 public:
 
-	static double noise(double xin, double yin, double zin);
-	static double noise(double xin, double yin);
-	static double noise(double x, double y, double z, double w);
+	static double noise(double xin, double yin, double zin, float freqancy);
+	static double noise(double xin, double yin, float freqancy);
+	static double noise(double x, double y, double z, double w, float freqancy);
 
 	static inline void set_SkewingFactor_2D(double skewFator) { F2 = skewFator; };
 	static inline void set_SkewingFactor_3D(double skewFator) { F3 = skewFator; };

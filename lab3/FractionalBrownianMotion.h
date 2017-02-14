@@ -21,7 +21,7 @@ public:
 	static inline float get_persistence() { return persistence; };
 
 
-	static double FBm(float x, float y, int octaves);
+	static double FBm(float x, float y, int octaves,float pelinFrequancy);
 private:
 	static float frequency;  
 	static float amplitude;   

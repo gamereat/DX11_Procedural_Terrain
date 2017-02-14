@@ -31,6 +31,8 @@ TerrainScene::~TerrainScene()
 	tessSettings.maxTesselationAmmount = 6;
 	tessSettings.minDistance = 1;
 	tessSettings.minTesselationAmmount = 1;
+
+	
 }
 
 void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * deviceContext,Sound* sound)
