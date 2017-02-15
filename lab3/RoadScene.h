@@ -20,6 +20,7 @@
 #include "DistanceBasedTesselation.h"
 #include "../DXFramework/Model.h"
 #include "Sound.h"
+#include "LineMesh.h"
  #include "LSystem.h"
 using namespace DirectX;
 
@@ -88,7 +89,7 @@ public:
 	virtual void SceneInformationPopUp(bool* is_open);
 
 private:
-
+	LineMesh* lineMesh;
 	 int a;
 	LSystem lsystem;
  	ColourShader* colourShader;

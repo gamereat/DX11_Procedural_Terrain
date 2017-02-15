@@ -103,6 +103,7 @@
     <ClCompile Include="DistanceBasedTesselation.cpp" />
     <ClCompile Include="EmptyScene.cpp" />
     <ClCompile Include="FractionalBrownianMotion.cpp" />
+    <ClCompile Include="LineMesh.cpp" />
     <ClCompile Include="LSystem.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="PirlinNoise.cpp" />
@@ -115,6 +116,7 @@
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TerrainScene.cpp" />
+    <ClCompile Include="TerrainShader.cpp" />
     <ClCompile Include="TextureShader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +128,7 @@
     <ClInclude Include="DistanceBasedTesselation.h" />
     <ClInclude Include="EmptyScene.h" />
     <ClInclude Include="FractionalBrownianMotion.h" />
+    <ClInclude Include="LineMesh.h" />
     <ClInclude Include="LSystem.h" />
     <ClInclude Include="PirlinNoise.h" />
     <ClInclude Include="PostProccessingDownScale.h" />
@@ -138,6 +141,7 @@
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TerrainScene.h" />
+    <ClInclude Include="TerrainShader.h" />
     <ClInclude Include="TextureShader.h" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +162,12 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Hull</ShaderType>
     </FxCompile>
     <FxCompile Include="shaders\noise_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\Terrain_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\Terrain_vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="shaders\texture_ps.hlsl">

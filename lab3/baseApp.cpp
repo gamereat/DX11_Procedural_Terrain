@@ -228,7 +228,22 @@ void BaseApp::CreateMainMenuBar()
 	static bool show_light_option[4];
 
 	postPro.PostProccessingMenu();
+	if (ImGui::BeginMenu("Lights"))
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			std::string lightName;
+			lightName.append("Light ");
+			lightName.append(std::to_string(i + 1));
+			if (ImGui::MenuItem(lightName.c_str(), NULL, show_light_option[i]))
+			{
+				show_light_option[i] = show_light_option[i] ? false : true;
+			}
+		}
 
+		ImGui::EndMenu();
+
+	}
 	currentScene->MenuOptions();
 	// display light settings
 	for (int i = 0; i < 4; i++)

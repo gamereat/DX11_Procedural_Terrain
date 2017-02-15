@@ -12,14 +12,15 @@
 #include "DistanceBasedTesselation.h"
 #include "../DXFramework/Model.h"
 #include "Sound.h"
-#include "LSystem.h"
+#include "TerrainShader.h"
+ #include "LSystem.h"
  class TerrainScene :
 	public Scene
 {
 public:
 	TerrainScene(string sceneName);
 	~TerrainScene();
-
+	ID3D11ShaderResourceView*f;
 	/*
 	Initializes the given Scene
 
@@ -76,8 +77,11 @@ public:
   	*/
 	virtual void SceneInformationPopUp(bool* is_open);
 
+	ID3D11ShaderResourceView * MakeCheckerboard(ID3D11Device * myDevice);
+
 private:
 
+	TerrainShader* terrainShader;
 	LSystem lsystem;
 	bool soundMenuOpen;
 	Sound* sound;

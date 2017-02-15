@@ -49,6 +49,22 @@ std::string LSystem::recustionValues(std::string values, int interation)
 	return recustionValues(newValue, interation);
 }
 
+void LSystem::updateNetwork(std::string product )
+{
+	//start point in middle of map
+	int startPointX = SIZE_OF_NETWORK / 2;
+	int startPointY = SIZE_OF_NETWORK / 2;
+
+	// Used for position or angles
+	positionInformation* currentStack;
+
+
+
+
+
+
+}
+
 void LSystem::Gui_menu(bool * is_open)
 {
 }

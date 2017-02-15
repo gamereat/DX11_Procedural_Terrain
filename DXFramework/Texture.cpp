@@ -43,8 +43,9 @@ Texture::Texture(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR
 	{
 	 	result = CreateWICTextureFromFile(device, deviceContext, filename, NULL, &m_texture, 0);
 	}
+
 	
-	 if (FAILED(result))
+ 	 if (FAILED(result))
 	{
 	 	MessageBox(NULL, L"Texture loading error", L"ERROR", MB_OK);
 	}

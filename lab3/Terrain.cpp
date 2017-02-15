@@ -91,7 +91,7 @@ bool Terrain::InitializeTerrain(ID3D11Device* device, int terrainWidth, int terr
 
 
 			fbmNoiseValues[index]= (float)FractionalBrownianMotion::FBm(i, j, octaves, frequancy);
-			perinNoiseValues[index] = (float)PirlinNoise::noise(i,j,frequancy)  ;
+			perinNoiseValues[index] = (float)SimplexNoise::noise(i,j,frequancy)  ;
 
 			this->heightMap[index].x = (float)i;
 			this->heightMap[index].y = (float)height;
@@ -391,19 +391,14 @@ void Terrain::Settings(bool* is_open)
 			if (usingPerlinNoise)
 			{
 
-
-				float f2 = (float)PirlinNoise::get_SkewingFactor_2D();
-				float g2 = (float)PirlinNoise::get_unSkewingFactor_2D();
-
-				ImGui::SliderFloat("Skew Factor", &f2, 0.0f, 1.0f);
-
-				ImGui::SliderFloat("unSkew Factor", &g2, 0.0f, 1.0f);
+				  
 				ImGui::SliderFloat("Height Scale", &perlinNoiseHeightRange, 0.0f, 20.0f);
 
-				ImGui::SliderFloat("Perlin frequancy", &frequancy, 0.0f, 10.0f);
-
-				PirlinNoise::set_SkewingFactor_2D(f2);
-				PirlinNoise::set_unSkewingFactor_2D(g2);
+				if (ImGui::SliderFloat("Perlin frequancy", &frequancy, 0.0f, 10.0f))
+				{
+					perlinNeedingRegnerated = true;
+				}
+				 
 
 			}
 			else if (usingWaves)
@@ -468,6 +463,16 @@ void Terrain::Settings(bool* is_open)
 					terrainNeedReGeneration = true;
 
 				}
+				if (ImGui::Checkbox("Use expdentional ", &useExpedetional))
+				{
+					fbmNeedingRegnerated = true;
+					terrainNeedReGeneration = true;
+				}
+				if (useExpedetional)
+				{
+					ImGui::InputFloat("Exp", &fmbExpetional);
+
+				}
 
  
 
@@ -476,10 +481,13 @@ void Terrain::Settings(bool* is_open)
 				FractionalBrownianMotion::set_lacunarity(lacunarity);
 				FractionalBrownianMotion::set_persistence(persistence);
 				
+				if (ImGui::SliderInt("Octaves", &octaves, 0, 100))
+				{
+					fbmNeedingRegnerated = true;
+					terrainNeedReGeneration = true;
 
-
-				ImGui::SliderInt("Octaves", &octaves, 0, 100);			
-				ImGui::SliderFloat("Height Scale", &perlinNoiseHeightRange, 0.0f, 20.0f);
+				}
+ 				ImGui::SliderFloat("Height Scale", &perlinNoiseHeightRange, 0.0f, 20.0f);
 
 			}
 			if (generateTerrain && (usingPerlinNoise || usingHightField || useFBm))
@@ -667,7 +675,7 @@ void Terrain::GeneratePelinNoise(ID3D11Device* device, Sound * sound)
 
 				if (perlinNeedingRegnerated)
 				{
-					pelinNoise = PirlinNoise::noise(j, i, frequancy);
+					pelinNoise = SimplexNoise::noise(j, i, frequancy);
 					perinNoiseValues[index] = pelinNoise;
 
 				}
@@ -689,7 +697,7 @@ void Terrain::GeneratePelinNoise(ID3D11Device* device, Sound * sound)
 
 			}
 		}
- 
+		perlinNeedingRegnerated = false;
 		delete[] f;
 		f =  0;
 	
@@ -705,7 +713,6 @@ void Terrain::GenerateFBmNoise(ID3D11Device * device, Sound * sound)
 	}
 
 	int index = 0;
-
 
 	// Initialise the data in the height map (flat).
 	for (int j = 0; j < this->terrainHeight; j++)
@@ -726,19 +733,35 @@ void Terrain::GenerateFBmNoise(ID3D11Device * device, Sound * sound)
 			}
 			if (useMusicData)
 			{
-				this->heightMap[index].y = (float)fbm * perlinNoiseHeightRange *f[i + j];
+				if (fmbExpetional)
+				{
+					this->heightMap[index].y = pow(fmbExpetional, (float)fbm * perlinNoiseHeightRange *f[i + j]);
+				}
+				else
+				{
+					this->heightMap[index].y =  (float)fbm * perlinNoiseHeightRange *f[i + j];
+
+				}
 			}
 			else
 			{
-				this->heightMap[index].y = (float)fbm * perlinNoiseHeightRange;
+				if (fmbExpetional)
+				{
+					this->heightMap[index].y = pow(fmbExpetional, (float)fbm * perlinNoiseHeightRange);
+				}
+				else
+				{
+					this->heightMap[index].y = (float)fbm * perlinNoiseHeightRange;
 
+				}
 			}
 
 			this->heightMap[index].z = (float)j;
 
 		}
 	}
-				fbmNeedingRegnerated = false;
+				
+	fbmNeedingRegnerated = false;
 
 	delete[] f;
 	f = 0;

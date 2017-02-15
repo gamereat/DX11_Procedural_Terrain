@@ -35,7 +35,8 @@ private:
 		float x, y, z;
 	};
 public:
-	Terrain(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, int resolution = 100);
+
+ 	Terrain(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, int resolution = 100);
 	~Terrain();
 	bool CalculateNormals();
 	bool InitializeTerrain(ID3D11Device*, int terrainWidth, int terrainHeight);
@@ -56,6 +57,7 @@ private:
  
    
 private:
+	bool useExpedetional;
 	float frequancy;
 	int octaves;
 	bool useFBm;
@@ -76,7 +78,7 @@ private:
 
 	double* fbmNoiseValues;
 	bool fbmNeedingRegnerated;
-
+	float fmbExpetional;
 	waveSettings xAxisWaveSettings, yAxisWaveSettings, zAxisWaveSettings;
 };
 

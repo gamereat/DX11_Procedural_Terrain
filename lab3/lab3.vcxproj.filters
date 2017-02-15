@@ -20,30 +20,30 @@
     <Filter Include="Header Files\Shaders">
       <UniqueIdentifier>{4e4ad371-4954-459f-82f9-36d25a4b74c4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Scene">
+      <UniqueIdentifier>{0501a192-da89-43b5-94f5-4da90cdf8a72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Noise">
+      <UniqueIdentifier>{4bca799a-b2b2-466c-a377-883b3e3a6da9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Post proccssing">
+      <UniqueIdentifier>{d8cc26bf-db56-47ad-bb27-6057a6494f50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Post Proccessing">
+      <UniqueIdentifier>{f98f4be7-c174-4c1e-bd3e-03d7063aae7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scene">
+      <UniqueIdentifier>{8319598c-2521-454c-b858-a9d53894d4b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Noise">
+      <UniqueIdentifier>{f61afe17-7863-45af-9ba9-3fd72e8fe1f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PostProcessing.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="baseApp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProccessingUpScale.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProccessingDownScale.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProcessingBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EmptyScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\MiniIni\minIni.cpp">
@@ -52,13 +52,7 @@
     <ClCompile Include="..\ApplicationSettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TerrainScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Terrain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PirlinNoise.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ColourShader.cpp">
@@ -70,33 +64,50 @@
     <ClCompile Include="DistanceBasedTesselation.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="Sound.cpp" />
-    <ClCompile Include="LSystem.cpp" />
-    <ClCompile Include="RoadScene.cpp" />
-    <ClCompile Include="FractionalBrownianMotion.cpp" />
+    <ClCompile Include="LineMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PirlinNoise.cpp">
+      <Filter>Source Files\Post Proccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProccessingDownScale.cpp">
+      <Filter>Source Files\Post Proccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProccessingUpScale.cpp">
+      <Filter>Source Files\Post Proccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessing.cpp">
+      <Filter>Source Files\Post Proccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessingBase.cpp">
+      <Filter>Source Files\Post Proccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="EmptyScene.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="RoadScene.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainScene.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainShader.cpp">
+      <Filter>Source Files\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="FractionalBrownianMotion.cpp">
+      <Filter>Source Files\Noise</Filter>
+    </ClCompile>
+    <ClCompile Include="LSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="baseApp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PostProcessing.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PostProccessingDownScale.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PostProccessingUpScale.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PostProcessingBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EmptyScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\MiniIni\minGlue.h">
       <Filter>miniINi</Filter>
     </ClInclude>
@@ -107,12 +118,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Terrain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PirlinNoise.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ColourShader.h">
@@ -133,10 +138,43 @@
     <ClInclude Include="LSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RoadScene.h">
+    <ClInclude Include="LineMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TerrainScene.h">
+      <Filter>Header Files\Noise</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainShader.h">
+      <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProccessingDownScale.h">
+      <Filter>Header Files\Post proccssing</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProccessingUpScale.h">
+      <Filter>Header Files\Post proccssing</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcessing.h">
+      <Filter>Header Files\Post proccssing</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcessingBase.h">
+      <Filter>Header Files\Post proccssing</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="RoadScene.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="PirlinNoise.h">
+      <Filter>Header Files\Noise</Filter>
+    </ClInclude>
     <ClInclude Include="FractionalBrownianMotion.h">
+      <Filter>Header Files\Noise</Filter>
+    </ClInclude>
+    <ClInclude Include="EmptyScene.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="baseApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -160,6 +198,12 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\noise_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\Terrain_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\Terrain_vs.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
