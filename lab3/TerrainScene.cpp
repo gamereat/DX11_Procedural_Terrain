@@ -67,8 +67,8 @@ void TerrainScene::Update(Timer * timer)
 }
 void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[])
 {
- 
-
+	f = MakeCheckerboard(device->GetDevice());
+	 
  
 	terrain->GenerateHeightMap(device->GetDevice(), false,sound);
 
@@ -102,7 +102,7 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 	//// Send geometry data (from mesh)
 	terrain->SendData(device->GetDeviceContext());
 	//// Set shader parameters (matrices and texture)
-	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(), depthMaps, light);
+	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, f, depthMaps, light);
 	//// Render object (combination of mesh geometry and shader process
 	terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
 
@@ -133,6 +133,8 @@ void TerrainScene::MenuOptions()
 
 	sound->GUI_Menu(&soundMenuOpen);
 
+
+
 }
 
 void TerrainScene::ResetLights(Light * lights[])
@@ -155,17 +157,17 @@ ID3D11ShaderResourceView* TerrainScene::MakeCheckerboard(ID3D11Device *myDevice)
 	ID3D11Texture2D*       tex;
 	D3D11_TEXTURE2D_DESC   tdesc;
 	D3D11_SUBRESOURCE_DATA tbsd;
-
-const	int width = 50;   // three pixel wide
-const int height = 50;   // one pixel height
-const	int bpp = 3;
-const	int nb_color = 3;
+						  
+	const int width = 500;  
+	const int height = 500;   
+	const	int bpp = 3;
+	const	int nb_color = 3;
 
 //
 //int g = 0;
 //
 //	// CREATING THE IMAGE
- 	float buf[width * height * nb_color];
+ 	float* buf = new float[width * height * nb_color];
 //	for (int i = 0; i < 3; i++)
 //	{
 //		for (int j = 0; j < 1; j++)
@@ -235,7 +237,7 @@ const	int nb_color = 3;
 	myDevice->CreateShaderResourceView(tex, &shaderResourceViewDesc, &m_shaderResourceView);
 
 
-	//delete[] buf;
+	delete[] buf;
 
 	return(m_shaderResourceView);
 }
