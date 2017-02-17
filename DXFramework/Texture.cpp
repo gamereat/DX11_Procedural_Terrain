@@ -1,3 +1,6 @@
+#include "Texture.h"
+#include "Texture.h"
+#include "Texture.h"
 // texture.cpp
 #include "texture.h"
 
@@ -66,6 +69,53 @@ ID3D11ShaderResourceView* Texture::GetTexture()
 {
 	return m_texture;
 }
+
+ID3D11Texture2D* Texture::CreateDynamicTexture(ID3D11Device * device, int width, int height, float * buf, D3D11_TEXTURE2D_DESC &desc)
+{
+ 	D3D11_SUBRESOURCE_DATA tbsd;
+
+	int bpp = 12;
+
+	tbsd.pSysMem = (void *)buf;
+	tbsd.SysMemPitch = width * bpp;
+	tbsd.SysMemSlicePitch = width * height * bpp; // Not needed since this is a 2d texture
+
+	desc.Width = width;
+	desc.Height = height;
+	desc.MipLevels = 1;
+	desc.ArraySize = 1;
+	desc.SampleDesc.Count = 1;
+	desc.SampleDesc.Quality = 0; 
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	desc.CPUAccessFlags = 0;
+	desc.MiscFlags = 0;
+	 
+
+	ID3D11Texture2D *pTexture = NULL;
+	device->CreateTexture2D(&desc, &tbsd, &pTexture);
+
+	return pTexture;
+
+}
+
+ID3D11ShaderResourceView* Texture::SetTexture(ID3D11Texture2D * texture, ID3D11Device* device, D3D11_TEXTURE2D_DESC* textureDesc)
+{
+	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
+	shaderResourceViewDesc.Format = textureDesc->Format;
+	shaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
+	shaderResourceViewDesc.Texture2D.MipLevels = 1;
+ 
+	ID3D11ShaderResourceView* m_shaderResourceView;
+	;
+	device->CreateShaderResourceView(texture, &shaderResourceViewDesc, &m_shaderResourceView);
+
+
+	return m_shaderResourceView;
+
+ }
 
 bool Texture::does_file_exist(const WCHAR *fname)
 {

@@ -52,11 +52,11 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	std::unordered_map<char, LShapedConstant> constants;
 
 	std::unordered_map<char, std::string> d{
-		{ '1',"11" },
-	{'0',"1[0]0"}
-	
+		{ 'F',"F+F-F-F+F" },
+ 	
 	};
-	lsystem.loadSystem(constants, d);
+	lsystem = new LSystem(device);
+	lsystem->loadSystem(constants, d);
 	 
 
 	f = MakeCheckerboard(device);
@@ -67,9 +67,19 @@ void TerrainScene::Update(Timer * timer)
 }
 void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[])
 {
-	f = MakeCheckerboard(device->GetDevice());
-	 
+	ImGui::Text("fsd");
  
+	static int ff = 0;
+
+	if (ImGui::DragInt("Test int", &ff, 1, 0, 750))
+	{
+		std::string f = lsystem->recustionValues("F", ff);
+		lsystem->updateNetwork(f);
+
+
+		lsystem->GenterateUpdateTexture(device->GetDevice(), ff);
+	}
+
 	terrain->GenerateHeightMap(device->GetDevice(), false,sound);
 
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrixs;
@@ -102,7 +112,7 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 	//// Send geometry data (from mesh)
 	terrain->SendData(device->GetDeviceContext());
 	//// Set shader parameters (matrices and texture)
-	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, f, depthMaps, light);
+	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, lsystem->tes, depthMaps, light);
 	//// Render object (combination of mesh geometry and shader process
 	terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
 
@@ -139,6 +149,7 @@ void TerrainScene::MenuOptions()
 
 void TerrainScene::ResetLights(Light * lights[])
 {
+	lights[0]->SetDiffuseColour(1, 1, 1, 1);
 }
 
 void TerrainScene::GenerateDepthPass(D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[])

@@ -20,10 +20,17 @@ public:
 
 	ID3D11ShaderResourceView* GetTexture();
 
-private:
-	bool does_file_exist(const WCHAR *fileName);
+	ID3D11Texture2D* CreateDynamicTexture(ID3D11Device * device, int width, int hight, float* buf, D3D11_TEXTURE2D_DESC &desc);
 
+	/*
+	Sets the texture based off a Texture 2D
+	*/
+	ID3D11ShaderResourceView*  SetTexture(ID3D11Texture2D * texture, ID3D11Device * device, D3D11_TEXTURE2D_DESC * textureDesc);
+
+protected:
+	bool does_file_exist(const WCHAR *fileName);
 	ID3D11ShaderResourceView* m_texture;
+
 };
 
 #endif

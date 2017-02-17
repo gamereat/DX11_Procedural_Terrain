@@ -24,11 +24,9 @@ void RoadScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * dev
 		{ 'F', "F+F-F-F+F" },
  
 	};
-	lsystem.loadSystem(constants, d);
-
+ 
 	interations = 5;
-	 rule = lsystem.recustionValues("F", interations);
-
+ 
 	 lineMesh = new LineMesh(device, deviceContext, L"../res/bunny.png");
  	cube = new CubeMesh(device, deviceContext, L"../res/bunny.png");
 }

@@ -82,7 +82,7 @@ public:
 private:
 
 	TerrainShader* terrainShader;
-	LSystem lsystem;
+	LSystem* lsystem;
 	bool soundMenuOpen;
 	Sound* sound;
 	TessellationBufferType tessSettings;

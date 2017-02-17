@@ -141,9 +141,6 @@
     <ClInclude Include="LineMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainScene.h">
-      <Filter>Header Files\Noise</Filter>
-    </ClInclude>
     <ClInclude Include="TerrainShader.h">
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>
@@ -176,6 +173,9 @@
     </ClInclude>
     <ClInclude Include="baseApp.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainScene.h">
+      <Filter>Header Files\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

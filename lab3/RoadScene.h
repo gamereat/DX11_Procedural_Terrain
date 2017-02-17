@@ -91,7 +91,6 @@ public:
 private:
 	LineMesh* lineMesh;
 	 int a;
-	LSystem lsystem;
  	ColourShader* colourShader;
 	std::string rule;
 	CubeMesh* cube;
