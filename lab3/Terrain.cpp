@@ -2,7 +2,7 @@
 #include <random>
 #include "../imgui/imgui.h"
 #include "Sound.h"
-#include "PirlinNoise.h"
+#include "SimplexNoise.h"
 #include "FractionalBrownianMotion.h"
 Terrain::Terrain(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, int resolution)
 : PlaneMesh(device, deviceContext, textureFilename, resolution)

@@ -38,10 +38,7 @@ void PostProcessing::Init(D3D* directX3D, HWND hwnd, Timer* timer)
 
 	// Init all the post proccessing effects 
 
-
-
-
-	// Init all the post proccessing effects 
+	 
 
 	downScale = new PostProccessingDownScale(directX3D, hwnd, downScaleAmmount);
 

@@ -60,12 +60,11 @@ void LSystemScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	// init L-System
 	lSystem = new LSystem(device);
 
-	// Create L-System rules
-	std::vector<char> constants{'F'};
+	// Create L-System rules 
 	std::unordered_map<char, std::string> rules{
 		{ 'F',"F+F-F-F+F" },
 	};
-	lSystem->loadSystem(constants, rules);
+	lSystem->loadSystem(rules);
 
 
 	// Set up base settings for plane to be diplayed on screen in correction line up

@@ -1,5 +1,5 @@
 #include "FractionalBrownianMotion.h"
-#include "PirlinNoise.h"
+#include "SimplexNoise.h"
 
 
 float FractionalBrownianMotion::frequency = 1;
@@ -17,7 +17,7 @@ FractionalBrownianMotion::~FractionalBrownianMotion()
 {
 }
 
-double FractionalBrownianMotion::FBm(float x, float y, int octaves, float pelinFrequancy)
+float FractionalBrownianMotion::FBm(float x, float y, int octaves, float pelinFrequancy)
 {
 	float output = 0.f;
 	float denom = 0.f;

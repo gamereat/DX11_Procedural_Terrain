@@ -22,6 +22,10 @@
 #include "RoadScene.h"
 #include "ShaderBuffers.h"
 #include "Sound.h"
+
+/*
+Base application used to host given scenes
+*/
 class BaseApp :	public BaseApplication
 {
 public:
@@ -57,13 +61,21 @@ protected:
 
 
 private:
-
+	
+	/*
+	L-System Scene used to show a 2D l-system on a dynamic texture
+	*/
 	LSystemScene* lSystemScene;
 
+	/*
+	Road scene .......
+	*/
 	RoadScene* roadScene;
 
-	Model* model;
-
+ 
+	/*
+	Terrain scene used to show procedural generated terrain
+	*/
 	TerrainScene* terrainScene;
 	/*
 	The current Scene that is viewed the world
@@ -76,7 +88,7 @@ private:
 	PostProcessing postPro;
 
 	/*
-	Render
+	Render to the screen
 	*/
 	void RenderToScreen();
 

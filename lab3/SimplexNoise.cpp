@@ -1,4 +1,4 @@
-#include "PirlinNoise.h"
+#include "SimplexNoise.h"
 #include <cstdint> 
 
 /*

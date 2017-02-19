@@ -75,6 +75,9 @@ public:
 	
 protected:
  
+	/*
+	Sound engine used to create background sound and get data from it
+	*/
 	Sound* sound;
 	
 

@@ -4,7 +4,20 @@
 #include "Scene.h"
 #include "../DXFramework/Light.h"
 
+
+/*
+Used to hold buffer stucts used accross shader clasess
+
+*/
+
+
 const int NUM_LIGHTS = 4;
+
+
+
+
+
+
 
 struct TessellationBufferType
 {

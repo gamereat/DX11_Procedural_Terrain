@@ -14,6 +14,13 @@
 #include "Sound.h"
 #include "TerrainShader.h"
  #include "LSystem.h"
+
+/*
+Terrain Scene 
+@Author Alan Yeats
+
+Used to show proseduraly generated terrain
+*/
  class TerrainScene :
 	public Scene
 {
@@ -77,19 +84,33 @@ public:
   	*/
 	virtual void SceneInformationPopUp(bool* is_open);
 
-	ID3D11ShaderResourceView * MakeCheckerboard(ID3D11Device * myDevice);
+
 
 private:
-
+	/*
+	Terraom Shader
+	*/
 	TerrainShader* terrainShader;
-	LSystem* lsystem;
-	bool soundMenuOpen;
-	Sound* sound;
-	TessellationBufferType tessSettings;
-	DistanceBasedTesselation* dbtShader;
-	Model* model;
+	/*
+	Tesselation settings
+	*/
+ 	TessellationBufferType tessSettings;
+
+	/*
+	Model used for debugging purposes
+	*/
+ 	Model* model;
+	/*
+	Texture shaders
+	*/
 	TextureShader* textureShader;
+	/*
+	Basic colour Shader
+	*/
 	ColourShader* colourShader;
+	/*
+	Terrain mesh
+	*/
 	Terrain* terrain;
 };
 

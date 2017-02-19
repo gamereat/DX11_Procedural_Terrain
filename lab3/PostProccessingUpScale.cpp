@@ -46,8 +46,7 @@ void PostProccessingUpScale::MenuOptions(bool * isOpen)
 			return;
 		}
 
-		ImGui::Text("ff");
-
+ 
 		ImGui::End();
 	}
 }

@@ -5,7 +5,7 @@
 EmptyScene::EmptyScene(string sceneName)
 	: Scene(sceneName)
 {
-	m_Mesh = nullptr;
+	mesh = nullptr;
 	colourShader = nullptr;
 }
 
@@ -14,10 +14,10 @@ EmptyScene::~EmptyScene()
 {
 
 	// Release the Direct3D object.
-	if (m_Mesh)
+	if (mesh)
 	{
-		delete m_Mesh;
-		m_Mesh = 0;
+		delete mesh;
+		mesh = 0;
 	}
 
 	if (colourShader)
@@ -32,7 +32,7 @@ void EmptyScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * de
 	Scene::Init(hwnd, device, deviceContext,sound);
 
 	// Create Mesh object
-	m_Mesh = new DoubleTriangleMesh(device, deviceContext, L"../res/DefaultDiffuse.png");
+	mesh = new DoubleTriangleMesh(device, deviceContext, L"../res/DefaultDiffuse.png");
 
 	colourShader = new ColourShader(device, hwnd);
 }
@@ -59,11 +59,11 @@ void EmptyScene::Render(RenderTexture * renderTexture, D3D * device, Camera * ca
 	device->GetProjectionMatrix(projectionMatrix);
 
 	//// Send geometry data (from mesh)
-	m_Mesh->SendData(device->GetDeviceContext());
+	mesh->SendData(device->GetDeviceContext());
 	//// Set shader parameters (matrices and texture)
 	colourShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix);
 	//// Render object (combination of mesh geometry and shader process
-	colourShader->Render(device->GetDeviceContext(), m_Mesh->GetIndexCount());
+	colourShader->Render(device->GetDeviceContext(), mesh->GetIndexCount());
 
 	device->SetBackBufferRenderTarget();
 

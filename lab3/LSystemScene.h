@@ -16,6 +16,7 @@
  #include "LSystem.h"
 
 /*
+L-System Scene
 @author Alan Yeats
 L-System scene used to display a L-system Represented on a dynamic texture on a plane
 */

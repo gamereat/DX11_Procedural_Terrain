@@ -4,6 +4,13 @@
 #include <d3d11.h>
  #include <stdio.h>
 
+/*
+Terrain Mesh
+
+@Author Alan Yeats
+
+Creates a mesh that can be used to create prosedural terrain
+*/
 class Terrain :	public PlaneMesh
 {
 

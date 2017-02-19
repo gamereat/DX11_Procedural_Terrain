@@ -36,8 +36,9 @@ protected:
 	RenderTexture* renderTexture;
 
 
-	bool isEnabled;	/*
-
+	bool isEnabled;	
+	/*
+	if the menu is open 
 	*/
 	bool isMenuOpen;
 private:

@@ -5,13 +5,18 @@
 #include "../DXFramework/CubeMesh.h"
 #include "../DXFramework/QuadMesh.h"
 #include "../DXFramework/DoubleTriangleMesh.h"
-
 #include "ColourShader.h"
-
 #include "../DXFramework/CubeMesh.h"
-
 #include "Scene.h"
 
+
+/*
+Empty Scene
+@Author Alan Yeats
+
+Used to show if application is rendering correct
+
+*/
 class EmptyScene :
 	public Scene
 {
@@ -76,8 +81,14 @@ public:
 	virtual void SceneInformationPopUp(bool* is_open);
 
 private:
+	/*
+	Colour Shader
+	*/
 	ColourShader* colourShader;
-	DoubleTriangleMesh* m_Mesh;
+	/*
+	Given mesh used to show if render correctly
+	*/
+	DoubleTriangleMesh* mesh;
 
 };
 

@@ -1,5 +1,6 @@
 #pragma once
 
+// Fratical brownian motion noise functions
 // Expanded from 
 //https://github.com/SRombauts/SimplexNoise
 static class FractionalBrownianMotion
@@ -21,8 +22,20 @@ public:
 	static inline float get_persistence() { return persistence; };
 
 
-	static double FBm(float x, float y, int octaves,float pelinFrequancy);
+	/*
+	Fractical browning noise function
+ 
+	@param x				X position
+	@param y				Y posision
+	@param octaves			The number of itterations to complete 
+	@param pelinFrequancy	the frequancy values used for perlin noise function
+	@returns noise values between -1 and 1
+	*/
+	static float FBm(float x, float y, int octaves,float pelinFrequancy);
 private:
+	/*
+
+	*/
 	static float frequency;  
 	static float amplitude;   
 	static float lacunarity;  

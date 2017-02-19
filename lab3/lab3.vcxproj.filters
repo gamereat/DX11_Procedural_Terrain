@@ -67,9 +67,6 @@
     <ClCompile Include="LineMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PirlinNoise.cpp">
-      <Filter>Source Files\Post Proccessing</Filter>
-    </ClCompile>
     <ClCompile Include="PostProccessingDownScale.cpp">
       <Filter>Source Files\Post Proccessing</Filter>
     </ClCompile>
@@ -108,6 +105,9 @@
     </ClCompile>
     <ClCompile Include="LSystemScene.cpp">
       <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SimplexNoise.cpp">
+      <Filter>Source Files\Noise</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -165,9 +165,6 @@
     <ClInclude Include="RoadScene.h">
       <Filter>Header Files\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="PirlinNoise.h">
-      <Filter>Header Files\Noise</Filter>
-    </ClInclude>
     <ClInclude Include="FractionalBrownianMotion.h">
       <Filter>Header Files\Noise</Filter>
     </ClInclude>
@@ -182,6 +179,9 @@
     </ClInclude>
     <ClInclude Include="LSystemScene.h">
       <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SimplexNoise.h">
+      <Filter>Header Files\Noise</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

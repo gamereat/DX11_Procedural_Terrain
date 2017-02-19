@@ -107,7 +107,7 @@
     <ClCompile Include="LSystem.cpp" />
     <ClCompile Include="LSystemScene.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="PirlinNoise.cpp" />
+    <ClCompile Include="SimplexNoise.cpp" />
     <ClCompile Include="PostProccessingDownScale.cpp" />
     <ClCompile Include="PostProccessingUpScale.cpp" />
     <ClCompile Include="PostProcessing.cpp" />
@@ -132,7 +132,7 @@
     <ClInclude Include="LineMesh.h" />
     <ClInclude Include="LSystem.h" />
     <ClInclude Include="LSystemScene.h" />
-    <ClInclude Include="PirlinNoise.h" />
+    <ClInclude Include="SimplexNoise.h" />
     <ClInclude Include="PostProccessingDownScale.h" />
     <ClInclude Include="PostProccessingUpScale.h" />
     <ClInclude Include="PostProcessing.h" />
