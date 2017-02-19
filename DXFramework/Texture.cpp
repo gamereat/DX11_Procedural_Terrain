@@ -109,11 +109,10 @@ ID3D11ShaderResourceView* Texture::SetTexture(ID3D11Texture2D * texture, ID3D11D
 	shaderResourceViewDesc.Texture2D.MipLevels = 1;
  
 	ID3D11ShaderResourceView* m_shaderResourceView;
-	;
 	device->CreateShaderResourceView(texture, &shaderResourceViewDesc, &m_shaderResourceView);
 
 
-	return m_shaderResourceView;
+ 	return m_shaderResourceView;
 
  }
 

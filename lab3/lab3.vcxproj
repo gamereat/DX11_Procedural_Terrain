@@ -105,6 +105,7 @@
     <ClCompile Include="FractionalBrownianMotion.cpp" />
     <ClCompile Include="LineMesh.cpp" />
     <ClCompile Include="LSystem.cpp" />
+    <ClCompile Include="LSystemScene.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="PirlinNoise.cpp" />
     <ClCompile Include="PostProccessingDownScale.cpp" />
@@ -130,6 +131,7 @@
     <ClInclude Include="FractionalBrownianMotion.h" />
     <ClInclude Include="LineMesh.h" />
     <ClInclude Include="LSystem.h" />
+    <ClInclude Include="LSystemScene.h" />
     <ClInclude Include="PirlinNoise.h" />
     <ClInclude Include="PostProccessingDownScale.h" />
     <ClInclude Include="PostProccessingUpScale.h" />

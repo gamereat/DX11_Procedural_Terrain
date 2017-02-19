@@ -49,37 +49,15 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 
 	terrainShader = new TerrainShader(device,hwnd);
 	//sound->Init(L"../res/BlownAway.mp3");
-	std::unordered_map<char, LShapedConstant> constants;
-
-	std::unordered_map<char, std::string> d{
-		{ 'F',"F+F-F-F+F" },
- 	
-	};
-	lsystem = new LSystem(device);
-	lsystem->loadSystem(constants, d);
-	 
-
-	f = MakeCheckerboard(device);
-}
+ 
+ }
 void TerrainScene::Update(Timer * timer)
 {
  
 }
 void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[])
 {
-	ImGui::Text("fsd");
  
-	static int ff = 0;
-
-	if (ImGui::DragInt("Test int", &ff, 1, 0, 750))
-	{
-		std::string f = lsystem->recustionValues("F", ff);
-		lsystem->updateNetwork(f);
-
-
-		lsystem->GenterateUpdateTexture(device->GetDevice(), ff);
-	}
-
 	terrain->GenerateHeightMap(device->GetDevice(), false,sound);
 
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrixs;
@@ -112,7 +90,7 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 	//// Send geometry data (from mesh)
 	terrain->SendData(device->GetDeviceContext());
 	//// Set shader parameters (matrices and texture)
-	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, lsystem->tes, depthMaps, light);
+	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(), depthMaps, light);
 	//// Render object (combination of mesh geometry and shader process
 	terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
 
@@ -124,6 +102,7 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 void TerrainScene::MenuOptions()
 {
 	static bool terrainOptions;
+	static bool lstsytemSettings;
 	if (ImGui::BeginMenu("Terrain Options"))
 	{
 		if (ImGui::MenuItem("terain stuff "))
@@ -136,6 +115,11 @@ void TerrainScene::MenuOptions()
 			soundMenuOpen = soundMenuOpen ? false : true;
 
 		}
+		if (ImGui::MenuItem("L-System Settings"))
+		{
+			lstsytemSettings = lstsytemSettings ? false : true;
+
+		}
 		ImGui::EndMenu();
 
 	}
@@ -143,7 +127,7 @@ void TerrainScene::MenuOptions()
 
 	sound->GUI_Menu(&soundMenuOpen);
 
-
+	lsystem->Gui_menu(&lstsytemSettings);
 
 }
 

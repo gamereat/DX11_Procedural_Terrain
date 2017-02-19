@@ -17,6 +17,7 @@ BaseApp::BaseApp()
 	upScaleTexture = nullptr;
 	textureShader = nullptr;
 	emptyScene = nullptr;
+	lSystemScene = nullptr;
 	terrainScene = nullptr;
 }
 
@@ -25,6 +26,11 @@ BaseApp::~BaseApp()
 {
 	BaseApplication::~BaseApplication();
  
+	if (lSystemScene)
+	{
+		delete lSystemScene;
+		lSystemScene = nullptr;
+	}
 	if (emptyScene)
 	{
 		delete emptyScene;
@@ -90,19 +96,25 @@ void BaseApp::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHe
 	// Call super init function (required!)
 	BaseApplication::init(hinstance, hwnd, screenWidth, screenHeight, in);
  
-
+	// Init sound information 
 	sound = new Sound();
+	sound->Init(L"../res/BlownAway.mp3");
+	sound->setPause(true);
+ 	
+	// Load in Scenes 
 	terrainScene = new TerrainScene("Terrain Scene");
-	terrainScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(),sound);
-	 
-	 
+	terrainScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), sound);
 
 	emptyScene = new EmptyScene("Empty Scene");
 	emptyScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), sound);
-	roadScene = new RoadScene("Road Sceme");
+
+	roadScene = new RoadScene("Road Scene");
 	roadScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), sound);
 
-	textureShader = new TextureShader(m_Direct3D->GetDevice(), hwnd);
+	lSystemScene = new LSystemScene("L-System Scene");
+	lSystemScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), sound);
+
+
 
 	// Initialize lights and depth texture 
 	for (int i = 0; i < NUM_LIGHTS; i++)
@@ -118,20 +130,25 @@ void BaseApp::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHe
 		depthTextures[i] = new RenderTexture(m_Direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
 	}
 
-
+	// Load in textures
 	orthoMeshNormalScaled = new OrthoMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), screenWidth, screenHeight, 0, 0);
 	upScaleTexture = new  RenderTexture(m_Direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
-
 	sceneTexture = new  RenderTexture(m_Direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
+
+
+	// Load in shaders
+	textureShader = new TextureShader(m_Direct3D->GetDevice(), hwnd);
+
 
 
 	postPro.Init(m_Direct3D, hwnd, m_Timer);
 	// set starting scene to be terrain scene
-	currentScene = terrainScene;
+	currentScene = lSystemScene;
 
 	// set my lights up correcntly for current scene
 	currentScene->ResetLights(lights);
 }
+
 bool BaseApp::Frame()
 {
 	bool result;
@@ -228,6 +245,24 @@ void BaseApp::CreateMainMenuBar()
 	static bool show_light_option[4];
 
 	postPro.PostProccessingMenu();
+	if (ImGui::BeginMenu("Scenes"))
+	{
+		if (ImGui::MenuItem(terrainScene->getSceneName().c_str()))
+		{
+			currentScene = terrainScene;
+			currentScene->ResetLights(lights);
+			terrainScene->isEnbaled = true;
+			lSystemScene->isEnbaled = false;
+		}
+		if (ImGui::MenuItem(lSystemScene->getSceneName().c_str()))
+		{
+			currentScene = lSystemScene;
+			currentScene->ResetLights(lights);
+			lSystemScene->isEnbaled = true;
+			terrainScene->isEnbaled = false;
+		}
+		ImGui::EndMenu();
+	}
 	if (ImGui::BeginMenu("Lights"))
 	{
 		for (int i = 0; i < 4; i++)

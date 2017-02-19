@@ -17,6 +17,7 @@
 #include "PostProcessing.h"
 #include "EmptyScene.h"
 #include "TerrainScene.h"
+#include "LSystemScene.h"
 #include "../DXFramework/Model.h"
 #include "RoadScene.h"
 #include "ShaderBuffers.h"
@@ -57,6 +58,7 @@ protected:
 
 private:
 
+	LSystemScene* lSystemScene;
 
 	RoadScene* roadScene;
 
