@@ -8,13 +8,22 @@ LSystem::LSystem(ID3D11Device *myDevice)
 
 	GenterateUpdateTexture(myDevice);
 
-	startPos.x = SIZE_OF_NETWORK / 2;
+	startPos.x = SIZE_OF_NETWORK / 4;
 	startPos.y = SIZE_OF_NETWORK / 2;
 	lenghtOfLine = 4;
 	angle = 90;
 	textureNeedingUpdated = false;
  }
 
+
+LSystem::LSystem(ID3D11Device * device, int itertaions, int lineLength, std::unordered_map<char, std::string> rules) : LSystem(device)
+{
+	iterations = itertaions;
+	lenghtOfLine = lineLength;
+	textureNeedingUpdated = true;
+	this->rules = rules;
+	Update();
+}
 
 LSystem::~LSystem()
 {

@@ -87,6 +87,8 @@ public:
 
 
 private:
+
+	DistanceBasedTesselation* distanceTess;
 	/*
 	Terraom Shader
 	*/

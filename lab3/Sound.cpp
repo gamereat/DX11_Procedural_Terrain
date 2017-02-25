@@ -217,6 +217,15 @@ void Sound::GUI_Menu(bool * is_open)
 	}
 }
 
+float Sound::getLeftData()
+{
+	DWORD level, left, right;
+	level = BASS_ChannelGetLevel(channel);
+	left = LOWORD(level);
+	right = HIWORD(level);
+	return left;
+}
+
 float * Sound::getData(DWORD length, int size)
 {
 

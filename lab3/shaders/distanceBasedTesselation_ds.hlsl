@@ -49,17 +49,18 @@ float4 tesselationLept(float4 cords1, float4 cords2, float4 cords3, float4 cords
 float3 tesselationLept(float3 cords1, float3 cords2, float3 cords3, float3 cords4, float2 uvCord);
 
 
-[domain("quad")]
-OutputType main(ConstantOutputQuadType input, float2 uvwCoord : SV_DomainLocation, const OutputPatch<InputType, 4> patch)
+[domain("tri")]
+OutputType main(ConstantOutputTriType input, float3 bary : SV_DomainLocation, const OutputPatch<InputType, 3> patch)
 {
     float4 vertexPosition;
 	float3 vertexTexture;
 	OutputType output;
 	 
 	// Determine the position of the new vertex.
- 
+    vertexPosition = bary.x * patch[0].position + bary.y * patch[1].position + bary.z * patch[2].position;
 
-    vertexPosition = tesselationLept(patch[0].position, patch[1].position, patch[2].position, patch[3].position, uvwCoord);
+
+   // vertexPosition = tesselationLept(patch[0].position, patch[1].position, patch[2].position, patch[3].position, uvwCoord);
 	// Calculate the position of the new vertex against the world, view, and projection matrices.
 	output.position = mul(vertexPosition, worldMatrix);
 	output.position = mul(output.position, viewMatrix);
@@ -68,11 +69,11 @@ OutputType main(ConstantOutputQuadType input, float2 uvwCoord : SV_DomainLocatio
 
  
     // pass though outputs
-     output.tex = tesselationLept(patch[0].tex, patch[1].tex, patch[2].tex, patch[3].tex, uvwCoord);
-    output.normal = tesselationLept(patch[0].normal, patch[1].normal, patch[2].normal, patch[3].normal, uvwCoord);
-    output.position3D = tesselationLept(patch[0].position3D, patch[1].position3D, patch[2].position3D, patch[3].position3D, uvwCoord);
-    output.viewDirection = tesselationLept(patch[0].viewDirection, patch[1].viewDirection, patch[2].viewDirection, patch[3].viewDirection, uvwCoord);
-    output.lightPos = patch[0].lightPos;
+    output.tex = bary.x * patch[0].tex + bary.y * patch[1].tex + bary.z * patch[2].tex;
+    output.normal = bary.x * patch[0].normal + bary.y * patch[1].normal + bary.z * patch[2].normal;
+    output.position3D = bary.x * patch[0].position3D + bary.y * patch[1].position3D + bary.z * patch[2].position3D;
+    output.viewDirection = bary.x * patch[0].viewDirection + bary.y * patch[1].viewDirection + bary.z * patch[2].viewDirection;
+     output.lightPos = patch[0].lightPos;
     output.lightViewPosition = patch[0].lightViewPosition;
   
 

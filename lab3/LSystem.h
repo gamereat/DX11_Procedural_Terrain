@@ -8,7 +8,7 @@
 using namespace DirectX;
 
  
-const int SIZE_OF_NETWORK = 250;
+const int SIZE_OF_NETWORK = 100;
 typedef void(*LShapedConstant)(int iteration);
 
 
@@ -25,6 +25,15 @@ public:
 	@param device	The device for the given d3d window
 	*/
 	LSystem(ID3D11Device *device);
+
+	/*
+	Constructor creates l-system texture
+	@param device		The device for the given d3d window
+	@param iterations	The number of iterations applicaion should start with
+	@param lineLength	How long each line should be used when using turle graphics
+	@param rules		The rules for the given l=system
+	*/
+	LSystem(ID3D11Device *device,int itertaions, int lineLength, std::unordered_map<char, std::string> rules);
 	~LSystem();
 
 	/*

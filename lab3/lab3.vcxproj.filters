@@ -109,6 +109,7 @@
     <ClCompile Include="SimplexNoise.cpp">
       <Filter>Source Files\Noise</Filter>
     </ClCompile>
+    <ClCompile Include="FaultLineDisplacement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\MiniIni\minGlue.h">
@@ -183,6 +184,9 @@
     <ClInclude Include="SimplexNoise.h">
       <Filter>Header Files\Noise</Filter>
     </ClInclude>
+    <ClInclude Include="FaultLineDisplacement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\colour_ps.hlsl">
@@ -210,6 +214,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\Terrain_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\distanceBasedTesselation_vs.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

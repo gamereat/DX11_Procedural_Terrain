@@ -56,15 +56,16 @@ void LSystemScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	// init objects
 
 	planeMesh = new PlaneMesh(device, deviceContext, L"../res/bunny.png", 100);
-
-	// init L-System
-	lSystem = new LSystem(device);
-
 	// Create L-System rules 
 	std::unordered_map<char, std::string> rules{
 		{ 'F',"F+F-F-F+F" },
 	};
-	lSystem->loadSystem(rules);
+	// init L-System
+	lSystem = new LSystem(device,3,4, rules);
+	updateLSysteam = true;
+
+
+//	lSystem->loadSystem(rules);
 
 
 	// Set up base settings for plane to be diplayed on screen in correction line up
@@ -78,7 +79,9 @@ void LSystemScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	planeTranslation.x = -49;
 	planeTranslation.y = -7;
 	planeTranslation.z = -48;
- }
+
+
+}
 void LSystemScene::Update(Timer * timer)
 {
  

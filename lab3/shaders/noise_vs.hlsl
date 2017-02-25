@@ -42,7 +42,7 @@ double dot(float3 g, double x, double y, double z)
 }
 float grad(int hash, float x)
 {
-    int h = hash & 0x0F; // Convert low 4 bits of hash code
+    uint h = hash & 0x0F; // Convert low 4 bits of hash code
     float grad = 1.0f + (h & 7); // Gradient value 1.0, 2.0, ..., 8.0
     if ((h & 8) != 0)
         grad = -grad; // Set a random sign for the gradient
@@ -51,7 +51,7 @@ float grad(int hash, float x)
 }
 float grad(int hash, float x, float y)
 {
-    int h = hash & 0x3F; // Convert low 3 bits of hash code
+    uint h = hash & 0x3F; // Convert low 3 bits of hash code
     float u = h < 4 ? x : y; // into 8 simple gradient directions,
     float v = h < 4 ? y : x; // and compute the dot product with (x,y).
     return ((h & 1) ? -u : u) + ((h & 2) ? -2.0f * v : 2.0f * v);
@@ -59,7 +59,7 @@ float grad(int hash, float x, float y)
 
 float noise(float x)
 {
-    int perm[256] =
+    uint perm[256] =
     {
         151, 160, 137, 91, 90, 15,
 	131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23,
@@ -105,7 +105,7 @@ float noise(float x)
 }
 
  
-double noise(double x, double y)
+float noise(float x, float y)
 {
     int perm[256] =
     {
@@ -127,15 +127,15 @@ double noise(double x, double y)
     float n0, n1, n2; // Noise contributions from the three corners
 
 						// Skewing/Unskewing factors for 2D
-    const float F2 = 0.366025403f; // F2 = (sqrt(3) - 1) / 2
-    const float G2 = 0.211324865f; // G2 = (3 - sqrt(3)) / 6   = F2 / (1 + 2 * K)
+    float F2 = 0.366025403f; // F2 = (sqrt(3) - 1) / 2
+    float G2 = 0.211324865f; // G2 = (3 - sqrt(3)) / 6   = F2 / (1 + 2 * K)
 
 									// Skew the input space to determine which simplex cell we're in
     float s = (x + y) * F2; // Hairy factor for 2D
     float xs = x + s;
     float ys = y + s;
-    int i = fastfloor(xs);
-    int j = fastfloor(ys);
+    uint i = fastfloor(xs);
+    uint j = fastfloor(ys);
 
 	// Unskew the cell origin back to (x,y) space
     float t = ( float)  (i + j) * G2;
@@ -146,7 +146,7 @@ double noise(double x, double y)
 
 	// For the 2D case, the simplex shape is an equilateral triangle.
 	// Determine which simplex we are in.
-    int i1, j1; // Offsets for second (middle) corner of simplex in (i,j) coords
+    uint i1, j1; // Offsets for second (middle) corner of simplex in (i,j) coords
     if (x0 > y0)
     { // lower triangle, XY order: (0,0)->(1,0)->(1,1)
         i1 = 1;
@@ -213,6 +213,8 @@ double noise(double x, double y)
 
 float fbm(float x,float y,int octave)
 {
+  
+   
     float output = 0.f;
     float denom = 0.f;
     float frequency = 8.0f;
@@ -220,7 +222,7 @@ float fbm(float x,float y,int octave)
 
     for (int i = 0; i < octave; i++)
     {
-        output += (amplitude * noise(x * frequency, y * frequency));
+        output += (amplitude * noise((double) x * (double) frequency, (double) y * (double) frequency));
         denom += amplitude;
 
         frequency *= .5;
@@ -242,7 +244,7 @@ OutputType main(InputType input)
  
 
 
-    input.position.y = fbm(input.position.x, input.position.y, 8);
+    //input.position.y = noise(input.position.x * 0.99f, input.position.y * 0.99f);
  
 	
 	// Calculate the position of the vertex against the world, view, and projection matrices.

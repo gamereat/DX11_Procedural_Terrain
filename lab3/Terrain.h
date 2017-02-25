@@ -61,9 +61,20 @@ private:
 	void GenerateFBmNoise(ID3D11Device * device, Sound * sound);
 
 
+
+	void FaultLineDisplacement(ID3D11Device * device, Sound * sound, int iterations);
  
    
 private:
+
+
+	float faultLineDisplacement;
+	float faultLineReducementFactor;
+	int faultLineIterations;
+
+
+	bool resetTerrain; 
+	bool usingFaultLineDisancement;
 	bool useExpedetional;
 	float frequancy;
 	int octaves;
@@ -80,12 +91,18 @@ private:
 	int terrainWidth, terrainHeight;
 	HeightMapType* heightMap;
 	
+	double* faultLineDisplacementValues;
+	bool faultLineDisplacementNeedingRegnerated;
+
+
 	double* perinNoiseValues;
 	bool perlinNeedingRegnerated;
 
 	double* fbmNoiseValues;
 	bool fbmNeedingRegnerated;
 	float fmbExpetional;
+
+	HeightMapType* startingHeightmap;
 	waveSettings xAxisWaveSettings, yAxisWaveSettings, zAxisWaveSettings;
 };
 

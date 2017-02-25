@@ -78,17 +78,28 @@ ConstantOutputQuadType PatchConstantQuadFunction(InputPatch<InputType, 4> inputP
     
     return output;
 }
+ConstantOutputTriType PatchConstantTriFunction(InputPatch<InputType, 3> inputPatch, uint patchId : SV_PrimitiveID)
+{
+    ConstantOutputTriType output;
+     
+    // find out waht the center of the patch is and set that as the tess ammount
 
+    output.edges[0] = getTessenationAmount(0.5f * (inputPatch[1].position + inputPatch[2].position));
+    output.edges[1] = getTessenationAmount(0.5f * (inputPatch[2].position + inputPatch[0].position));
+    output.edges[2] = getTessenationAmount(0.5f * (inputPatch[0].position + inputPatch[1].position));
  
  
-
-
-[domain("quad")]
-[partitioning("integer")]
+    output.inside = 1.0f;
+    return output;
+}
+ 
+ 
+[domain("tri")]
+[partitioning("fractional_odd")]
 [outputtopology("triangle_cw")]
-[outputcontrolpoints(4)]
-[patchconstantfunc("PatchConstantQuadFunction")]
-OutputType main(InputPatch<InputType, 4> patch, uint pointId : SV_OutputControlPointID, uint patchId : SV_PrimitiveID)
+[outputcontrolpoints(3)]
+[patchconstantfunc("PatchConstantTriFunction")]
+OutputType main(InputPatch<InputType, 3> patch, uint pointId : SV_OutputControlPointID, uint patchId : SV_PrimitiveID)
 {
     OutputType output;
 
@@ -125,3 +136,47 @@ float getTessenationAmount(float3 pos)
 
 
 }
+
+
+//[domain("quad")]
+//[partitioning("integer")]
+//[outputtopology("triangle_cw")]
+//[outputcontrolpoints(4)]
+//[patchconstantfunc("PatchConstantQuadFunction")]
+//OutputType main(InputPatch<InputType, 4> patch, uint pointId : SV_OutputControlPointID, uint patchId : SV_PrimitiveID)
+//{
+//    OutputType output;
+
+//	// Set the position for this control point as the output position.
+//    output.position = patch[pointId].position;
+
+//    output.normal = patch[pointId].normal;
+//    output.tex = patch[pointId].tex;
+	 
+
+
+//    output.lightPos = patch[pointId].lightPos;
+//    output.lightViewPosition = patch[pointId].lightViewPosition;
+    
+//    output.position3D = patch[pointId].position3D;
+//    output.viewDirection = patch[pointId].viewDirection;
+//    return output;
+//}
+
+
+//float getTessenationAmount(float3 pos)
+//{
+//    // Get rid of padding value added ;
+//    float3 realCamPos = camPos.xyz;
+//    // find distance between current pos and the cam pos
+//    float dis = distance(pos, realCamPos);
+
+//    // Work out what distance away from minimu and max distance based
+//    float lerpAmmount = saturate((dis - minDistance) / (maxDistance - minDistance));
+
+//    // find tesselastion ammount 
+//    return lerp(maxTesselationAmmount, minTesselationAmmount, lerpAmmount);
+
+
+
+//}

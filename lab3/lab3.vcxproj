@@ -102,6 +102,7 @@
     <ClCompile Include="ColourShader.cpp" />
     <ClCompile Include="DistanceBasedTesselation.cpp" />
     <ClCompile Include="EmptyScene.cpp" />
+    <ClCompile Include="FaultLineDisplacement.cpp" />
     <ClCompile Include="FractionalBrownianMotion.cpp" />
     <ClCompile Include="LineMesh.cpp" />
     <ClCompile Include="LSystem.cpp" />
@@ -128,6 +129,7 @@
     <ClInclude Include="ColourShader.h" />
     <ClInclude Include="DistanceBasedTesselation.h" />
     <ClInclude Include="EmptyScene.h" />
+    <ClInclude Include="FaultLineDisplacement.h" />
     <ClInclude Include="FractionalBrownianMotion.h" />
     <ClInclude Include="LineMesh.h" />
     <ClInclude Include="LSystem.h" />
@@ -162,6 +164,9 @@
     </FxCompile>
     <FxCompile Include="shaders\distanceBasedTesselation_hs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Hull</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\distanceBasedTesselation_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="shaders\noise_vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>

@@ -35,6 +35,7 @@ public:
 
 	void GUI_Menu(bool* is_open);
 
+	float getLeftData();
 
  	float* getData(DWORD length, int size);
 

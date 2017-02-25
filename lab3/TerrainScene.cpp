@@ -50,6 +50,8 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	terrainShader = new TerrainShader(device,hwnd);
 	//sound->Init(L"../res/BlownAway.mp3");
  
+
+	distanceTess = new DistanceBasedTesselation(device, hwnd);
  }
 void TerrainScene::Update(Timer * timer)
 {
@@ -90,6 +92,7 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 	//// Render object (combination of mesh geometry and shader process
 	terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
 
+
 	device->SetBackBufferRenderTarget();
 
 
@@ -98,6 +101,7 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 void TerrainScene::MenuOptions()
 {
 	static bool terrainOptions;
+	static bool soundOptions;
  	if (ImGui::BeginMenu("Terrain Options"))
 	{
 		if (ImGui::MenuItem("Terrain Settings "))
@@ -105,11 +109,16 @@ void TerrainScene::MenuOptions()
 			terrainOptions = terrainOptions ? false : true;
 
 		}
- 
+		if (ImGui::MenuItem("Sound Details"))
+		{
+			soundOptions = soundOptions ? false : true;
+		}
  
 		ImGui::EndMenu();
 
 	}
+
+	sound->GUI_Menu(&soundOptions);
 	terrain->Settings(&terrainOptions);
 	 
 

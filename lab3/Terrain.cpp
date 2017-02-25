@@ -77,6 +77,7 @@ bool Terrain::InitializeTerrain(ID3D11Device* device, int terrainWidth, int terr
 	fbmNoiseValues = new double[this->terrainWidth * this->terrainHeight];
 	// Create the structure to hold the terrain data.
 	this->heightMap = new HeightMapType[this->terrainWidth * this->terrainHeight];
+	this->startingHeightmap = new HeightMapType[this->terrainWidth * this->terrainHeight];
 	if (!this->heightMap)
 	{
 		return false;
@@ -96,13 +97,13 @@ bool Terrain::InitializeTerrain(ID3D11Device* device, int terrainWidth, int terr
 			this->heightMap[index].x = (float)i;
 			this->heightMap[index].y = (float)height;
 			this->heightMap[index].z = (float)j;
+			startingHeightmap[index].y = (float)height;
 
 		}
 	} 
 	// Initialize the vertex and index buffer that hold the geometry for the terrain.
 	InitBuffers(device);
  
-
 	return true;
 }
 
@@ -116,6 +117,12 @@ bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* soun
 
 	}
 
+
+	if (resetTerrain)
+	{
+		resetTerrain = false;
+		InitializeTerrain(device, this->terrainHeight, this->terrainWidth);
+	}
 	bool result;
 	//the toggle is just a bool that I use to make sure this is only called ONCE when you press a key
 	//until you release the key and start again. We dont want to be generating the terrain 500
@@ -136,6 +143,16 @@ bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* soun
 		{
 			GenerateHieghtField(device,sound);
  
+		}
+		else if (usingFaultLineDisancement)
+		{
+			if (sound->getData(BASS_DATA_FFT256 | BASS_DATA_FLOAT,128)[1] > 0.4f)
+			{
+				faultLineDisplacementNeedingRegnerated = true;
+				terrainNeedReGeneration = true;
+				faultLineIterations++;
+			}
+			FaultLineDisplacement(device, sound,faultLineIterations);
 		}
 		else if(usingWaves)
 		{
@@ -359,6 +376,12 @@ void Terrain::Settings(bool* is_open)
 		}
 
 
+	
+		if (ImGui::SmallButton("Restart Terrain"))
+		{
+			resetTerrain = true;
+		}
+
 		ImGui::Checkbox("Generate terrain", &generateTerrain);
 
 		if (generateTerrain)
@@ -384,9 +407,35 @@ void Terrain::Settings(bool* is_open)
 				ImGui::Checkbox("Use random height", &usingHightField);
 
 			}
+			if (!useFBm && !usingHightField && !usingWaves && !usingPerlinNoise)
+			{
+				ImGui::Checkbox("Use Faul Displacment", &usingFaultLineDisancement);
+			}
 
 
 			ImGui::Separator();
+			 
+			if (usingFaultLineDisancement)
+			{
+				if (ImGui::SliderFloat("Fault Line Displacment start", &faultLineDisplacement, 0.0f, 20.0f))
+				{
+					faultLineDisplacementNeedingRegnerated = true;
+					terrainNeedReGeneration = true;
+				}
+				if (ImGui::SliderFloat("Fault line reducment factor", &faultLineReducementFactor, 1.01f, 20.0f))
+				{
+					faultLineDisplacementNeedingRegnerated = true;
+					terrainNeedReGeneration = true;
+
+				}
+				if (ImGui::SliderInt("Number of iterations", &faultLineIterations, 0, 500))
+				{
+					faultLineDisplacementNeedingRegnerated = true;
+					terrainNeedReGeneration = true;
+
+				}
+
+			}
 
 			if (usingPerlinNoise)
 			{
@@ -394,7 +443,7 @@ void Terrain::Settings(bool* is_open)
 				  
 				ImGui::SliderFloat("Height Scale", &perlinNoiseHeightRange, 0.0f, 20.0f);
 
-				if (ImGui::SliderFloat("Perlin frequancy", &frequancy, 0.0f, 10.0f))
+ 				if (ImGui::SliderFloat("Perlin frequancy", &frequancy, 0.0f, 10.0f))
 				{
 					perlinNeedingRegnerated = true;
 				}
@@ -765,6 +814,91 @@ void Terrain::GenerateFBmNoise(ID3D11Device * device, Sound * sound)
 
 	delete[] f;
 	f = 0;
+}
+
+void Terrain::FaultLineDisplacement(ID3D11Device * device, Sound * sound,int iterations)
+{
+
+	float* f = NULL;
+
+	if (sound)
+	{
+		f = sound->getData(BASS_DATA_FFT1024 | BASS_DATA_FFT_INDIVIDUAL | BASS_DATA_FLOAT, 1024);
+	}
+ 
+
+	if (faultLineDisplacementNeedingRegnerated)
+	{
+		heightMap = startingHeightmap;
+		int indexDF = 0;
+		for (int j = 0; j < terrainHeight; j++)
+		{
+			for (int i = 0; i < terrainWidth; i++)
+			{
+				int indexDF = (this->terrainHeight * j) + i;
+				this->heightMap[indexDF].y = 0;
+			}
+		}
+
+		float displacement = faultLineDisplacement;
+ 		for (int iter = 0; iter < iterations; iter++)
+		{
+ 
+
+			int index = 0;
+			std::random_device rd;
+			std::mt19937 gen(rd());
+			std::uniform_real_distribution<> disWidth(0, terrainWidth);
+			std::uniform_real_distribution<> disHeight(0, terrainHeight);
+
+
+			XMINT2 randPoint1, randPoint2;
+
+			randPoint1.x = disWidth(gen);
+			randPoint2.x = disWidth(gen);
+
+			randPoint1.y= disHeight(gen);
+			randPoint2.y = disHeight(gen);
+
+			float a = (randPoint2.y - randPoint1.y);
+			float b = -(randPoint2.x - randPoint1.x);
+			float c = -randPoint1.x*(randPoint2.y - randPoint1.y) + randPoint1.y*(randPoint2.x - randPoint1.x);
+ 
+
+ 	 
+
+			for (int j = 0; j < terrainHeight; j++)
+			{
+				for (int i = 0; i < terrainWidth; i++)
+				{
+					index = (this->terrainHeight * j) + i;
+
+					if (a*i + b*j - c > 0)
+					{
+						this->heightMap[index].y += displacement;
+					}
+					else
+					{
+						this->heightMap[index].y -= displacement;
+					}
+					this->heightMap[index].z = (float)j;
+
+					this->heightMap[index].x = (float)i;
+				}
+			}
+			if (iter < iterations)
+			{
+				displacement = faultLineDisplacement - ((float)iter / (float)iterations) * ((float)displacement - (float)0.1);
+			}
+			else
+			{
+				displacement = faultLineDisplacement;
+			}
+		}
+
+		faultLineDisplacementNeedingRegnerated = false;
+	}
+ 
 }
 
  
