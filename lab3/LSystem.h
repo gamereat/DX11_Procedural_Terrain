@@ -8,7 +8,8 @@
 using namespace DirectX;
 
  
-const int SIZE_OF_NETWORK = 100;
+const int SIZE_OF_NETWORK = 1000;
+const int COLOUR_ON_TEXTURE = 3;
 typedef void(*LShapedConstant)(int iteration);
 
 
@@ -68,6 +69,17 @@ public:
  	*/
 	void Update();
 private:
+
+
+	float* nextBuf ;
+
+
+
+
+
+
+
+
 	/*
 	Updates the current network based of the product creating the points that the l-system covers
 	@param product		The product being created 

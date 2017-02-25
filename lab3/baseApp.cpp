@@ -98,8 +98,8 @@ void BaseApp::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHe
  
 	// Init sound information 
 	sound = new Sound();
-	sound->Init(L"../res/BlownAway.mp3");
-	sound->setPause(true);
+	sound->Init(L"../res/DiscoMedusae.mp3");
+	sound->setPause(false);
  	
 	// Load in Scenes 
 	terrainScene = new TerrainScene("Terrain Scene");

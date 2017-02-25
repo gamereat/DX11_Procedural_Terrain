@@ -35,3 +35,8 @@ shader-error.text
 
 *.cso
 *.sdf
+*.cache
+*.opendb
+lab3/Debug/
+*.pdb
+*.ilk

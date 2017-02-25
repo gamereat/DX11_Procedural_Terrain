@@ -5,7 +5,7 @@
 DistanceBasedTesselation::DistanceBasedTesselation(ID3D11Device* device, HWND hwnd) : BaseShader(device, hwnd)
 {
 	//InitShader(L"shaders/colour_vs.hlsl", L"shaders/colour_ps.hlsl");
-	InitShader(L"shaders/texture_Vs.hlsl", L"shaders/distanceBasedTesselation_hs.hlsl", L"shaders/distanceBasedTesselation_Ds.hlsl", L"shaders/texture_ps.hlsl");
+	InitShader(L"shaders/texture_Vs.hlsl", L"shaders/distanceBasedTesselation_hs.hlsl", L"shaders/distanceBasedTesselation_ds.hlsl", L"shaders/texture_ps.hlsl");
 
 }
 

@@ -58,7 +58,9 @@ void LSystemScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	planeMesh = new PlaneMesh(device, deviceContext, L"../res/bunny.png", 100);
 	// Create L-System rules 
 	std::unordered_map<char, std::string> rules{
-		{ 'F',"F+F-F-F+F" },
+	//	{ 'F',"F+F-F-F+F" },
+		{ 'X',"X+YF+" },
+		{ 'Y',"-FX-Y" },
 	};
 	// init L-System
 	lSystem = new LSystem(device,3,4, rules);

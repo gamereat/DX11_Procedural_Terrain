@@ -6,13 +6,29 @@ LSystem::LSystem(ID3D11Device *myDevice)
 {
 	iterations = 0;
 
-	GenterateUpdateTexture(myDevice);
 
 	startPos.x = SIZE_OF_NETWORK / 4;
 	startPos.y = SIZE_OF_NETWORK / 2;
 	lenghtOfLine = 4;
 	angle = 90;
 	textureNeedingUpdated = false;
+	nextBuf = new float[SIZE_OF_NETWORK * SIZE_OF_NETWORK * COLOUR_ON_TEXTURE];
+
+	for (int i = 0; i < SIZE_OF_NETWORK; i++)
+	{
+		for (int j = 0; j < SIZE_OF_NETWORK; j++)
+		{
+			for (int k = 0; k < COLOUR_ON_TEXTURE; k++)
+			{
+
+				nextBuf[i + SIZE_OF_NETWORK* (j + SIZE_OF_NETWORK* k)] = 1.0f;
+			}
+		}
+	}
+
+
+	GenterateUpdateTexture(myDevice);
+
  }
 
 
@@ -23,10 +39,21 @@ LSystem::LSystem(ID3D11Device * device, int itertaions, int lineLength, std::uno
 	textureNeedingUpdated = true;
 	this->rules = rules;
 	Update();
-}
+
+
+
+
+
+
+ }
 
 LSystem::~LSystem()
 {
+	if (nextBuf)
+	{
+		delete[] nextBuf;
+		nextBuf = nullptr;
+	}
 }
 
  
@@ -69,6 +96,24 @@ std::string LSystem::RecursiveCreateProduct(std::string values, int interation)
 
 void LSystem::updateNetwork(std::string product )
 {
+
+	delete[] nextBuf;
+	nextBuf = nullptr;
+
+	nextBuf = new float[SIZE_OF_NETWORK * SIZE_OF_NETWORK * COLOUR_ON_TEXTURE];
+
+	for (int i = 0; i < SIZE_OF_NETWORK; i++)
+	{
+		for (int j = 0; j < SIZE_OF_NETWORK; j++)
+		{
+			for (int k = 0; k < COLOUR_ON_TEXTURE; k++)
+			{
+
+				nextBuf[i + SIZE_OF_NETWORK* (j + SIZE_OF_NETWORK* k)] = 1.0f;
+			}
+		}
+	}
+
 	//start point in middle of map
 	int startPointX = startPos.x;
 	int startPointY = startPos.y;
@@ -101,10 +146,39 @@ void LSystem::updateNetwork(std::string product )
 			std::vector<XMINT2> newpoints = BresenhamAlgorithm(currentPos, newPoint);
 
  
-			points.insert(points.end(), newpoints.begin(), newpoints.end());
-			//points.push_back(newPoint);
-			currentPos = newPoint;
+			if (newpoints.size() > 0)
+			{
+				for (int i = 0; i < newpoints.size() - 1; i++)
+				{
+					int x = SIZE_OF_NETWORK * COLOUR_ON_TEXTURE;
+					int y = COLOUR_ON_TEXTURE;
+					int index = x * newpoints[i].x + newpoints[i].y * y;
 
+					if (newpoints[i].x > 0 && newpoints[i].y > 0)
+					{
+						if (index < SIZE_OF_NETWORK * SIZE_OF_NETWORK * COLOUR_ON_TEXTURE + 2)
+						{
+							nextBuf[index] = 0.0f;
+							nextBuf[index + 1] = 0.0f;
+							nextBuf[index + 2] = 0.0f;
+
+						}
+					}
+					//int index = newpoints[i].x * SIZE_OF_NETWORK + newpoints[i].y  +1  ;
+					//nextBuf[index] = 0.0f;
+					//index++;
+					//nextBuf[index] = 0.0f;
+					//index++;
+
+					//nextBuf[index] = 0.0f;
+					//index++;
+
+
+				}
+				points.insert(points.end(), newpoints.begin(), newpoints.end());
+				//points.push_back(newPoint);
+				currentPos = newPoint;
+			}
 //
 //			if (currentDirection == 0)
 //			{
@@ -242,7 +316,7 @@ void LSystem::GenterateUpdateTexture(ID3D11Device *myDevice)
 
 	int width = SIZE_OF_NETWORK;
 	int height = SIZE_OF_NETWORK;
-	int colours = 3;
+	int colours = COLOUR_ON_TEXTURE;
 	int index = 0;
 	int f = 0;
 	float* buf = new float[width * height * colours];
@@ -250,31 +324,49 @@ void LSystem::GenterateUpdateTexture(ID3D11Device *myDevice)
 	{
 		for (int j = 0; j < height; j++)
 		{
-			float colour = 1.0f;
 
-			for (auto pt : points)
+			//int index = i + SIZE_OF_NETWORK * (j + SIZE_OF_NETWORK * k);
+
+			//
+			   float colour = 1.0f;
+
+
+	/*		for (auto pt : points)
 			{
 				if (pt.x == i && pt.y == j)
 				{
 					colour = 0.0f;
 				}
-			}
-		 
-			buf[index] = colour;
+		}*/
+			buf[index] = nextBuf[index];;
 			index++;
-			buf[index] = colour;
-			index++;
-			buf[index] = colour;
+			buf[index] = nextBuf[index];;;
 			index++;
 
-						
-			
+			buf[index] = nextBuf[index];;;
+			index++;
+
+				//buf[index] = nextBuf[index];
+
+				//for (auto pt : points)
+				//{
+				//	if (pt.x == i && pt.y == j)
+				//	{
+				//		colour = 0.0f;
+				//	}
+				//}
+
+ 
+		//		
+ 		//		buf[index + (1*SIZE_OF_NETWORK)] = nextBuf[index + (1 * SIZE_OF_NETWORK)];
+ 		//		buf[index + (2 * SIZE_OF_NETWORK)] = nextBuf[index + (2 * SIZE_OF_NETWORK)];
+ 			
  
 		}
  	}
 	texture = 	displayTexture->SetTexture( displayTexture->CreateDynamicTexture(myDevice,width,height,buf, tdesc),myDevice, &tdesc);
 
-	delete[] buf;
+//	delete[] buf;
 }
 
 Texture * LSystem::getTexture()
@@ -289,7 +381,7 @@ void LSystem::Update()
 	if (textureNeedingUpdated)
 	{
 		textureNeedingUpdated = false;
-		std::string product = RecursiveCreateProduct("F", iterations);
+		std::string product = RecursiveCreateProduct("fX", iterations);
 		updateNetwork(product);
 	}
 }
@@ -441,10 +533,10 @@ std::vector<XMINT2> LSystem::BresenhamAlgorithm(XMINT2 startPos, XMINT2 endPos)
 	//		error += dx;
 	//	}
 	//}
-	//	------------------
+	////	------------------
 
 
- 
+ //
 
 //-----
 

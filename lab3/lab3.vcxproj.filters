@@ -219,5 +219,8 @@
     <FxCompile Include="shaders\distanceBasedTesselation_vs.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\FaultLineDisplacement_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
