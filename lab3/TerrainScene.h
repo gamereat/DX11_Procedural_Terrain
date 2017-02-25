@@ -85,8 +85,18 @@ public:
 	virtual void SceneInformationPopUp(bool* is_open);
 
 
-
+	void TerrainSettings(bool *is_open);
 private:
+
+	/*
+	Fault line settings
+	*/
+	FaultLineDisplacementBufferType* faultLineSettings;
+
+	/*
+	Regenerate random fault lines
+	*/
+	bool regenerateFaultLines;
 
 	DistanceBasedTesselation* distanceTess;
 	/*

@@ -15,8 +15,7 @@ public:
 
 	void SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, 
 		const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, 
-		ID3D11ShaderResourceView* texture,  
-		ID3D11ShaderResourceView*depthMap[], Light* light[] );
+		ID3D11ShaderResourceView* texture,  FaultLineDisplacementBufferType* faultLineSettings);
 	void Render(ID3D11DeviceContext * deviceContext, int indexCount);
 
  
@@ -34,6 +33,9 @@ private:
 	ID3D11Buffer* planetBuffer;;
 	ID3D11Buffer* lightBuffer;
 	ID3D11Buffer* lightBuffer2;
+
+	ID3D11Buffer* faultLineBuffer;
+
 
 };
 

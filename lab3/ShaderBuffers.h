@@ -13,11 +13,50 @@ Used to hold buffer stucts used accross shader clasess
 
 const int NUM_LIGHTS = 4;
 
+const int MAX_FAULTLINE_ITERATIONS = 2500;
 
 
 
 
+struct FaultLineDisplacementBufferType
+{
+	/*
+	Number of iterations to complete
+	*/
+	int numberOfIterations;
+	/*
+	The starting displacment value
+	*/
+	float startingDisplacement;
+	/*
+	The minimum value the last displacement will set to be
+	*/
+	float minimumDisplacement;
+	
+	/*
+	SmoothingValue
+	*/
+	float smoothingValue;
+	/*
 
+	2D array holding the diffrent random points on the surface which should be sued to complete fault line displ
+
+
+	Using heavy packing on varrible.
+	x and y being the first 2 random points on the surface,
+	z and w beingthe second random point on the surface
+	Note 1000 will be the maxium number of iterations
+
+	*/
+	XMINT4 interationsRandomPoints[MAX_FAULTLINE_ITERATIONS];
+
+	/*
+	IF fault line displacement is active
+	*/
+	bool enableFaultLineDisplacement;
+
+	XMFLOAT3 padding;
+};
 
 struct TessellationBufferType
 {
