@@ -27,8 +27,8 @@ void RoadScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * dev
  
 	interations = 5;
  
-	 lineMesh = new LineMesh(device, deviceContext, L"../res/bunny.png");
- 	cube = new CubeMesh(device, deviceContext, L"../res/bunny.png");
+	 lineMesh = new LineMesh("Line Mesh",device, deviceContext, L"../res/bunny.png");
+ 	cube = new CubeMesh("Set Cube",device, deviceContext, L"../res/bunny.png");
 }
 
 

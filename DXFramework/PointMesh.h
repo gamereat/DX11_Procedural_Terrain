@@ -10,10 +10,10 @@ class PointMesh : public BaseMesh
 {
 
 public:
-	PointMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename);
+ 	PointMesh(std::string name, ID3D11Device * device, ID3D11DeviceContext * deviceContext, WCHAR * textureFilename);
 	~PointMesh();
 
-	void SendData(ID3D11DeviceContext*);
+	void SendData(ID3D11DeviceContext*, XMMATRIX& worldMartix);
 
 protected:
 	void InitBuffers(ID3D11Device* device);

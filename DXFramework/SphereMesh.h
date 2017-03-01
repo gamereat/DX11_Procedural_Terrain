@@ -9,7 +9,7 @@ class SphereMesh : public BaseMesh
 {
 
 public:
-	SphereMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, int resolution = 20);
+	SphereMesh(std::string name, ID3D11Device * device, ID3D11DeviceContext * deviceContext, WCHAR * textureFilename, int resolution = 20);
 	~SphereMesh();
 
 protected:

@@ -7,7 +7,7 @@ LSystem::LSystem(ID3D11Device *myDevice)
 	iterations = 0;
 
 
-	startPos.x = SIZE_OF_NETWORK / 4;
+	startPos.x = SIZE_OF_NETWORK / 2;
 	startPos.y = SIZE_OF_NETWORK / 2;
 	lenghtOfLine = 4;
 	angle = 90;

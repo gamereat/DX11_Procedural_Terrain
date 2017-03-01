@@ -7,7 +7,7 @@ class PlaneMesh : public BaseMesh
 {
 
 public:
-	PlaneMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, int resolution = 100);
+ 	PlaneMesh(std::string name, ID3D11Device * device, ID3D11DeviceContext * deviceContext, WCHAR * textureFilename, int resolution = 100);
 	~PlaneMesh();
 
 protected:

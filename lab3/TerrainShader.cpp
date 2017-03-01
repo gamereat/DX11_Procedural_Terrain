@@ -6,7 +6,7 @@ TerrainShader::TerrainShader(ID3D11Device * device, HWND hwnd)
 	: BaseShader(device, hwnd)
 {
 	//InitShader(L"shaders/TerrainGenerator_vs.hlsl", L"shaders/wobblyBox_hs.hlsl", L"shaders/wobblyBox_ds.hlsl", L"shaders/TerrainGenerator_ps.hlsl");
-	InitShader(L"shaders/FaultLineDisplacement_vs.hlsl",   L"shaders/texture_ps.hlsl" );
+	InitShader(L"shaders/FaultLineDisplacement_vs.hlsl",   L"shaders/Terrain_ps.hlsl" );
 //	InitShader(L"shaders/wobblyBox_vs.hlsl", L"shaders/wobblyBox_hs.hlsl", L"shaders/wobblyBox_ds.hlsl", L"shaders/wobblyBox_ps.hlsl");
 
 
@@ -33,30 +33,14 @@ TerrainShader::~TerrainShader()
 	}
 
 
-	// Release the light constant buffer.
-	if (m_tessellationBuffer)
-	{
-		m_tessellationBuffer->Release();
-		m_tessellationBuffer = 0;
-	}
-
+	 
 	// Release the layout.
 	if (m_layout)
 	{
 		m_layout->Release();
 		m_layout = 0;
 	}
-	if (lightBuffer)
-	{
-		lightBuffer->Release();
-		lightBuffer = 0;
-	}
-	// Release the light constant buffer.
-	if (lightBuffer2)
-	{
-		lightBuffer2->Release();
-		lightBuffer2 = 0;
-	}
+
 
 	if (faultLineBuffer)
 	{

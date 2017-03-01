@@ -2,7 +2,7 @@
 
 
 
-DoubleTriangleMesh::DoubleTriangleMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename)
+DoubleTriangleMesh::DoubleTriangleMesh(std::string name, ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename) :BaseMesh(name)
 {
 	// Initialize the vertex and index buffer that hold the geometry for the triangle.
 	InitBuffers(device);

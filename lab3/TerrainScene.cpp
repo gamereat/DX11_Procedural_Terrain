@@ -38,7 +38,7 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	Scene::Init(hwnd, device, deviceContext, sound);
 
 	// Create Mesh object
-	terrain = new Terrain(device, deviceContext, L"../res/bunny.png");
+	terrain = new Terrain("Terrain",device, deviceContext, L"../res/bunny.png");
  	terrain->InitializeTerrain(device, 100, 100);
   	colourShader = new ColourShader(device, hwnd);
 	textureShader = new TextureShader(device, hwnd);
@@ -62,6 +62,8 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 
 	faultLineSettings->numberOfIterations = 1;
 	faultLineSettings->startingDisplacement = 0.5f;
+
+	terrain->setTranslation(XMFLOAT3(-25, -25, 50));
  }
 void TerrainScene::Update(Timer * timer)
 {
@@ -114,7 +116,7 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 	}
 	 
 	//// Send geometry data (from mesh)
-	terrain->SendData(device->GetDeviceContext());
+	worldMatrix = 	terrain->SendData(device->GetDeviceContext());
 	//// Set shader parameters (matrices and texture)
 	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(), faultLineSettings);
 	//// Render object (combination of mesh geometry and shader process
@@ -141,11 +143,19 @@ void TerrainScene::MenuOptions()
 		{
 			soundOptions = soundOptions ? false : true;
 		}
- 
+		if (ImGui::BeginMenu("Objects"))
+		{
+			if (ImGui::MenuItem(terrain->getName().c_str()))
+			{
+				terrain->ToggleMenu();
+			}
+			ImGui::EndMenu();
+
+		}
 		ImGui::EndMenu();
 
 	}
-
+	terrain->GuiSettings(&terrain->menuOpen);
 	sound->GUI_Menu(&soundOptions);
 	//terrain->Settings(&terrainOptions);
 	TerrainSettings(&terrainOptions);
@@ -176,26 +186,29 @@ void TerrainScene::TerrainSettings(bool * is_open)
 			ImGui::End();
 			return;
 		}
-		if (ImGui::Checkbox("Smoothing Value ", &faultLineSettings->enableFaultLineDisplacement))
+		if (ImGui::Checkbox("Enable Fault Line Displacement", &faultLineSettings->enableFaultLineDisplacement))
 		{
 		}
+		if (faultLineSettings->enableFaultLineDisplacement)
+		{
 
-		if(ImGui::SliderInt("Number of Iterations", &faultLineSettings->numberOfIterations, 0, MAX_FAULTLINE_ITERATIONS))
-		{
-		}
-		if(ImGui::SliderFloat("Displacement Value ", &faultLineSettings->startingDisplacement, 0, 10))
-		{
- 		}
-		if (ImGui::SliderFloat("Minimum displacement value ", &faultLineSettings->minimumDisplacement, 0, faultLineSettings->startingDisplacement))
-		{
-		}
-		if (ImGui::SliderFloat("Smoothing Value ", &faultLineSettings->smoothingValue, 0, 1,"%.3f",0.1f))
-		{
-		}
+			if (ImGui::SliderInt("Number of Iterations", &faultLineSettings->numberOfIterations, 0, MAX_FAULTLINE_ITERATIONS))
+			{
+			}
+			if (ImGui::SliderFloat("Displacement Value ", &faultLineSettings->startingDisplacement, 0, 1))
+			{
+			}
+			if (ImGui::SliderFloat("Minimum displacement value ", &faultLineSettings->minimumDisplacement, 0, faultLineSettings->startingDisplacement))
+			{
+			}
+			if (ImGui::SliderFloat("Smoothing Value ", &faultLineSettings->smoothingValue, 0, 1, "%.3f", 0.1f))
+			{
+			}
 
-		if (ImGui::Button("Regenerate Fault Line Values"))
-		{
-			regenerateFaultLines = true;
+			if (ImGui::Button("Regenerate Fault Line Values"))
+			{
+				regenerateFaultLines = true;
+			}
 		}
 		ImGui::End();
 

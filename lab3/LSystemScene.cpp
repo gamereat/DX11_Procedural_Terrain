@@ -55,7 +55,7 @@ void LSystemScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 
 	// init objects
 
-	planeMesh = new PlaneMesh(device, deviceContext, L"../res/bunny.png", 100);
+	planeMesh = new PlaneMesh("Dynamic Texture",device, deviceContext, L"../res/bunny.png", 100);
 	// Create L-System rules 
 	std::unordered_map<char, std::string> rules{
 	//	{ 'F',"F+F-F-F+F" },
@@ -63,7 +63,7 @@ void LSystemScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 		{ 'Y',"-FX-Y" },
 	};
 	// init L-System
-	lSystem = new LSystem(device,3,4, rules);
+	lSystem = new LSystem(device,14,3, rules);
 	updateLSysteam = true;
 
 
@@ -81,6 +81,7 @@ void LSystemScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	planeTranslation.x = -49;
 	planeTranslation.y = -7;
 	planeTranslation.z = -48;
+	planeMesh->setScaleRotationTranslation(planeScale, planeRotate, planeTranslation);
 
 
 }
@@ -120,14 +121,10 @@ void LSystemScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 		depthMaps[i] = depthMap[i]->GetShaderResourceView();
 
 	}
- 
-	// Set the tranfom value for the plane
-	worldMatrix = XMMatrixTranslation(planeTranslation.x, planeTranslation.y, planeTranslation.z) *
-		XMMatrixScaling(planeScale.x, planeScale.y, planeScale.z) * XMMatrixRotationX(planeRotate.x) *
-		XMMatrixRotationY(planeRotate.y) *  XMMatrixRotationZ(planeRotate.z);
+
 
 	//// Send geometry data (from mesh)
-	planeMesh->SendData(device->GetDeviceContext());
+	worldMatrix = planeMesh->SendData(device->GetDeviceContext());
 	//// Set shader parameters (matrices and texture)
 	textureShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, lSystem->texture);
 	//// Render object (combination of mesh geometry and shader process
@@ -151,6 +148,16 @@ void LSystemScene::MenuOptions()
 			lStsytemSettings = lStsytemSettings ? false : true;
 
 		}
+
+		if (ImGui::BeginMenu("Objects"))
+		{
+			if (ImGui::MenuItem(planeMesh->getName().c_str()))
+			{
+				planeMesh->ToggleMenu();
+			}
+			ImGui::EndMenu();
+
+		}
 		if (ImGui::SmallButton("Refresh L-System"))
 		{
 			updateLSysteam = true;
@@ -160,6 +167,7 @@ void LSystemScene::MenuOptions()
 		ImGui::EndMenu();
 
 	}
+	planeMesh->GuiSettings(&planeMesh->menuOpen);
 	lSystem->Gui_menu(&lStsytemSettings);
 
 }

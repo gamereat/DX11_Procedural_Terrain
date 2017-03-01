@@ -17,7 +17,7 @@ class Model : public BaseMesh
 	};
 
 public:
-	Model(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, WCHAR* filename);
+	Model(std::string name, ID3D11Device * device, ID3D11DeviceContext * deviceContext, WCHAR * textureFilename, WCHAR * filename);
 	~Model();
 
 

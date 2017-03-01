@@ -1,7 +1,7 @@
 // Mesh.cpp
 #include "tessellationmesh.h"
 
-TessellationMesh::TessellationMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename)
+TessellationMesh::TessellationMesh(std::string name, ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename) : BaseMesh(name)
 {
 	// Initialize the vertex and index buffer that hold the geometry for the triangle.
 	InitBuffers(device);
@@ -17,6 +17,7 @@ TessellationMesh::~TessellationMesh()
 	BaseMesh::~BaseMesh();
 }
 
+ 
 
 
 void TessellationMesh::InitBuffers(ID3D11Device* device)
@@ -96,7 +97,7 @@ void TessellationMesh::InitBuffers(ID3D11Device* device)
 	indices = 0;
 }
 
-void TessellationMesh::SendData(ID3D11DeviceContext* deviceContext)
+void TessellationMesh::SendData(ID3D11DeviceContext* deviceContext, XMMATRIX & worldMartix)
 {
 	unsigned int stride;
 	unsigned int offset;
@@ -113,5 +114,9 @@ void TessellationMesh::SendData(ID3D11DeviceContext* deviceContext)
 
 	// Set the type of primitive that should be rendered from this vertex buffer, in this case control patch for tessellation.
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
-}
 
+	//// Set the position on screen
+	//worldMartix = XMMatrixTranslation(translation.x, translation.y, translation.z) *
+	//	XMMatrixScaling(scale.x, scale.y, scale.z) * XMMatrixRotationX(rotate.x) *
+	//	XMMatrixRotationY(rotate.y) *  XMMatrixRotationZ(rotate.z);
+}

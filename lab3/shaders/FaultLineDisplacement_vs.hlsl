@@ -104,7 +104,7 @@ OutputType main(InputType input)
 	
     // Normalize the normal vector.
     output.normal = normalize(output.normal);
-
+ 
 
     return output;
 }
@@ -114,8 +114,6 @@ float FaultLineDisplacement(float x, float z)
 {
      
     float yAxisChange = 0;
-
-  
 
 
     float displacement = startingDisplacement;
@@ -137,8 +135,7 @@ float FaultLineDisplacement(float x, float z)
 
 
         if (((a * z) + (b * x) - c) > 0)
-        {
-                          
+        {          
             yAxisChange += displacement;
         }
         else

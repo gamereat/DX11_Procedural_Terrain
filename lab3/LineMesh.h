@@ -9,7 +9,7 @@ class LineMesh : public BaseMesh
 {
 
 public:
-	LineMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, int resolution = 20);
+	LineMesh(std::string name, ID3D11Device * device, ID3D11DeviceContext * deviceContext, WCHAR * textureFilename, int resolution = 20);
 	~LineMesh();
 
 protected:

@@ -3,7 +3,7 @@
 
 #include "orthomesh.h"
 
-OrthoMesh::OrthoMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, int width, int height, int xPosition, int yPosition)
+OrthoMesh::OrthoMesh(std::string name,  ID3D11Device* device, ID3D11DeviceContext* deviceContext, int width, int height, int xPosition, int yPosition) :BaseMesh(name)
 {
 	// Initialize the vertex and index buffer that hold the geometry for the triangle.
 	m_width = width;

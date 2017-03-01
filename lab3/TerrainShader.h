@@ -29,10 +29,8 @@ private:
 	ID3D11Buffer* m_matrixBuffer;
  	ID3D11SamplerState* m_sampleState;
 	ID3D11SamplerState* sampleStateClamp;
-	ID3D11Buffer* m_tessellationBuffer;
+
 	ID3D11Buffer* planetBuffer;;
-	ID3D11Buffer* lightBuffer;
-	ID3D11Buffer* lightBuffer2;
 
 	ID3D11Buffer* faultLineBuffer;
 

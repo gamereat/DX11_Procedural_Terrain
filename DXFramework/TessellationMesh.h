@@ -10,10 +10,10 @@ class TessellationMesh : public BaseMesh
 {
 
 public:
-	TessellationMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename);
+	TessellationMesh(std::string name, ID3D11Device * device, ID3D11DeviceContext * deviceContext, WCHAR * textureFilename);
 	~TessellationMesh();
 
-	void SendData(ID3D11DeviceContext*);
+	void SendData(ID3D11DeviceContext*, XMMATRIX& worldMartix);
 
 protected:
 	void InitBuffers(ID3D11Device* device);

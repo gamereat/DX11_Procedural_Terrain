@@ -9,7 +9,7 @@ class OrthoMesh : public BaseMesh
 {
 
 public:
-	OrthoMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, int width, int height, int xPosition = 0, int yPosition = 0);
+	OrthoMesh(std::string name, ID3D11Device* device, ID3D11DeviceContext* deviceContext, int width, int height, int xPosition = 0, int yPosition = 0);
 	~OrthoMesh();
 
 protected:

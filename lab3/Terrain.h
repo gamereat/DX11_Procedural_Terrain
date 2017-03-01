@@ -43,13 +43,13 @@ private:
 	};
 public:
 
- 	Terrain(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, int resolution = 100);
+	Terrain(std::string name, ID3D11Device * device, ID3D11DeviceContext * deviceContext, WCHAR * textureFilename, int resolution = 100);
 	~Terrain();
 	bool CalculateNormals();
 	bool InitializeTerrain(ID3D11Device*, int terrainWidth, int terrainHeight);
  	bool GenerateHeightMap(ID3D11Device * device, bool keydown, class Sound * sound);
 	void InitBuffers(ID3D11Device * device);
- 	void SendData(ID3D11DeviceContext* deviceContext);
+	XMMATRIX SendData(ID3D11DeviceContext* deviceContext);
 	void Settings(bool* is_open);
 private:
 	bool LoadHeightMap(char*);

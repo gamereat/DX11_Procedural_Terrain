@@ -1,7 +1,7 @@
 // Mesh.cpp
 #include "quadmesh.h"
 
-QuadMesh::QuadMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename)
+QuadMesh::QuadMesh(std::string name, ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename) : BaseMesh(name)
 {
 	// Initialize the vertex and index buffer that hold the geometry for the triangle.
 	InitBuffers(device);
@@ -16,7 +16,7 @@ QuadMesh::~QuadMesh()
 	// Run parent deconstructor
 	BaseMesh::~BaseMesh();
 }
-
+ 
 
 
 void QuadMesh::InitBuffers(ID3D11Device* device)
@@ -105,7 +105,8 @@ void QuadMesh::InitBuffers(ID3D11Device* device)
 }
 
 
-void QuadMesh::SendData(ID3D11DeviceContext* deviceContext)
+void QuadMesh::SendData(ID3D11DeviceContext * deviceContext, XMMATRIX & worldMartix)
+
 {
 	unsigned int stride;
 	unsigned int offset;
@@ -122,5 +123,12 @@ void QuadMesh::SendData(ID3D11DeviceContext* deviceContext)
 
 	// Set the type of primitive that should be rendered from this vertex buffer, in this case control patch for tessellation.
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST);
+
+
+		//// Set the position on screen
+		//worldMartix = XMMatrixTranslation(translation.x, translation.y, translation.z) *
+		//XMMatrixScaling(scale.x, scale.y, scale.z) * XMMatrixRotationX(rotate.x) *
+		//XMMatrixRotationY(rotate.y) *  XMMatrixRotationZ(rotate.z);
 }
+
 

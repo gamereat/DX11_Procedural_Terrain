@@ -34,7 +34,7 @@ void PostProcessing::Init(D3D* directX3D, HWND hwnd, Timer* timer)
 
 
 	// Create a downscaled OrthoMesh to be used for each post prcoessing effect
-	orthoMeshDownScaled = new OrthoMesh(directX3D->GetDevice(), directX3D->GetDeviceContext(), ApplicationSettings::screenWidth / downScaleAmmount, ApplicationSettings::screenHeight / downScaleAmmount, 0, 0);
+	orthoMeshDownScaled = new OrthoMesh("Down Scale Orth Mesh",directX3D->GetDevice(), directX3D->GetDeviceContext(), ApplicationSettings::screenWidth / downScaleAmmount, ApplicationSettings::screenHeight / downScaleAmmount, 0, 0);
 
 	// Init all the post proccessing effects 
 

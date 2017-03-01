@@ -2,7 +2,7 @@
 // Generates a sphere.
 #include "LineMesh.h"
 
-LineMesh::LineMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, int resolution)
+LineMesh::LineMesh(std::string name ,ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, int resolution) :BaseMesh(name)
 {
 	m_resolution = resolution;
 	// Initialize the vertex and index buffer that hold the geometry for the triangle.
@@ -19,7 +19,7 @@ LineMesh::~LineMesh()
 	BaseMesh::~BaseMesh();
 }
 
-
+ 
 
 void LineMesh::InitBuffers(ID3D11Device* device)
 {

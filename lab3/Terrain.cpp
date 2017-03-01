@@ -4,8 +4,8 @@
 #include "Sound.h"
 #include "SimplexNoise.h"
 #include "FractionalBrownianMotion.h"
-Terrain::Terrain(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, int resolution)
-: PlaneMesh(device, deviceContext, textureFilename, resolution)
+Terrain::Terrain(std::string name, ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, int resolution)
+: PlaneMesh(name,device, deviceContext, textureFilename, resolution)
 {
 	isTerrainGeneratedEnabled = false;
 	generateTerrain = false;
@@ -343,7 +343,7 @@ void Terrain::InitBuffers(ID3D11Device* device)
 	indices = 0;
 
  }
-void Terrain::SendData(ID3D11DeviceContext * deviceContext)
+ XMMATRIX Terrain::SendData(ID3D11DeviceContext * deviceContext)
 {
 	unsigned int stride;
 	unsigned int offset;
@@ -361,7 +361,13 @@ void Terrain::SendData(ID3D11DeviceContext * deviceContext)
 	// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	return;
+
+
+
+	// Set the position on screen
+	return XMMatrixTranslation(translation.x, translation.y, translation.z) *
+		XMMatrixScaling(scale.x, scale.y, scale.z) * XMMatrixRotationX(rotate.x) *
+		XMMatrixRotationY(rotate.y) *  XMMatrixRotationZ(rotate.z);
 }
 
 void Terrain::Settings(bool* is_open)

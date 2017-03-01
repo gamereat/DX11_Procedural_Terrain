@@ -9,7 +9,7 @@ using namespace DirectX;
 class DoubleTriangleMesh : public BaseMesh
 {
 public:
-	DoubleTriangleMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename);
+	DoubleTriangleMesh(std::string name, ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename);
 
  	~DoubleTriangleMesh();
 

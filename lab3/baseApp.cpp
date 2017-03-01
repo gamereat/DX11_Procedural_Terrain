@@ -131,7 +131,7 @@ void BaseApp::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHe
 	}
 
 	// Load in textures
-	orthoMeshNormalScaled = new OrthoMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), screenWidth, screenHeight, 0, 0);
+	orthoMeshNormalScaled = new OrthoMesh("Normal OrthoMesh",m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), screenWidth, screenHeight, 0, 0);
 	upScaleTexture = new  RenderTexture(m_Direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
 	sceneTexture = new  RenderTexture(m_Direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
 

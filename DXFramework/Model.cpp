@@ -2,7 +2,7 @@
 // Loads a .obj and creates a mesh object from the data
 #include "model.h"
 
-Model::Model(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, WCHAR* filename)
+Model::Model(std::string name, ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, WCHAR* filename) : BaseMesh(name)
 {
 	// Load model data
 	LoadModel(filename);

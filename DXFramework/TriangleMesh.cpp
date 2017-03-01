@@ -3,7 +3,7 @@
 
 #include "TriangleMesh.h"
 
-TriangleMesh::TriangleMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename)
+TriangleMesh::TriangleMesh(std::string name, ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename) :BaseMesh(name)
 {
 	// Initialize the vertex and index buffer that hold the geometry for the triangle.
 	InitBuffers(device);
