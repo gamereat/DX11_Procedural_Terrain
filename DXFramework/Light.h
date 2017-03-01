@@ -3,7 +3,7 @@
 
 #include <directxmath.h>
 #include <string>
-using namespace DirectX;
+ using namespace DirectX;
 
 class Light
 {
@@ -11,6 +11,7 @@ class Light
 
 public:
 	Light();
+
 	enum class lightType
 	{
 		directional,
@@ -74,6 +75,8 @@ public:
 
 
 protected:
+
+
 	XMFLOAT4 m_ambientColour;
 	XMFLOAT4 m_diffuseColour;
 	XMFLOAT3 m_direction;

@@ -4,7 +4,7 @@
 #include "../DXFramework/CubeMesh.h"
 #include "../DXFramework/QuadMesh.h"
 #include "../DXFramework/DoubleTriangleMesh.h"
-
+#include "DepthShader.h"
 #include "ColourShader.h"
 #include "Terrain.h"
 #include "../DXFramework/CubeMesh.h"
@@ -87,6 +87,14 @@ public:
 
 	void TerrainSettings(bool *is_open);
 private:
+
+
+	DepthShader* depthShader;
+
+	/*
+	Settings used to texture the terrains
+	*/
+	TerrainSettingTextureType* terrainTextureSettings;
 
 	/*
 	Fault line settings

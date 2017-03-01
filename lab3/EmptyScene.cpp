@@ -32,7 +32,7 @@ void EmptyScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * de
 	Scene::Init(hwnd, device, deviceContext,sound);
 
 	// Create Mesh object
-	mesh = new DoubleTriangleMesh(device, deviceContext, L"../res/DefaultDiffuse.png");
+	mesh = new DoubleTriangleMesh( "BaseMesh",device, deviceContext, L"../res/DefaultDiffuse.png");
 
 	colourShader = new ColourShader(device, hwnd);
 }

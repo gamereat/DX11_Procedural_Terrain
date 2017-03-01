@@ -27,6 +27,9 @@ Light::Light()
 	m_makeSpecular = false;
 	m_lightType = lightType::point;
 }
+
+
+
 void Light::GenerateViewMatrix()
 {
 	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
@@ -164,9 +167,9 @@ void Light::DisplayGUIEditor(std::string  lightNum,bool* is_open)
 	}
 }
 
-void Light::generateOrthoMatrix(float screenWidth, float screenHeight, float near, float far)
+void Light::generateOrthoMatrix(float screenWidth, float screenHeight, float nearf, float farf)
 {
-	m_orthoMatrix = XMMatrixOrthographicLH(screenWidth, screenHeight, near, far);
+	m_orthoMatrix = XMMatrixOrthographicLH(screenWidth, screenHeight, nearf, farf);
 }
 
 void Light::SetAmbientColour(float red, float green, float blue, float alpha)

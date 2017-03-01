@@ -15,7 +15,9 @@ public:
 
 	void SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, 
 		const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, 
-		ID3D11ShaderResourceView* texture,  FaultLineDisplacementBufferType* faultLineSettings);
+		ID3D11ShaderResourceView* texture,  FaultLineDisplacementBufferType* faultLineSettings, TerrainSettingTextureType* terrainTextureSettings,
+		Light* light[NUM_LIGHTS],
+		ID3D11ShaderResourceView*depthMap[]);
 	void Render(ID3D11DeviceContext * deviceContext, int indexCount);
 
  
@@ -27,10 +29,13 @@ private:
 
 private:
 	ID3D11Buffer* m_matrixBuffer;
- 	ID3D11SamplerState* m_sampleState;
-	ID3D11SamplerState* sampleStateClamp;
+	ID3D11SamplerState* m_sampleState;
+	ID3D11SamplerState* m_sampleStateClamp;
+	ID3D11Buffer* m_LightBuffer;
+	ID3D11Buffer* m_LightBuffer2;
 
-	ID3D11Buffer* planetBuffer;;
+
+	ID3D11Buffer* terrainTexturingBuffer;;
 
 	ID3D11Buffer* faultLineBuffer;
 

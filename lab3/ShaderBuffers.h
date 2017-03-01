@@ -17,6 +17,13 @@ const int MAX_FAULTLINE_ITERATIONS = 2500;
 
 
 
+struct TerrainSettingTextureType
+{
+	bool displayNormalMap;
+
+	XMINT3 padding;
+};
+
 
 struct FaultLineDisplacementBufferType
 {
@@ -102,8 +109,7 @@ struct CammeraBufferType
 };
 struct LightBufferType
 {
-	//XMFLOAT4 ambient;
-	//XMFLOAT4 diffuse; 
+ 
 
 	XMFLOAT4 diffuseColour[NUM_LIGHTS];
 	XMFLOAT4 lightDirection[NUM_LIGHTS];

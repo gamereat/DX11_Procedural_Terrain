@@ -100,6 +100,7 @@
     <ClCompile Include="..\MiniIni\minIni.cpp" />
     <ClCompile Include="baseApp.cpp" />
     <ClCompile Include="ColourShader.cpp" />
+    <ClCompile Include="DepthShader.cpp" />
     <ClCompile Include="DistanceBasedTesselation.cpp" />
     <ClCompile Include="EmptyScene.cpp" />
     <ClCompile Include="FaultLineDisplacement.cpp" />
@@ -127,6 +128,7 @@
     <ClInclude Include="..\MiniIni\minIni.hpp" />
     <ClInclude Include="baseApp.h" />
     <ClInclude Include="ColourShader.h" />
+    <ClInclude Include="DepthShader.h" />
     <ClInclude Include="DistanceBasedTesselation.h" />
     <ClInclude Include="EmptyScene.h" />
     <ClInclude Include="FaultLineDisplacement.h" />
@@ -158,6 +160,12 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="shaders\depth_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\depth_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="shaders\distanceBasedTesselation_ds.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Domain</ShaderType>

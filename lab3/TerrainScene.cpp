@@ -1,5 +1,6 @@
 #include "TerrainScene.h"
 #include "../imgui/imgui.h"
+#include "../ApplicationSettings.h"
 #include <random>
 
 TerrainScene::TerrainScene(string sceneName)
@@ -49,11 +50,12 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	//sound->Init(L"../res/BlownAway.mp3");
  
 
+	depthShader = new DepthShader(device, hwnd);
 	faultLineSettings = new FaultLineDisplacementBufferType();
 
 	distanceTess = new DistanceBasedTesselation(device, hwnd);
 
-
+	terrainTextureSettings = new TerrainSettingTextureType();
 	tessSettings.maxDistance = 10;
 	tessSettings.maxTesselationAmmount = 6;
 	tessSettings.minDistance = 1;
@@ -67,6 +69,16 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
  }
 void TerrainScene::Update(Timer * timer)
 {
+
+
+
+	if (faultLineSettings->enableFaultLineDisplacement && sound->getData(BASS_DATA_FFT256 | BASS_DATA_FLOAT, 128)[1] > 0.4f)
+	{
+ 
+		faultLineSettings->numberOfIterations++;
+	}
+
+
 	// If needing to genereat rnadom numbers 
 	if (regenerateFaultLines)
 	{
@@ -89,8 +101,9 @@ void TerrainScene::Update(Timer * timer)
 }
 void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[])
 {
- 
+
 	terrain->GenerateHeightMap(device->GetDevice(), false,sound);
+//	GenerateDepthPass(device, camera, depthMap, light);
 
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrixs;
 
@@ -118,7 +131,8 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 	//// Send geometry data (from mesh)
 	worldMatrix = 	terrain->SendData(device->GetDeviceContext());
 	//// Set shader parameters (matrices and texture)
-	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(), faultLineSettings);
+	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(),
+		faultLineSettings, terrainTextureSettings,light,depthMaps);
 	//// Render object (combination of mesh geometry and shader process
 	terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
 
@@ -165,10 +179,59 @@ void TerrainScene::MenuOptions()
 void TerrainScene::ResetLights(Light * lights[])
 {
 	lights[0]->SetDiffuseColour(1, 1, 1, 1);
+
+	lights[0]->SetPosition(-68, 82, 177);
+
 }
 
-void TerrainScene::GenerateDepthPass(D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[])
+void TerrainScene::GenerateDepthPass(D3D * device, Camera * camera, RenderTexture * depthMap[], Light * lights[])
 {
+	// Loop though for each light to generate depth map for each
+	for (int i = 0; i < NUM_LIGHTS; i++)
+	{
+		XMMATRIX worldMatrix;
+
+		XMMATRIX lightViewMartix, lightProjectionMatrix;
+
+		// Set the render target to be the render to texture.
+		depthMap[i]->SetRenderTarget(device->GetDeviceContext());
+
+		// Clear the render to texture.
+		depthMap[i]->ClearRenderTarget(device->GetDeviceContext(), 0.0f, 0.0f, 1.0f, 1.0f);
+
+		// Generate the view matrix based on the camera's position.
+		camera->Update();
+
+		// Get the world, view, and projection matrices from the camera and d3d objects.
+		device->GetWorldMatrix(worldMatrix);
+
+		lights[i]->GenerateViewMatrix();
+		lightViewMartix = lights[i]->GetViewMatrix();
+
+		lights[i]->GenerateProjectionMatrix(ApplicationSettings::sceenNear, ApplicationSettings::screenDepth);
+		lightProjectionMatrix = lights[i]->GetProjectionMatrix();
+		worldMatrix = XMMatrixScaling(0.1, 0.1, 0.1);
+
+
+		////// Send geometry data (from mesh)
+
+
+		//// Send geometry data (from mesh)
+		worldMatrix = terrain->SendData(device->GetDeviceContext());
+		//// Set shader parameters (matrices and texture)
+		depthShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, lightViewMartix, lightProjectionMatrix);
+		//// Render object (combination of mesh geometry and shader process
+		depthShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
+
+
+
+
+
+
+		// Reset the render target back to the original back buffer and not the render to texture anymore.
+		device->SetBackBufferRenderTarget();
+		device->ResetViewport();
+	}
 }
 
 void TerrainScene::SceneInformationPopUp(bool * is_open)
@@ -205,6 +268,10 @@ void TerrainScene::TerrainSettings(bool * is_open)
 			{
 			}
 
+			if (ImGui::Button("Display Normal map"))
+			{
+				terrainTextureSettings->displayNormalMap = terrainTextureSettings->displayNormalMap ? false : true;
+			}
 			if (ImGui::Button("Regenerate Fault Line Values"))
 			{
 				regenerateFaultLines = true;
