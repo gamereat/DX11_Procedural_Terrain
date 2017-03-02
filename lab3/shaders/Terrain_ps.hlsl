@@ -2,12 +2,15 @@
 // Basic fragment shader for rendering textured geometry
 
 
-Texture2D texture0 : register(t0);
+Texture2D defaultTexture : register(t0);
+Texture2D lowTexture : register(t1);
+Texture2D mediumTexture : register(t2);
+Texture2D highTexture : register(t3);
 
-Texture2D depthMapTexture : register(t1);
-Texture2D depthMapTexture1 : register(t2);
-Texture2D depthMapTexture2 : register(t3);
-Texture2D depthMapTexture3 : register(t4);
+Texture2D depthMapTexture : register(t4);
+Texture2D depthMapTexture1 : register(t5);
+Texture2D depthMapTexture2 : register(t6);
+Texture2D depthMapTexture3 : register(t7);
 
 SamplerState SampleTypeWrap : register(s0);
 SamplerState SampleTypeClamp : register(s1);
@@ -45,8 +48,7 @@ cbuffer TerrainSettingTextureBuffer : register(cb1)
 
     int3 padding;
 };
-
-
+ 
 struct InputType
 {
     float4 position : SV_POSITION;
@@ -57,20 +59,17 @@ struct InputType
     float3 position3D : TEXCOORD10;
     float3 viewDirection : TEXCOORD11;
 };
-
-
+ 
 float4 main(InputType input) : SV_TARGET
 {
-
-
+	 
     // If Needing to just display the normal map 
     if (displayNormalMap)
     {
         // Gets the input normal map then returns colour based off it 
         return float4(1, 1, 1, 0) - float4(input.normal, 1);;
     }
-
-
+ 
     float bias;
     float4 shadowColourValue[4];
     float4 color = float4(0, 0, 0, 0);
@@ -305,10 +304,28 @@ float4 main(InputType input) : SV_TARGET
         color = saturate(color + shadowColourValue[i]);
 
     }
-    color = saturate(color);
+   
+	color = saturate(color);
 	// Sample the pixel color from the texture using the sampler at this texture coordinate location.
-    textureColor = texture0.Sample(SampleTypeWrap, input.tex);
-   float4 depth= depthMapTexture.Sample(SampleTypeWrap, input.tex);
+ //   textureColor = texture0.Sample(SampleTypeWrap, input.tex);
+   
+	if (1- input.normal.y < 0.3)
+	{
+
+		textureColor = lowTexture.Sample(SampleTypeWrap, input.tex);
+	}
+	else if (1 - input.normal.y < 0.6)
+	{
+		textureColor = mediumTexture.Sample(SampleTypeWrap, input.tex);
+
+	}
+	else {
+		textureColor = highTexture.Sample(SampleTypeWrap, input.tex);
+
+	}
+
+
+	float4 depth= depthMapTexture.Sample(SampleTypeWrap, input.tex);
     depth.w = 1;
 	// Combine the light and texture color.
     color = color * textureColor;

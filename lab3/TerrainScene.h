@@ -89,6 +89,24 @@ public:
 private:
 
 
+	/*
+	
+	*/
+	Texture* lowTexture;
+
+	/*
+
+	*/
+	Texture* mediumTexture;
+
+	/*
+
+	*/
+	Texture* hightTexture;
+
+	/*
+	Depth texture using to create depth map
+	*/
 	DepthShader* depthShader;
 
 	/*

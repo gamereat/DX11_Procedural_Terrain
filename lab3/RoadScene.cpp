@@ -27,7 +27,9 @@ void RoadScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * dev
  
 	interations = 5;
  
+
 	 lineMesh = new LineMesh("Line Mesh",device, deviceContext, L"../res/bunny.png");
+	 lineMesh2 = new LineMesh("Line Mesh 1", device, deviceContext, L"../res/bunny.png");
  	cube = new CubeMesh("Set Cube",device, deviceContext, L"../res/bunny.png");
 }
 
@@ -62,13 +64,14 @@ void RoadScene::Render(RenderTexture * renderTexture, D3D * device, Camera * cam
 	int g = 0;
 	  int b = 0;
  
-	  lineMesh->SendData(device->GetDeviceContext());
+	  worldMatrix = lineMesh->SendData(device->GetDeviceContext());
 	  colourShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix);
 	  colourShader->Render(device->GetDeviceContext(), lineMesh->GetIndexCount());
 
- 
- 
-
+	  worldMatrix = lineMesh2->SendData(device->GetDeviceContext());
+	  colourShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix);
+	  colourShader->Render(device->GetDeviceContext(), lineMesh2->GetIndexCount());
+	  
 	device->SetBackBufferRenderTarget();
 
 }
@@ -79,6 +82,21 @@ void RoadScene::MenuOptions()
 
 	if (ImGui::BeginMenu("Road options"))
 	{
+		if (ImGui::BeginMenu("Objects"))
+		{
+			if (ImGui::MenuItem(lineMesh->getName().c_str()))
+			{
+				lineMesh->ToggleMenu();
+			}
+			if (ImGui::MenuItem(lineMesh2->getName().c_str()))
+			{
+				lineMesh2->ToggleMenu();
+			}
+
+			
+			ImGui::EndMenu();
+
+		}
 		if (ImGui::MenuItem("Sound Settings"))
 		{
 			soundMenuOpen = soundMenuOpen ? false : true;
@@ -87,7 +105,8 @@ void RoadScene::MenuOptions()
 		ImGui::EndMenu();
 
 	}
-
+	lineMesh2->GuiSettings(&lineMesh2->menuOpen);
+	lineMesh->GuiSettings(&lineMesh->menuOpen);
 	sound->GUI_Menu(&soundMenuOpen);
 
 }

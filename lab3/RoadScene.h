@@ -90,6 +90,7 @@ public:
 
 private:
 	LineMesh* lineMesh;
+	LineMesh* lineMesh2;
 	 int a;
  	ColourShader* colourShader;
 	std::string rule;

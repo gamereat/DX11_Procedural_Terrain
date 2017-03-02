@@ -99,7 +99,7 @@ void BaseApp::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHe
 	// Init sound information 
 	sound = new Sound();
 	sound->Init(L"../res/DiscoMedusae.mp3");
-	sound->setPause(false);
+	sound->setPause(true);
  	
 	// Load in Scenes 
 	terrainScene = new TerrainScene("Terrain Scene");
@@ -259,6 +259,15 @@ void BaseApp::CreateMainMenuBar()
 			currentScene = lSystemScene;
 			currentScene->ResetLights(lights);
 			lSystemScene->isEnbaled = true;
+			terrainScene->isEnbaled = false;
+			roadScene->isEnbaled = false;
+		}
+		if (ImGui::MenuItem(roadScene->getSceneName().c_str()))
+		{
+			currentScene = roadScene;
+			currentScene->ResetLights(lights);
+			roadScene->isEnbaled = true;
+			lSystemScene->isEnbaled = false;
 			terrainScene->isEnbaled = false;
 		}
 		ImGui::EndMenu();

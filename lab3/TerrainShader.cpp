@@ -165,7 +165,9 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * hsFilename, WCHAR * d
 }
 
 
-void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * texture, FaultLineDisplacementBufferType * faultLineSettings, TerrainSettingTextureType * terrainTextureSettings, Light * light[NUM_LIGHTS], ID3D11ShaderResourceView * depthMap[])
+void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix,
+	ID3D11ShaderResourceView * defaultTexture, FaultLineDisplacementBufferType * faultLineSettings, TerrainSettingTextureType * terrainTextureSettings, Light * light[NUM_LIGHTS],
+	ID3D11ShaderResourceView * depthMap[], ID3D11ShaderResourceView * lowTexture, ID3D11ShaderResourceView * mediumTexture, ID3D11ShaderResourceView * hightTexture)
 
 {
 	HRESULT result;
@@ -216,8 +218,6 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
 
 
-	// Set shader texture resource in the pixel shader.
-	deviceContext->PSSetShaderResources(0, 1, &texture);
 
 
 
@@ -339,14 +339,23 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 
 
 
-	deviceContext->PSSetShaderResources(1, 1, (&depthMap[0]));
-	deviceContext->PSSetShaderResources(2, 1, (&depthMap[1]));
-	deviceContext->PSSetShaderResources(3, 1, (&depthMap[2]));
-	deviceContext->PSSetShaderResources(4, 1, (&depthMap[3]));
+	// Set shader texture resource in the pixel shader.
+	deviceContext->PSSetShaderResources(0, 1, &defaultTexture);
+
+	deviceContext->PSSetShaderResources(1, 1, &lowTexture);
+	deviceContext->PSSetShaderResources(2, 1, &mediumTexture);
+	deviceContext->PSSetShaderResources(3, 1, &hightTexture); 
+
+
+	deviceContext->PSSetShaderResources(4, 1, (&depthMap[0]));
+	deviceContext->PSSetShaderResources(5, 1, (&depthMap[1]));
+	deviceContext->PSSetShaderResources(6, 1, (&depthMap[2]));
+	deviceContext->PSSetShaderResources(7, 1, (&depthMap[3]));
 
 }
 
 
+ 
  
 
 void TerrainShader::Render(ID3D11DeviceContext * deviceContext, int indexCount)

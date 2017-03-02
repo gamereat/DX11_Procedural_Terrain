@@ -15,9 +15,9 @@ public:
 
 	void SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, 
 		const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, 
-		ID3D11ShaderResourceView* texture,  FaultLineDisplacementBufferType* faultLineSettings, TerrainSettingTextureType* terrainTextureSettings,
-		Light* light[NUM_LIGHTS],
-		ID3D11ShaderResourceView*depthMap[]);
+		ID3D11ShaderResourceView* defaultTexture,  FaultLineDisplacementBufferType* faultLineSettings, TerrainSettingTextureType* terrainTextureSettings,
+		Light* light[NUM_LIGHTS], ID3D11ShaderResourceView*depthMap[],
+		ID3D11ShaderResourceView* lowTexture, ID3D11ShaderResourceView* mediumTexture, ID3D11ShaderResourceView* hightTexture );
 	void Render(ID3D11DeviceContext * deviceContext, int indexCount);
 
  

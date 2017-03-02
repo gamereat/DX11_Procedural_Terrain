@@ -66,6 +66,15 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	faultLineSettings->startingDisplacement = 0.5f;
 
 	terrain->setTranslation(XMFLOAT3(-25, -25, 50));
+
+
+
+	lowTexture = new Texture(device, deviceContext, L"../res/snow.png");
+	mediumTexture = new Texture(device, deviceContext, L"../res/stone.png");
+	hightTexture = new Texture(device, deviceContext, L"../res/rock_solid_rugged_01_M.png");
+
+
+
  }
 void TerrainScene::Update(Timer * timer)
 {
@@ -132,7 +141,8 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 	worldMatrix = 	terrain->SendData(device->GetDeviceContext());
 	//// Set shader parameters (matrices and texture)
 	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(),
-		faultLineSettings, terrainTextureSettings,light,depthMaps);
+		faultLineSettings, terrainTextureSettings, light, depthMaps,
+		lowTexture->GetTexture(), mediumTexture->GetTexture(), hightTexture->GetTexture());
 	//// Render object (combination of mesh geometry and shader process
 	terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
 
@@ -268,10 +278,9 @@ void TerrainScene::TerrainSettings(bool * is_open)
 			{
 			}
 
-			if (ImGui::Button("Display Normal map"))
+			if (ImGui::Checkbox("Display Normal map",&terrainTextureSettings->displayNormalMap))
 			{
-				terrainTextureSettings->displayNormalMap = terrainTextureSettings->displayNormalMap ? false : true;
-			}
+ 			}
 			if (ImGui::Button("Regenerate Fault Line Values"))
 			{
 				regenerateFaultLines = true;
