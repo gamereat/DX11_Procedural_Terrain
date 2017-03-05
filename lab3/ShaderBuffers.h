@@ -15,6 +15,31 @@ const int NUM_LIGHTS = 4;
 
 const int MAX_FAULTLINE_ITERATIONS = 2500;
 
+/*
+The Current Terrain Shader being Used
+*/
+enum TerrainGeneration
+{
+	FaultLineDisplacement,
+	PerlinNoise,
+	FractionalBrowningNoise,
+	SimplexNoise,
+	DiamondSquare,
+	MidwayPointDisplacement,
+	RandomNoise,
+
+};
+
+
+struct TerrainGenerationBufferType
+{
+	/*
+	The Type of generation used. NOTE this should be cast from TerrainGeneration enum
+	*/
+	int terrainGenerationType;
+
+
+};
 
 
 struct TerrainSettingTextureType

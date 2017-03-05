@@ -91,9 +91,6 @@
     <ClCompile Include="TerrainScene.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="TerrainShader.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
     <ClCompile Include="FractionalBrownianMotion.cpp">
       <Filter>Source Files\Noise</Filter>
     </ClCompile>
@@ -112,8 +109,8 @@
     <ClCompile Include="DepthShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FaultLineDisplacement.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="TerrainShader.cpp">
+      <Filter>Source Files\Shaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,9 +146,6 @@
     </ClInclude>
     <ClInclude Include="LineMesh.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainShader.h">
-      <Filter>Header Files\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="PostProccessingDownScale.h">
       <Filter>Header Files\Post proccssing</Filter>
@@ -189,11 +183,11 @@
     <ClInclude Include="SimplexNoise.h">
       <Filter>Header Files\Noise</Filter>
     </ClInclude>
-    <ClInclude Include="FaultLineDisplacement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DepthShader.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainShader.h">
+      <Filter>Header Files\Shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

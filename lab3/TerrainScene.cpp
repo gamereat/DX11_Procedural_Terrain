@@ -3,6 +3,7 @@
 #include "../ApplicationSettings.h"
 #include <random>
 
+
 TerrainScene::TerrainScene(string sceneName)
 	: Scene(sceneName)
 {
@@ -11,8 +12,6 @@ TerrainScene::TerrainScene(string sceneName)
 
 	regenerateFaultLines = true;
 }
-
-
  
 TerrainScene::~TerrainScene()
 {
@@ -43,12 +42,11 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
  	terrain->InitializeTerrain(device, 100, 100);
   	colourShader = new ColourShader(device, hwnd);
 	textureShader = new TextureShader(device, hwnd);
- //	model = new Model(device, deviceContext, L"../res/bunny.png", L"../res/teapot.obj");
-//	dbtShader = new DistanceBasedTesselation(device, hwnd);
+
 
 	terrainShader = new TerrainShader(device,hwnd);
-	//sound->Init(L"../res/BlownAway.mp3");
- 
+
+
 
 	depthShader = new DepthShader(device, hwnd);
 	faultLineSettings = new FaultLineDisplacementBufferType();
@@ -62,23 +60,24 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	tessSettings.minTesselationAmmount = 1;
 
 
-	faultLineSettings->numberOfIterations = 1;
+	faultLineSettings->enableFaultLineDisplacement = true;
+	faultLineSettings->numberOfIterations = 250;
 	faultLineSettings->startingDisplacement = 0.5f;
 
 	terrain->setTranslation(XMFLOAT3(-25, -25, 50));
 
 
 
-	lowTexture = new Texture(device, deviceContext, L"../res/snow.png");
-	mediumTexture = new Texture(device, deviceContext, L"../res/stone.png");
-	hightTexture = new Texture(device, deviceContext, L"../res/rock_solid_rugged_01_M.png");
+	lowTexture = new Texture(device, deviceContext, L"../res/grass.png");
+	mediumTexture = new Texture(device, deviceContext, L"../res/moss.png");
+	hightTexture = new Texture(device, deviceContext, L"../res/rock.png");
 
 
 
  }
+
 void TerrainScene::Update(Timer * timer)
 {
-
 
 
 	if (faultLineSettings->enableFaultLineDisplacement && sound->getData(BASS_DATA_FFT256 | BASS_DATA_FLOAT, 128)[1] > 0.4f)
@@ -108,6 +107,7 @@ void TerrainScene::Update(Timer * timer)
 		}
 	}
 }
+
 void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[])
 {
 
@@ -259,33 +259,39 @@ void TerrainScene::TerrainSettings(bool * is_open)
 			ImGui::End();
 			return;
 		}
-		if (ImGui::Checkbox("Enable Fault Line Displacement", &faultLineSettings->enableFaultLineDisplacement))
-		{
-		}
-		if (faultLineSettings->enableFaultLineDisplacement)
-		{
+		
+			int currnetGen = generationMethod;
 
-			if (ImGui::SliderInt("Number of Iterations", &faultLineSettings->numberOfIterations, 0, MAX_FAULTLINE_ITERATIONS))
-			{
-			}
-			if (ImGui::SliderFloat("Displacement Value ", &faultLineSettings->startingDisplacement, 0, 1))
-			{
-			}
-			if (ImGui::SliderFloat("Minimum displacement value ", &faultLineSettings->minimumDisplacement, 0, faultLineSettings->startingDisplacement))
-			{
-			}
-			if (ImGui::SliderFloat("Smoothing Value ", &faultLineSettings->smoothingValue, 0, 1, "%.3f", 0.1f))
-			{
-			}
 
-			if (ImGui::Checkbox("Display Normal map",&terrainTextureSettings->displayNormalMap))
+			ImGui::Combo("Terrain Generation Type", &currnetGen, TerrainGeneration_str, IM_ARRAYSIZE(TerrainGeneration_str));
+
+			generationMethod = (TerrainGeneration)currnetGen;
+			if (ImGui::Checkbox("Enable Fault Line Displacement", &faultLineSettings->enableFaultLineDisplacement))
 			{
- 			}
-			if (ImGui::Button("Regenerate Fault Line Values"))
-			{
-				regenerateFaultLines = true;
 			}
-		}
+			if (faultLineSettings->enableFaultLineDisplacement)
+			{
+				if (ImGui::SliderInt("Number of Iterations", &faultLineSettings->numberOfIterations, 0, MAX_FAULTLINE_ITERATIONS))
+				{
+				}
+				if (ImGui::SliderFloat("Displacement Value ", &faultLineSettings->startingDisplacement, 0, 1))
+				{
+				}
+				if (ImGui::SliderFloat("Minimum displacement value ", &faultLineSettings->minimumDisplacement, 0, faultLineSettings->startingDisplacement))
+				{
+				}
+				if (ImGui::SliderFloat("Smoothing Value ", &faultLineSettings->smoothingValue, 0, 1, "%.3f", 0.1f))
+				{
+				}
+
+				if (ImGui::Checkbox("Display Normal map", &terrainTextureSettings->displayNormalMap))
+				{
+				}
+				if (ImGui::Button("Regenerate Fault Line Values"))
+				{
+					regenerateFaultLines = true;
+				}
+			}
 		ImGui::End();
 
 	}

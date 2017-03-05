@@ -13,7 +13,24 @@
 #include "../DXFramework/Model.h"
 #include "Sound.h"
 #include "TerrainShader.h"
- #include "LSystem.h"
+#include "LSystem.h"
+#include <string>
+/*
+The Current Terrain Shader being Used 
+*/
+enum TerrainGeneration
+{
+	FaultLineDisplacement,
+	PerlinNoise,
+	FractionalBrowningNoise,
+	SimplexNoise,
+	DiamondSquare,
+	MidwayPointDisplacement,
+	RandomNoise,
+
+};
+
+
 
 /*
 Terrain Scene 
@@ -24,10 +41,20 @@ Used to show proseduraly generated terrain
  class TerrainScene :
 	public Scene
 {
+	 const char* TerrainGeneration_str[7] =
+	 {
+		 "FaultLineDisplacement",
+		 "PerlinNoise",
+		 "FractionalBrowningNoise",
+		 "SimplexNoise",
+		 "DiamondSquare",
+		 "MidwayPointDisplacement",
+		 "RandomNoise",
+	 };
 public:
 	TerrainScene(string sceneName);
 	~TerrainScene();
-	ID3D11ShaderResourceView*f;
+
 	/*
 	Initializes the given Scene
 
@@ -88,7 +115,7 @@ public:
 	void TerrainSettings(bool *is_open);
 private:
 
-
+	TerrainGeneration generationMethod;
 	/*
 	
 	*/

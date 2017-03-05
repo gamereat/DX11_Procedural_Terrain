@@ -2,14 +2,10 @@
 
  
 
-TerrainShader::TerrainShader(ID3D11Device * device, HWND hwnd)
-	: BaseShader(device, hwnd)
+TerrainShader::TerrainShader(ID3D11Device * device, HWND hwnd) : BaseShader(device, hwnd)
 {
-	//InitShader(L"shaders/TerrainGenerator_vs.hlsl", L"shaders/wobblyBox_hs.hlsl", L"shaders/wobblyBox_ds.hlsl", L"shaders/TerrainGenerator_ps.hlsl");
-	InitShader(L"shaders/FaultLineDisplacement_vs.hlsl",   L"shaders/Terrain_ps.hlsl" );
-//	InitShader(L"shaders/wobblyBox_vs.hlsl", L"shaders/wobblyBox_hs.hlsl", L"shaders/wobblyBox_ds.hlsl", L"shaders/wobblyBox_ps.hlsl");
-
-
+ 	InitShader(L"shaders/Terrain_vs.hlsl",   L"shaders/Terrain_ps.hlsl" );
+ 
 }
 
  
@@ -31,8 +27,6 @@ TerrainShader::~TerrainShader()
 		m_matrixBuffer->Release();
 		m_matrixBuffer = 0;
 	}
-
-
 	 
 	// Release the layout.
 	if (m_layout)

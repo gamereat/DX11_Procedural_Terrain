@@ -62,7 +62,7 @@ private:
 
 
 
-	void FaultLineDisplacement(ID3D11Device * device, Sound * sound, int iterations);
+	void TerrainShader(ID3D11Device * device, Sound * sound, int iterations);
  
    
 private:

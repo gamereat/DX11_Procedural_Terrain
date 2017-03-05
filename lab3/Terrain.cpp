@@ -152,7 +152,7 @@ bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* soun
 				terrainNeedReGeneration = true;
 				faultLineIterations++;
 			}
-			FaultLineDisplacement(device, sound,faultLineIterations);
+			TerrainShader(device, sound,faultLineIterations);
 		}
 		else if(usingWaves)
 		{
@@ -822,7 +822,7 @@ void Terrain::GenerateFBmNoise(ID3D11Device * device, Sound * sound)
 	f = 0;
 }
 
-void Terrain::FaultLineDisplacement(ID3D11Device * device, Sound * sound,int iterations)
+void Terrain::TerrainShader(ID3D11Device * device, Sound * sound,int iterations)
 {
 
 	float* f = NULL;

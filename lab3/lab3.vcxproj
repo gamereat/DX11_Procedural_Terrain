@@ -103,7 +103,6 @@
     <ClCompile Include="DepthShader.cpp" />
     <ClCompile Include="DistanceBasedTesselation.cpp" />
     <ClCompile Include="EmptyScene.cpp" />
-    <ClCompile Include="FaultLineDisplacement.cpp" />
     <ClCompile Include="FractionalBrownianMotion.cpp" />
     <ClCompile Include="LineMesh.cpp" />
     <ClCompile Include="LSystem.cpp" />
@@ -131,7 +130,6 @@
     <ClInclude Include="DepthShader.h" />
     <ClInclude Include="DistanceBasedTesselation.h" />
     <ClInclude Include="EmptyScene.h" />
-    <ClInclude Include="FaultLineDisplacement.h" />
     <ClInclude Include="FractionalBrownianMotion.h" />
     <ClInclude Include="LineMesh.h" />
     <ClInclude Include="LSystem.h" />

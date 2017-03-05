@@ -67,7 +67,7 @@ float4 main(InputType input) : SV_TARGET
     if (displayNormalMap)
     {
         // Gets the input normal map then returns colour based off it 
-        return float4(1, 1, 1, 0) - float4(input.normal, 1);;
+//        return float4(1, 1, 1, 0) - float4(input.normal, 1);;
     }
  
     float bias;
@@ -309,21 +309,42 @@ float4 main(InputType input) : SV_TARGET
 	// Sample the pixel color from the texture using the sampler at this texture coordinate location.
  //   textureColor = texture0.Sample(SampleTypeWrap, input.tex);
    
-	if (1- input.normal.y < 0.3)
-	{
+    float4 lowTexColour = lowTexture.Sample(SampleTypeWrap, input.tex);
 
-		textureColor = lowTexture.Sample(SampleTypeWrap, input.tex);
-	}
-	else if (1 - input.normal.y < 0.6)
-	{
-		textureColor = mediumTexture.Sample(SampleTypeWrap, input.tex);
+    float4 mediumTexColour = mediumTexture.Sample(SampleTypeWrap, input.tex);
 
-	}
-	else {
-		textureColor = highTexture.Sample(SampleTypeWrap, input.tex);
+    float4 highTexColour = highTexture.Sample(SampleTypeWrap, input.tex);
 
-	}
+    // Calculate the slope of this point.
+    float slope = 1.0f - input.normal.y;
+    float blendAmount;
 
+    // Determine which texture to use based on height.
+    if (slope < 0.2)
+    {
+        blendAmount = slope / 0.2f;
+
+
+    
+        textureColor = lerp(mediumTexColour, lowTexColour, blendAmount);
+
+    }else  if ((slope < 0.7) && (slope >= 0.2f))
+    {
+        blendAmount = (slope - 0.2f) * (1.0f / (0.7f - 0.2f));
+    
+        textureColor = lerp(mediumTexColour, highTexColour, blendAmount);
+
+
+    }else    if (slope >= 0.7)
+    {
+    
+        textureColor = lowTexColour;
+ 
+    }else
+    {
+        textureColor = float4(0, 1, 0, 1);
+
+    }
 
 	float4 depth= depthMapTexture.Sample(SampleTypeWrap, input.tex);
     depth.w = 1;
