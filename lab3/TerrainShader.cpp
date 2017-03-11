@@ -50,6 +50,7 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	D3D11_BUFFER_DESC matrixBufferDesc;
 	D3D11_BUFFER_DESC faultLineBufferDesc;
 	D3D11_BUFFER_DESC terrainTexturingBufferDesc;
+	D3D11_BUFFER_DESC terrainBufferDesc;
 	D3D11_BUFFER_DESC lightBufferDesc;
 	D3D11_BUFFER_DESC lightBufferDesc2;
 	D3D11_SAMPLER_DESC samplerDesc;
@@ -107,6 +108,19 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 	m_device->CreateBuffer(&faultLineBufferDesc, NULL, &faultLineBuffer);
 
+
+	// Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
+	terrainBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	terrainBufferDesc.ByteWidth = sizeof(TerrainGenerationBufferType);
+	terrainBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	terrainBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	terrainBufferDesc.MiscFlags = 0;
+	terrainBufferDesc.StructureByteStride = 0;
+
+	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
+	m_device->CreateBuffer(&terrainBufferDesc, NULL, &terrainBuffer);
+
+	
 	// Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
 	terrainTexturingBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	terrainTexturingBufferDesc.ByteWidth = sizeof(TerrainSettingTextureType);
@@ -160,13 +174,15 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * hsFilename, WCHAR * d
 
 
 void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix,
-	ID3D11ShaderResourceView * defaultTexture, FaultLineDisplacementBufferType * faultLineSettings, TerrainSettingTextureType * terrainTextureSettings, Light * light[NUM_LIGHTS],
+	ID3D11ShaderResourceView * defaultTexture, TerrainGenerationBufferType *terrinSetting, FaultLineDisplacementBufferType * faultLineSettings, TerrainSettingTextureType * terrainTextureSettings, Light * light[NUM_LIGHTS],
 	ID3D11ShaderResourceView * depthMap[], ID3D11ShaderResourceView * lowTexture, ID3D11ShaderResourceView * mediumTexture, ID3D11ShaderResourceView * hightTexture)
 
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
  	FaultLineDisplacementBufferType* faultLinePtr;
+
+	TerrainGenerationBufferType* terrinGenPtr;
 	MatrixBufferType2* dataPtr;
 	LightBufferType* lightPtr;
 	LightBufferType2* lightPtr2;
@@ -281,10 +297,19 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 
 
 
+	// Send light data to vertex shader
+	deviceContext->Map(terrainBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	terrinGenPtr = (TerrainGenerationBufferType*)mappedResource.pData;
+	terrinGenPtr->highScale = terrinSetting->highScale;
+	terrinGenPtr->terrainGenerationType = terrinSetting->terrainGenerationType;
+ 	terrinGenPtr->padding = XMINT2(0,  0);
+	deviceContext->Unmap(terrainBuffer, 0);
+	bufferNumber = 3;
+	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &terrainBuffer);
 
 
 
-
+	
 
 
 	// Send light data to vertex shader
@@ -326,7 +351,7 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 		}
 	}
 	deviceContext->Unmap(faultLineBuffer, 0);
-	bufferNumber = 3;
+	bufferNumber = 4;
 
 	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &faultLineBuffer);
 

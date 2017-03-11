@@ -19,7 +19,25 @@ cbuffer LightBuffer2 : register(cb2)
     float4 lightPosition[4];
 };
 
-cbuffer FaltLineDisplacementBuffer : register(cb3)
+cbuffer TerrainBuffer : register(cb3)
+{
+    /*
+    0. FaultLineDisplacement,
+	1. PerlinNoise,
+	2. FractionalBrowningNoise,
+	3. SimplexNoise,
+	4. DiamondSquare,
+	5. MidwayPointDisplacement,
+	6. RandomNoise,
+
+    */
+    int terrainGenerationType;
+
+    float highScale;
+    
+    int2 padding2;
+}
+cbuffer FaltLineDisplacementBuffer : register(cb4)
 {
     /*
     Number of iterations to complete
@@ -58,7 +76,7 @@ cbuffer FaltLineDisplacementBuffer : register(cb3)
     */
     int enableFaultLineDisplacement;
 
-    float3 padding2;
+    float3 padding3;
 
 }
 
@@ -89,6 +107,8 @@ OutputType main(InputType input)
 {
     OutputType output;
     float4 worldPosition;
+    
+
 
 
 
@@ -96,29 +116,26 @@ OutputType main(InputType input)
     // Change the position vector to be 4 units for proper matrix calculations.
     input.position.w = 1.0f;
 
- 
-    if (enableFaultLineDisplacement)
+     if (terrainGenerationType == 0)
     {
-        
-        input.position.y = FaultLineDisplacement(input.position.x, input.position.z);
-
-        output.normal = CaculateNormalMap(input.position.xyz);
-
-        if(smoothingValue > .1f)
+        if (enableFaultLineDisplacement)
         {
-            input.position.y = FaultLineDisplacementSmoothing(0, input.position.xyz);
+        
+            input.position.y = FaultLineDisplacement(input.position.x, input.position.z);
+
+            output.normal = CaculateNormalMap(input.position.xyz);
+
+            if (smoothingValue > .1f)
+            {
+                input.position.y = FaultLineDisplacementSmoothing(0, input.position.xyz);
+
+            }
+        }
+        else
+        {
 
         }
     }
-    else
-    {
-        	// Calculate the normal vector against the world matrix only.
-        output.normal = mul(input.normal, (float3x3) worldMatrix);
-	
-           // Normalize the normal vector.
-        output.normal = normalize(output.normal);
-    }
-    
 
 	// Calculate the position of the vertex against the world, view, and projection matrices.
     output.position = mul(input.position, worldMatrix);
@@ -158,7 +175,11 @@ OutputType main(InputType input)
 		// Normalize the light position vector.
         output.lightPos[i] = normalize(output.lightPos[i]);
     }
-  
+          	// Calculate the normal vector against the world matrix only.
+    output.normal = mul(input.normal, (float3x3) worldMatrix);
+	
+           // Normalize the normal vector.
+    output.normal = normalize(output.normal);
     return output;
 }
  

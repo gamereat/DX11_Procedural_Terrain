@@ -66,7 +66,7 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 
 	terrain->setTranslation(XMFLOAT3(-25, -25, 50));
 
-
+	terrainGeneration = new TerrainGenerationBufferType();
 
 	lowTexture = new Texture(device, deviceContext, L"../res/grass.png");
 	mediumTexture = new Texture(device, deviceContext, L"../res/moss.png");
@@ -141,7 +141,7 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 	worldMatrix = 	terrain->SendData(device->GetDeviceContext());
 	//// Set shader parameters (matrices and texture)
 	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(),
-		faultLineSettings, terrainTextureSettings, light, depthMaps,
+		terrainGeneration,faultLineSettings, terrainTextureSettings, light, depthMaps,
 		lowTexture->GetTexture(), mediumTexture->GetTexture(), hightTexture->GetTexture());
 	//// Render object (combination of mesh geometry and shader process
 	terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
@@ -260,36 +260,40 @@ void TerrainScene::TerrainSettings(bool * is_open)
 			return;
 		}
 		
-			int currnetGen = generationMethod;
+			int currnetGen = terrainGeneration->terrainGenerationType;
 
 
 			ImGui::Combo("Terrain Generation Type", &currnetGen, TerrainGeneration_str, IM_ARRAYSIZE(TerrainGeneration_str));
 
-			generationMethod = (TerrainGeneration)currnetGen;
-			if (ImGui::Checkbox("Enable Fault Line Displacement", &faultLineSettings->enableFaultLineDisplacement))
+			terrainGeneration->terrainGenerationType = (TerrainGeneration)currnetGen;
+			if (terrainGeneration->terrainGenerationType == TerrainGeneration::FaultLineDisplacement)
 			{
-			}
-			if (faultLineSettings->enableFaultLineDisplacement)
-			{
-				if (ImGui::SliderInt("Number of Iterations", &faultLineSettings->numberOfIterations, 0, MAX_FAULTLINE_ITERATIONS))
-				{
-				}
-				if (ImGui::SliderFloat("Displacement Value ", &faultLineSettings->startingDisplacement, 0, 1))
-				{
-				}
-				if (ImGui::SliderFloat("Minimum displacement value ", &faultLineSettings->minimumDisplacement, 0, faultLineSettings->startingDisplacement))
-				{
-				}
-				if (ImGui::SliderFloat("Smoothing Value ", &faultLineSettings->smoothingValue, 0, 1, "%.3f", 0.1f))
-				{
-				}
 
-				if (ImGui::Checkbox("Display Normal map", &terrainTextureSettings->displayNormalMap))
+				if (ImGui::Checkbox("Enable Fault Line Displacement", &faultLineSettings->enableFaultLineDisplacement))
 				{
 				}
-				if (ImGui::Button("Regenerate Fault Line Values"))
+				if (faultLineSettings->enableFaultLineDisplacement)
 				{
-					regenerateFaultLines = true;
+					if (ImGui::SliderInt("Number of Iterations", &faultLineSettings->numberOfIterations, 0, MAX_FAULTLINE_ITERATIONS))
+					{
+					}
+					if (ImGui::SliderFloat("Displacement Value ", &faultLineSettings->startingDisplacement, 0, 1))
+					{
+					}
+					if (ImGui::SliderFloat("Minimum displacement value ", &faultLineSettings->minimumDisplacement, 0, faultLineSettings->startingDisplacement))
+					{
+					}
+					if (ImGui::SliderFloat("Smoothing Value ", &faultLineSettings->smoothingValue, 0, 1, "%.3f", 0.1f))
+					{
+					}
+
+					if (ImGui::Checkbox("Display Normal map", &terrainTextureSettings->displayNormalMap))
+					{
+					}
+					if (ImGui::Button("Regenerate Fault Line Values"))
+					{
+						regenerateFaultLines = true;
+					}
 				}
 			}
 		ImGui::End();

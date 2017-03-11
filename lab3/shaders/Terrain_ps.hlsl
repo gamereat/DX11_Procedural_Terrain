@@ -66,8 +66,8 @@ float4 main(InputType input) : SV_TARGET
     // If Needing to just display the normal map 
     if (displayNormalMap)
     {
-        // Gets the input normal map then returns colour based off it 
-//        return float4(1, 1, 1, 0) - float4(input.normal, 1);;
+    // Gets the input normal map then returns colour based off it 
+        return float4(1, 1, 1, 0) - float4(input.normal, 1);;
     }
  
     float bias;

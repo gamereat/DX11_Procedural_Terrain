@@ -15,20 +15,6 @@
 #include "TerrainShader.h"
 #include "LSystem.h"
 #include <string>
-/*
-The Current Terrain Shader being Used 
-*/
-enum TerrainGeneration
-{
-	FaultLineDisplacement,
-	PerlinNoise,
-	FractionalBrowningNoise,
-	SimplexNoise,
-	DiamondSquare,
-	MidwayPointDisplacement,
-	RandomNoise,
-
-};
 
 
 
@@ -114,6 +100,8 @@ public:
 
 	void TerrainSettings(bool *is_open);
 private:
+
+	TerrainGenerationBufferType* terrainGeneration;
 
 	TerrainGeneration generationMethod;
 	/*

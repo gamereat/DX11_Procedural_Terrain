@@ -36,9 +36,11 @@ struct TerrainGenerationBufferType
 	/*
 	The Type of generation used. NOTE this should be cast from TerrainGeneration enum
 	*/
-	int terrainGenerationType;
+	TerrainGeneration terrainGenerationType;
 
+	float highScale;
 
+	XMINT2 padding;
 };
 
 
@@ -48,8 +50,7 @@ struct TerrainSettingTextureType
 
 	XMINT3 padding;
 };
-
-
+ 
 struct FaultLineDisplacementBufferType
 {
 	/*
