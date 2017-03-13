@@ -67,13 +67,19 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	terrain->setTranslation(XMFLOAT3(-25, -25, 50));
 
 	terrainGeneration = new TerrainGenerationBufferType();
-
+	fbnSettings = new FractionalBrowningNoiseBuffer();
 	lowTexture = new Texture(device, deviceContext, L"../res/grass.png");
 	mediumTexture = new Texture(device, deviceContext, L"../res/moss.png");
 	hightTexture = new Texture(device, deviceContext, L"../res/rock.png");
 
-
-
+	 
+	fbnSettings->fbnAmplitude = 1.0f;
+	fbnSettings->fbnFrequancy = 8.2f;
+	fbnSettings->fbnLacunarity = 0.5f;
+	fbnSettings->fbnPersistence = 3.64f;
+	fbnSettings->fbnOctaves = 8;
+	fbnSettings->heightScale = 6.5;
+	fbnSettings->fbnPelinNoiseFreqnacy  = .9f;
  }
 
 void TerrainScene::Update(Timer * timer)
@@ -141,7 +147,7 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 	worldMatrix = 	terrain->SendData(device->GetDeviceContext());
 	//// Set shader parameters (matrices and texture)
 	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(),
-		terrainGeneration,faultLineSettings, terrainTextureSettings, light, depthMaps,
+		terrainGeneration,faultLineSettings, terrainTextureSettings, fbnSettings, light, depthMaps,
 		lowTexture->GetTexture(), mediumTexture->GetTexture(), hightTexture->GetTexture());
 	//// Render object (combination of mesh geometry and shader process
 	terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
@@ -190,7 +196,7 @@ void TerrainScene::ResetLights(Light * lights[])
 {
 	lights[0]->SetDiffuseColour(1, 1, 1, 1);
 
-	lights[0]->SetPosition(-68, 82, 177);
+	lights[0]->SetPosition(-61, -47, -7);
 
 }
 
@@ -296,7 +302,19 @@ void TerrainScene::TerrainSettings(bool * is_open)
 					}
 				}
 			}
-		ImGui::End();
+		
+			if (terrainGeneration->terrainGenerationType == TerrainGeneration::FractionalBrowningNoise)
+			{
+				
+				ImGui::DragFloat("Fbn Octaves", &fbnSettings->fbnOctaves, 1, 1, 16);
+				ImGui::DragFloat("Fbn Amplitude", &fbnSettings->fbnAmplitude, 0.05f, 0.0f, 2);
+				ImGui::DragFloat("Fbn Lacunarity", &fbnSettings->fbnLacunarity, 0.05f, 0.0f, 2);
+				ImGui::DragFloat("Fbn Frequancy", &fbnSettings->fbnFrequancy, 0.05f, 0.0f, 15);
+				ImGui::DragFloat("Fbn Pelin Noise Freqancy", &fbnSettings->fbnPelinNoiseFreqnacy, 0.05f, 0.0f, 10);
+				ImGui::DragFloat("Fbn Persistence", &fbnSettings->fbnPersistence, 0.05f, 0.0f, 10);
+				ImGui::DragFloat("Fbn height Scale", &fbnSettings->heightScale,0.05f, 0.0f, 15);
+ 			}
+			ImGui::End();
 
 	}
 }

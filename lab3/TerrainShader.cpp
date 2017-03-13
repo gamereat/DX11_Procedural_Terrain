@@ -49,6 +49,7 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 {
 	D3D11_BUFFER_DESC matrixBufferDesc;
 	D3D11_BUFFER_DESC faultLineBufferDesc;
+	D3D11_BUFFER_DESC fractalBrowningNoiseDesc;
 	D3D11_BUFFER_DESC terrainTexturingBufferDesc;
 	D3D11_BUFFER_DESC terrainBufferDesc;
 	D3D11_BUFFER_DESC lightBufferDesc;
@@ -132,6 +133,17 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 	m_device->CreateBuffer(&terrainTexturingBufferDesc, NULL, &terrainTexturingBuffer);
 
+	// Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
+	fractalBrowningNoiseDesc.Usage = D3D11_USAGE_DYNAMIC;
+	fractalBrowningNoiseDesc.ByteWidth = sizeof(FractionalBrowningNoiseBuffer);
+	fractalBrowningNoiseDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	fractalBrowningNoiseDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	fractalBrowningNoiseDesc.MiscFlags = 0;
+	fractalBrowningNoiseDesc.StructureByteStride = 0;
+
+	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
+	m_device->CreateBuffer(&fractalBrowningNoiseDesc, NULL, &fractionalBrowningNoiseBuffer);
+	
 
 	// Setup light buffer
 	// Setup the description of the light dynamic constant buffer that is in the pixel shader.
@@ -173,15 +185,13 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * hsFilename, WCHAR * d
 }
 
 
-void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix,
-	ID3D11ShaderResourceView * defaultTexture, TerrainGenerationBufferType *terrinSetting, FaultLineDisplacementBufferType * faultLineSettings, TerrainSettingTextureType * terrainTextureSettings, Light * light[NUM_LIGHTS],
-	ID3D11ShaderResourceView * depthMap[], ID3D11ShaderResourceView * lowTexture, ID3D11ShaderResourceView * mediumTexture, ID3D11ShaderResourceView * hightTexture)
-
+void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * defaultTexture, TerrainGenerationBufferType * terrinSetting, FaultLineDisplacementBufferType * faultLineSettings, TerrainSettingTextureType * terrainTextureSettings, FractionalBrowningNoiseBuffer * fractionalBrowningNoiseSettings, Light * light[NUM_LIGHTS], ID3D11ShaderResourceView * depthMap[], ID3D11ShaderResourceView * lowTexture, ID3D11ShaderResourceView * mediumTexture, ID3D11ShaderResourceView * hightTexture)
+ 
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
  	FaultLineDisplacementBufferType* faultLinePtr;
-
+	FractionalBrowningNoiseBuffer* fbnPtr;
 	TerrainGenerationBufferType* terrinGenPtr;
 	MatrixBufferType2* dataPtr;
 	LightBufferType* lightPtr;
@@ -312,8 +322,7 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 	
 
 
-	// Send light data to vertex shader
-	deviceContext->Map(terrainTexturingBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+ 	deviceContext->Map(terrainTexturingBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	terrainTextureSettingsPtr = (TerrainSettingTextureType*)mappedResource.pData;
 
 	terrainTextureSettingsPtr->displayNormalMap = terrainTextureSettings->displayNormalMap;
@@ -323,6 +332,24 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 	deviceContext->PSSetConstantBuffers(bufferNumber, 1, &terrainTexturingBuffer);
 
 
+
+
+
+
+ 	deviceContext->Map(fractionalBrowningNoiseBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	fbnPtr = (FractionalBrowningNoiseBuffer*)mappedResource.pData;
+ 
+	fbnPtr->fbnAmplitude = fractionalBrowningNoiseSettings->fbnAmplitude;
+	fbnPtr->fbnFrequancy = fractionalBrowningNoiseSettings->fbnFrequancy;
+	fbnPtr->fbnLacunarity = fractionalBrowningNoiseSettings->fbnLacunarity;
+	fbnPtr->fbnOctaves= fractionalBrowningNoiseSettings->fbnOctaves;
+	fbnPtr->fbnPadding = 0;
+	fbnPtr->heightScale = fractionalBrowningNoiseSettings->heightScale;
+	fbnPtr->fbnPelinNoiseFreqnacy = fractionalBrowningNoiseSettings->fbnPelinNoiseFreqnacy;
+	fbnPtr->fbnPersistence  = fractionalBrowningNoiseSettings->fbnPersistence;
+	deviceContext->Unmap(fractionalBrowningNoiseBuffer, 0);
+	bufferNumber = 5;
+	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &fractionalBrowningNoiseBuffer);
 
 
 

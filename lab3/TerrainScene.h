@@ -101,6 +101,8 @@ public:
 	void TerrainSettings(bool *is_open);
 private:
 
+	FractionalBrowningNoiseBuffer* fbnSettings;
+
 	TerrainGenerationBufferType* terrainGeneration;
 
 	TerrainGeneration generationMethod;

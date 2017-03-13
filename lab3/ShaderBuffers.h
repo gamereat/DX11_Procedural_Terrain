@@ -15,6 +15,21 @@ const int NUM_LIGHTS = 4;
 
 const int MAX_FAULTLINE_ITERATIONS = 2500;
 
+
+
+
+struct FractionalBrowningNoiseBuffer
+{
+	float fbnFrequancy;
+	float fbnOctaves;
+ 	float fbnAmplitude;
+	float fbnLacunarity;
+	float fbnPersistence;
+	float fbnPelinNoiseFreqnacy;
+	float heightScale;
+	float fbnPadding;
+
+};
 /*
 The Current Terrain Shader being Used
 */
