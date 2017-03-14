@@ -101,6 +101,10 @@ public:
 	void TerrainSettings(bool *is_open);
 private:
 
+	bool regenerateDiamondSquare;
+
+	DimondSquareBuffer* diamondSquareSettings;
+
 	FractionalBrowningNoiseBuffer* fbnSettings;
 
 	TerrainGenerationBufferType* terrainGeneration;

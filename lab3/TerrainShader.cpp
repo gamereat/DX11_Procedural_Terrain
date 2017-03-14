@@ -51,6 +51,7 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	D3D11_BUFFER_DESC faultLineBufferDesc;
 	D3D11_BUFFER_DESC fractalBrowningNoiseDesc;
 	D3D11_BUFFER_DESC terrainTexturingBufferDesc;
+	D3D11_BUFFER_DESC dimondSquareDesc;
 	D3D11_BUFFER_DESC terrainBufferDesc;
 	D3D11_BUFFER_DESC lightBufferDesc;
 	D3D11_BUFFER_DESC lightBufferDesc2;
@@ -143,7 +144,19 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 	m_device->CreateBuffer(&fractalBrowningNoiseDesc, NULL, &fractionalBrowningNoiseBuffer);
-	
+
+	// Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
+	dimondSquareDesc.Usage = D3D11_USAGE_DYNAMIC;
+	dimondSquareDesc.ByteWidth = sizeof(DimondSquareBuffer);
+	dimondSquareDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	dimondSquareDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	dimondSquareDesc.MiscFlags = 0;
+	dimondSquareDesc.StructureByteStride = 0;
+
+	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
+	m_device->CreateBuffer(&dimondSquareDesc, NULL, &dimondSquareBuffer);
+
+
 
 	// Setup light buffer
 	// Setup the description of the light dynamic constant buffer that is in the pixel shader.
@@ -185,14 +198,14 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * hsFilename, WCHAR * d
 }
 
 
-void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * defaultTexture, TerrainGenerationBufferType * terrinSetting, FaultLineDisplacementBufferType * faultLineSettings, TerrainSettingTextureType * terrainTextureSettings, FractionalBrowningNoiseBuffer * fractionalBrowningNoiseSettings, Light * light[NUM_LIGHTS], ID3D11ShaderResourceView * depthMap[], ID3D11ShaderResourceView * lowTexture, ID3D11ShaderResourceView * mediumTexture, ID3D11ShaderResourceView * hightTexture)
- 
+void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * defaultTexture, TerrainGenerationBufferType * terrinSetting, FaultLineDisplacementBufferType * faultLineSettings, TerrainSettingTextureType * terrainTextureSettings, FractionalBrowningNoiseBuffer * fractionalBrowningNoiseSettings, DimondSquareBuffer * dimondSquareSettings, Light * light[NUM_LIGHTS], ID3D11ShaderResourceView * depthMap[], ID3D11ShaderResourceView * lowTexture, ID3D11ShaderResourceView * mediumTexture, ID3D11ShaderResourceView * hightTexture)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
  	FaultLineDisplacementBufferType* faultLinePtr;
 	FractionalBrowningNoiseBuffer* fbnPtr;
 	TerrainGenerationBufferType* terrinGenPtr;
+	DimondSquareBuffer* dimondSquarePtr;
 	MatrixBufferType2* dataPtr;
 	LightBufferType* lightPtr;
 	LightBufferType2* lightPtr2;
@@ -319,9 +332,23 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 
 
 
+
+	// Send light data to vertex shader
+	deviceContext->Map(dimondSquareBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	dimondSquarePtr = (DimondSquareBuffer*)mappedResource.pData;
+	dimondSquarePtr->padding = XMINT2(0, 0);
+	dimondSquarePtr->bottomLeftRandomNumber = dimondSquareSettings->bottomLeftRandomNumber;
+	dimondSquarePtr->bottomRightRandomNumber = dimondSquareSettings->bottomRightRandomNumber;
+	dimondSquarePtr->heightOfGrid = dimondSquareSettings->heightOfGrid;
+	dimondSquarePtr->widthOfGrid = dimondSquareSettings->widthOfGrid;
+	dimondSquarePtr->topLeftRandomNumber = dimondSquareSettings->topLeftRandomNumber;
+	dimondSquarePtr->topRightRandomNumber = dimondSquareSettings->topRightRandomNumber;
+	deviceContext->Unmap(dimondSquareBuffer, 0);
+	bufferNumber = 6;
+	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &dimondSquareBuffer);
+
+
 	
-
-
  	deviceContext->Map(terrainTexturingBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	terrainTextureSettingsPtr = (TerrainSettingTextureType*)mappedResource.pData;
 

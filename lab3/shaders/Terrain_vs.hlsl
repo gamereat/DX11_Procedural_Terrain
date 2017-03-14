@@ -105,11 +105,22 @@ cbuffer dimondSquareBuffer : register(cb6)
 	float bottomRightRandomNumber;
 	float bottomLeftRandomNumber;
 };
+struct dimondSquareResult
+{
+    bool found ;
+    float topLeft;
+    float topRight;
+    float bottomLeft;
+    float bottomRight;
+    float result;
+
+};
 struct InputType
 {
     float4 position : POSITION;
     float2 tex : TEXCOORD0;
     float3 normal : NORMAL;
+    uint id : SV_VertexID;
 };
 
 struct OutputType
@@ -122,7 +133,9 @@ struct OutputType
     float3 position3D : TEXCOORD10;
     float3 viewDirection : TEXCOORD11;
 };
-
+dimondSquareResult DiamondSquare(int x, int y, float height, float width, float topLeft, float topRight, float bottomLeft, float bottomRight);
+float adverage(float a, float b);
+float adverage(float a, float b, float c, float d);
 float FractionalBrownianMotion(float x, float y, int octaves, float frequency, float amplitude, float pelinFrequancy);
 float grad(int hash, float x, float y);
 float grad(int hash, float x);
@@ -180,7 +193,27 @@ OutputType main(InputType input)
 	}
 	// Diamond Square 
 	case 4:
-	{
+	{   
+        dimondSquareResult result;
+        result.bottomLeft = bottomLeftRandomNumber;
+        result.bottomRight = bottomRightRandomNumber;
+        result.topLeft = topLeftRandomNumber;
+        result.topRight = topRightRandomNumber;
+        result.found = false;
+        float hieght = heightOfGrid;
+        float width = widthOfGrid;
+                
+        //do
+        //{
+                 
+        //    result = DiamondSquare(input.position.x, input.position.z, hieght, width, result.topLeft, result.topRight, result.bottomLeft, result.bottomRight);
+              
+        //    hieght /= 2;
+        //    width /= 2;
+                  
+        //} while (result.found == false);
+
+      //  input.position.y = result.result;
 		break;
 	}
 
@@ -469,58 +502,126 @@ float FractionalBrownianMotion(float x, float y, int octaves, float frequency, f
 
 
 
-float DiamondSquare(int x, int y,float height,float width)
+dimondSquareResult DiamondSquare(int x, int y, float height, float width, float topLeft, float topRight, float bottomLeft, float bottomRight)
 {
-
+    dimondSquareResult result;
  
-	float middleWidth = widthOfGrid / 2;
-	float middleHeight = heightOfGrid / 2;
+    result.found = false;
+    float middleWidth = (width-1) / 2;
+    float middleHeight = (height-1) / 2;
 	 
  
-	// Get rid of cornors
+ 	// Get rid of cornors
 	if(x == 0 && y ==0)
 	{
-		return topLeftRandomNumber;
-	}
-	else if (x == width && y == 0)
+        result.found = true;
+        result.result = topLeft;
+     }
+	else if (x == (width-2) && y == 0)
 	{
-		return topRightRandomNumber;
-	}
-	else if (x == 0 && y == height)
+        result.found = true;
+        result.result = topRight;
+     }
+	else if (x == 0 && y == (height -2))
 	{
-		return bottomLeftRandomNumber;
-	}
-	else if (x == width && y == height)
+        result.found = true;
+        result.result = bottomLeft;
+     }
+	else if (x == (width-2) && y == (height-2))
 	{
-		return bottomRightRandomNumber;
-	}
+        result.found = true;
+        result.result = bottomRight;
+     }
 
 	// middle point of these
 	if (x == 0 && y == middleHeight)
 	{
-		return adverage2(topLeftRandomNumber, bottomLeftRandomNumber);
-	}
+        result.found = true;
+        result.result = adverage(topLeft, bottomLeft);
+     }
 	else if (x == middleWidth && y == 0)
 	{
-		return adverage2(topLeftRandomNumber, topRightRandomNumber);
-	}
-	else if (x == widthOfGrid && y == middleHeight)
+        
+        result.found = true;
+        result.result = adverage(topLeft, topRight);
+     }
+    else if (x == width && y == middleHeight)
 	{
-		return adverage2(topRightRandomNumber, bottomRightRandomNumber);
-	}
-	else if (x == middleWidth && y == heightOfGrid)
+                
+        result.found = true;
+        result.result = adverage(topRight, bottomRight);
+     }
+    else if (x == middleWidth && y == height)
 	{
-		return adverage2(bottomLeftRandomNumber, bottomRightRandomNumber);
-	}
+        
+        result.found = true;
+        result.result = adverage(bottomLeft, bottomRight);
+     }
 
-	if (x == middleWidth && y = middleHeight)
+	if (x == middleWidth && y == middleHeight)
 	{
+        
+        result.found = true;
+        result.result = adverage(bottomLeft, bottomRight, topRight, topLeft);
+     }
 
-	}
+    // Work out which 4 square pos lays in 
+    if(result.found == false)
+    {
+        if (x > middleWidth)
+        {
+            if (y > middleHeight)
+            {
+                result.topLeft = adverage(bottomLeft, bottomRight, topRight, topLeft);
+                result.topRight = adverage(topRight, bottomRight);
+                result.bottomLeft = adverage(bottomLeft, bottomRight);
+                result.bottomRight = bottomRight;
+
+   
+
+            }
+            else
+            {
+                result.topLeft = adverage(topLeft, topRight);
+                result.topRight = topRight;
+                result.bottomLeft = adverage(bottomLeft, bottomRight, topRight, topLeft);
+                result.bottomRight = adverage(topRight, bottomRight);
+
+       
+            }
+            
+        }
+        else
+        {
+            if (y > middleHeight)
+            {
+                result.topLeft = adverage(topLeft, bottomLeft);
+                result.topRight = adverage(bottomLeft, bottomRight, topRight, topLeft);
+                result.bottomLeft = bottomLeft;
+                result.bottomRight = adverage(bottomLeft, bottomRight);
+ 
+
+            }
+            else
+            {
+                result.topLeft = topLeft;
+                result.topRight = adverage(topLeft, topRight);
+                result.bottomLeft = adverage(bottomLeft, topLeft);
+                result.bottomRight = adverage(bottomLeft, bottomRight, topRight, topLeft);
+  
+            }
+        }
+    }
+
+    return result;
 
 }
 
-float adverage2(float a, float b)
+float adverage(float a, float b)
 {
 	return ((a + b) / 2);
 }
+float adverage(float a, float b ,float c, float d)
+{
+    return ((a + b + c+ d) / 4);
+} 

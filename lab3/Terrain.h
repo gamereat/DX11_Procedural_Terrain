@@ -50,57 +50,33 @@ public:
  	bool GenerateHeightMap(ID3D11Device * device, bool keydown, class Sound * sound);
 	void InitBuffers(ID3D11Device * device);
 	XMMATRIX SendData(ID3D11DeviceContext* deviceContext);
-	void Settings(bool* is_open);
+	void Settings(bool* is_open);	
+	bool diamondSquareNeedRegenerated;
+
 private:
 	bool LoadHeightMap(char*);
 	void NormalizeHeightMap();
 
-	void GenerateHieghtField(ID3D11Device * device, Sound * sound);
-
-	void GeneratePelinNoise(ID3D11Device * device, Sound * sound);
-	void GenerateFBmNoise(ID3D11Device * device, Sound * sound);
-
-
-
-	void TerrainShader(ID3D11Device * device, Sound * sound, int iterations);
+ 
+	void GenerateDimondSquare();
  
    
 private:
 
-
-	float faultLineDisplacement;
-	float faultLineReducementFactor;
-	int faultLineIterations;
-
-
+	float diamondSquareRange;
 	bool resetTerrain; 
-	bool usingFaultLineDisancement;
-	bool useExpedetional;
-	float frequancy;
-	int octaves;
-	bool useFBm;
+
+	float diamondSquarePoints[129 * 129];
+
 	bool useMusicData;
 	bool usingWaves;
-	bool usingPerlinNoise;
-	float heightFieldMaxHight;
-	float perlinNoiseHeightRange;
-	bool usingHightField;
 	bool terrainNeedReGeneration;
 	bool generateTerrain;
-	bool isTerrainGeneratedEnabled;
 	int terrainWidth, terrainHeight;
 	HeightMapType* heightMap;
 	
-	double* faultLineDisplacementValues;
-	bool faultLineDisplacementNeedingRegnerated;
 
 
-	double* perinNoiseValues;
-	bool perlinNeedingRegnerated;
-
-	double* fbmNoiseValues;
-	bool fbmNeedingRegnerated;
-	float fmbExpetional;
 
 	HeightMapType* startingHeightmap;
 	waveSettings xAxisWaveSettings, yAxisWaveSettings, zAxisWaveSettings;

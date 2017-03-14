@@ -112,6 +112,7 @@
     <ClCompile Include="TerrainShader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
+    <ClCompile Include="DiamondSquare.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\MiniIni\minGlue.h">
@@ -188,6 +189,9 @@
     </ClInclude>
     <ClInclude Include="TerrainShader.h">
       <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="DiamondSquare.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

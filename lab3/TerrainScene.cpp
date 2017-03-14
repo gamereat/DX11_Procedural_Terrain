@@ -39,7 +39,7 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 
 	// Create Mesh object
 	terrain = new Terrain("Terrain",device, deviceContext, L"../res/bunny.png");
- 	terrain->InitializeTerrain(device, 100, 100);
+ 	terrain->InitializeTerrain(device, 129, 129);
   	colourShader = new ColourShader(device, hwnd);
 	textureShader = new TextureShader(device, hwnd);
 
@@ -67,13 +67,17 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	terrain->setTranslation(XMFLOAT3(-25, -25, 50));
 
 	terrainGeneration = new TerrainGenerationBufferType();
+	diamondSquareSettings = new DimondSquareBuffer();
 	fbnSettings = new FractionalBrowningNoiseBuffer();
 	lowTexture = new Texture(device, deviceContext, L"../res/grass.png");
 	mediumTexture = new Texture(device, deviceContext, L"../res/moss.png");
 	hightTexture = new Texture(device, deviceContext, L"../res/rock.png");
 
 	 
-	fbnSettings->fbnAmplitude = 1.0f;
+
+	diamondSquareSettings->widthOfGrid = 129;
+	diamondSquareSettings->heightOfGrid = 129;
+ 	fbnSettings->fbnAmplitude = 1.0f;
 	fbnSettings->fbnFrequancy = 8.2f;
 	fbnSettings->fbnLacunarity = 0.5f;
 	fbnSettings->fbnPersistence = 3.64f;
@@ -112,6 +116,18 @@ void TerrainScene::Update(Timer * timer)
  
 		}
 	}
+	else if (regenerateDiamondSquare)
+	{
+		regenerateDiamondSquare = false;
+		terrain->diamondSquareNeedRegenerated = true;
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_real_distribution<> dis(0, 1);
+		diamondSquareSettings->bottomLeftRandomNumber = dis(gen);
+		diamondSquareSettings->bottomRightRandomNumber = dis(gen);
+		diamondSquareSettings->topLeftRandomNumber = dis(gen);
+		diamondSquareSettings->topRightRandomNumber = dis(gen);
+	}
 }
 
 void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[])
@@ -147,7 +163,7 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 	worldMatrix = 	terrain->SendData(device->GetDeviceContext());
 	//// Set shader parameters (matrices and texture)
 	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(),
-		terrainGeneration,faultLineSettings, terrainTextureSettings, fbnSettings, light, depthMaps,
+		terrainGeneration,faultLineSettings, terrainTextureSettings, fbnSettings,diamondSquareSettings, light, depthMaps,
 		lowTexture->GetTexture(), mediumTexture->GetTexture(), hightTexture->GetTexture());
 	//// Render object (combination of mesh geometry and shader process
 	terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
@@ -178,6 +194,7 @@ void TerrainScene::MenuOptions()
 			if (ImGui::MenuItem(terrain->getName().c_str()))
 			{
 				terrain->ToggleMenu();
+
 			}
 			ImGui::EndMenu();
 
@@ -269,7 +286,11 @@ void TerrainScene::TerrainSettings(bool * is_open)
 			int currnetGen = terrainGeneration->terrainGenerationType;
 
 
-			ImGui::Combo("Terrain Generation Type", &currnetGen, TerrainGeneration_str, IM_ARRAYSIZE(TerrainGeneration_str));
+			if (ImGui::Combo("Terrain Generation Type", &currnetGen, TerrainGeneration_str, IM_ARRAYSIZE(TerrainGeneration_str)))
+			{
+				regenerateDiamondSquare = true;
+
+			}
 
 			terrainGeneration->terrainGenerationType = (TerrainGeneration)currnetGen;
 			if (terrainGeneration->terrainGenerationType == TerrainGeneration::FaultLineDisplacement)
@@ -303,7 +324,7 @@ void TerrainScene::TerrainSettings(bool * is_open)
 				}
 			}
 		
-			if (terrainGeneration->terrainGenerationType == TerrainGeneration::FractionalBrowningNoise)
+			else if (terrainGeneration->terrainGenerationType == TerrainGeneration::FractionalBrowningNoise)
 			{
 				
 				ImGui::DragFloat("Fbn Octaves", &fbnSettings->fbnOctaves, 1, 1, 16);
@@ -314,6 +335,18 @@ void TerrainScene::TerrainSettings(bool * is_open)
 				ImGui::DragFloat("Fbn Persistence", &fbnSettings->fbnPersistence, 0.05f, 0.0f, 10);
 				ImGui::DragFloat("Fbn height Scale", &fbnSettings->heightScale,0.05f, 0.0f, 15);
  			}
+			else if (terrainGeneration->terrainGenerationType == TerrainGeneration::DiamondSquare)
+			{
+				bool f = true;
+				terrain->Settings(&f);
+				if (ImGui::Button("Regenerate DiamondSquare Alorigumth "))
+				{
+					regenerateDiamondSquare = true;
+				}
+			}
+
+
+
 			ImGui::End();
 
 	}

@@ -101,6 +101,7 @@
     <ClCompile Include="baseApp.cpp" />
     <ClCompile Include="ColourShader.cpp" />
     <ClCompile Include="DepthShader.cpp" />
+    <ClCompile Include="DiamondSquare.cpp" />
     <ClCompile Include="DistanceBasedTesselation.cpp" />
     <ClCompile Include="EmptyScene.cpp" />
     <ClCompile Include="FractionalBrownianMotion.cpp" />
@@ -128,6 +129,7 @@
     <ClInclude Include="baseApp.h" />
     <ClInclude Include="ColourShader.h" />
     <ClInclude Include="DepthShader.h" />
+    <ClInclude Include="DiamondSquare.h" />
     <ClInclude Include="DistanceBasedTesselation.h" />
     <ClInclude Include="EmptyScene.h" />
     <ClInclude Include="FractionalBrownianMotion.h" />

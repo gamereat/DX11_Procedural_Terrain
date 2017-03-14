@@ -4,10 +4,10 @@
 #include "Sound.h"
 #include "SimplexNoise.h"
 #include "FractionalBrownianMotion.h"
+#include "DiamondSquare.h"
 Terrain::Terrain(std::string name, ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, int resolution)
 : PlaneMesh(name,device, deviceContext, textureFilename, resolution)
 {
-	isTerrainGeneratedEnabled = false;
 	generateTerrain = false;
 	usingWaves = false;
 	heightMap = nullptr;
@@ -21,34 +21,12 @@ Terrain::Terrain(std::string name, ID3D11Device* device, ID3D11DeviceContext* de
 	yAxisWaveSettings.period = 1;
 	zAxisWaveSettings.period = 1;
 
-	octaves = 8;
 
 	xAxisWaveSettings.waveType = waveSettings::WaveType::cos;
 	yAxisWaveSettings.waveType = waveSettings::WaveType::cos;
 	zAxisWaveSettings.waveType = waveSettings::WaveType::cos;
 
-	fbmNeedingRegnerated = false;
-
-
-	float amp = (float)FractionalBrownianMotion::get_amplitude();
-	float freq = (float)FractionalBrownianMotion::get_frequency();
-	float lacunarity = (float)FractionalBrownianMotion::get_lacunarity();
-	float persistence = (float)FractionalBrownianMotion::get_persistence();
-
-	ImGui::SliderFloat("amplitude", &amp, 0.0f, 10.0f);
-	ImGui::SliderFloat("freqancy", &freq, 0.0f, 10.0f);
-	ImGui::SliderFloat("lacunarity", &lacunarity, 0.0f, 10.0f);
-	ImGui::SliderFloat("persistence", &persistence, 0.0f, 10.0f);
-
-
-
-	FractionalBrownianMotion::set_amplitude(1.0f);
-	FractionalBrownianMotion::set_frequency(8.2f);
-	FractionalBrownianMotion::set_lacunarity(.5);
-	FractionalBrownianMotion::set_persistence(3.14);
-
-	perlinNoiseHeightRange = 3;
-	frequancy = 1;
+ 
 }
 
 
@@ -71,13 +49,11 @@ bool Terrain::InitializeTerrain(ID3D11Device* device, int terrainWidth, int terr
  
 	// Save the dimensions of the terrain.
 	this->terrainWidth = terrainWidth;
-	this->terrainHeight = terrainHeight;
-
-	perinNoiseValues = new double[this->terrainWidth * this->terrainHeight];
-	fbmNoiseValues = new double[this->terrainWidth * this->terrainHeight];
+	this->terrainHeight = terrainHeight; 
 	// Create the structure to hold the terrain data.
 	this->heightMap = new HeightMapType[this->terrainWidth * this->terrainHeight];
 	this->startingHeightmap = new HeightMapType[this->terrainWidth * this->terrainHeight];
+	this->diamondSquarePoints;;
 	if (!this->heightMap)
 	{
 		return false;
@@ -89,28 +65,33 @@ bool Terrain::InitializeTerrain(ID3D11Device* device, int terrainWidth, int terr
 		for (int i = 0; i<this->terrainWidth; i++)
 		{
 			index = (this->terrainHeight * j) + i;
-
-
-			fbmNoiseValues[index]= (float)FractionalBrownianMotion::FBm(i, j, octaves, frequancy);
-			perinNoiseValues[index] = (float)SimplexNoise::noise(i,j,frequancy)  ;
+			 
 
 			this->heightMap[index].x = (float)i;
 			this->heightMap[index].y = (float)height;
 			this->heightMap[index].z = (float)j;
 			startingHeightmap[index].y = (float)height;
+			diamondSquarePoints[index] = 0;
 
 		}
 	} 
 	// Initialize the vertex and index buffer that hold the geometry for the terrain.
-	InitBuffers(device);
- 
+	InitBuffers(device); 
 	return true;
 }
 
 bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* sound)
 {
 
-	if (terrainNeedReGeneration)
+	if (diamondSquareNeedRegenerated)
+	{	
+		diamondSquareNeedRegenerated = false;
+		GenerateDimondSquare();
+
+		InitBuffers(device);
+		
+	}
+	if (terrainNeedReGeneration )
 	{
 		terrainNeedReGeneration = false;
 		InitBuffers(device);
@@ -127,34 +108,12 @@ bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* soun
 	//the toggle is just a bool that I use to make sure this is only called ONCE when you press a key
 	//until you release the key and start again. We dont want to be generating the terrain 500
 	//times per second. 
-	if (generateTerrain && (!isTerrainGeneratedEnabled))
+	if (generateTerrain)
 	{
 		int index;
 		float height = 0.0;
-
-
-		//loop through the terrain and set the hieghts how we want. This is where we generate the terrain
-		//in this case I will run a sin-wave through the terrain in one axis.
-
-		if (usingPerlinNoise)
-		{
-			GeneratePelinNoise(device,sound);
-		}	else if (usingHightField)
-		{
-			GenerateHieghtField(device,sound);
  
-		}
-		else if (usingFaultLineDisancement)
-		{
-			if (sound->getData(BASS_DATA_FFT256 | BASS_DATA_FLOAT,128)[1] > 0.4f)
-			{
-				faultLineDisplacementNeedingRegnerated = true;
-				terrainNeedReGeneration = true;
-				faultLineIterations++;
-			}
-			TerrainShader(device, sound,faultLineIterations);
-		}
-		else if(usingWaves)
+		if(usingWaves)
 		{
 
 			for (int j = 0; j < terrainHeight; j++)
@@ -188,20 +147,12 @@ bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* soun
 
  
 		}
-		else if (useFBm)
-		{
-			GenerateFBmNoise(device, sound);
-		}
+
 		// Initialize the vertex and index buffer that hold the geometry for the terrain.
 	 
 
-		isTerrainGeneratedEnabled = true;
-	}
-	else
-	{
-		isTerrainGeneratedEnabled = false;
-	}
-
+ 	}
+ 
 
 
 
@@ -374,194 +325,53 @@ void Terrain::Settings(bool* is_open)
 {
 	if (*is_open == true)
 	{
-		// Create the window
-		if (!ImGui::Begin("Terrain Settings", is_open, ImGuiWindowFlags_AlwaysAutoResize))
-		{
-			ImGui::End();
-			return;
-		}
+		//// Create the window
+		//if (!ImGui::Begin("Terrain Settings", is_open, ImGuiWindowFlags_AlwaysAutoResize))
+		//{
+		//	ImGui::End();
+		//	return;
+		//}
 
 
 	
-		if (ImGui::SmallButton("Restart Terrain"))
-		{
-			resetTerrain = true;
+		//if (ImGui::SmallButton("Restart Terrain"))
+		//{
+		//	resetTerrain = true;
+		//}
+
+		//ImGui::Checkbox("Generate terrain", &generateTerrain);
+
+	////	if (generateTerrain)
+	//	{
+ 
+			if (ImGui::InputFloat("Range", &diamondSquareRange))
+			{
+				GenerateDimondSquare();
+				terrainNeedReGeneration = true;
+			}
+
+			
+
+			//}
+			//if (generateTerrain )
+			//{
+
+			//	if (ImGui::SmallButton("ReGen height field"))
+			//	{
+			//		terrainNeedReGeneration =true ;
+			//		
+
+			//	}
+			//}
+			
+			//	ImGui::End();
+	
 		}
 
-		ImGui::Checkbox("Generate terrain", &generateTerrain);
-
-		if (generateTerrain)
-		{
-			if (!usingHightField && !usingWaves && !useFBm)
-			{
-				ImGui::Checkbox("Use Pelin Noise", &usingPerlinNoise);
-
-			}
-			 if (!usingHightField && !usingWaves && !usingPerlinNoise)
-			{
-				ImGui::Checkbox("Use FBm Noise", &useFBm);
-
-			}
-			if (!usingHightField && !useFBm && !usingPerlinNoise)
-			{
-				ImGui::Checkbox("Use waves Noise", &usingWaves);
-
-			}
-
-			if (!useFBm && !usingWaves && !usingPerlinNoise)
-			{
-				ImGui::Checkbox("Use random height", &usingHightField);
-
-			}
-			if (!useFBm && !usingHightField && !usingWaves && !usingPerlinNoise)
-			{
-				ImGui::Checkbox("Use Faul Displacment", &usingFaultLineDisancement);
-			}
 
 
-			ImGui::Separator();
-			 
-			if (usingFaultLineDisancement)
-			{
-				if (ImGui::SliderFloat("Fault Line Displacment start", &faultLineDisplacement, 0.0f, 20.0f))
-				{
-					faultLineDisplacementNeedingRegnerated = true;
-					terrainNeedReGeneration = true;
-				}
-				if (ImGui::SliderFloat("Fault line reducment factor", &faultLineReducementFactor, 1.01f, 20.0f))
-				{
-					faultLineDisplacementNeedingRegnerated = true;
-					terrainNeedReGeneration = true;
+}
 
-				}
-				if (ImGui::SliderInt("Number of iterations", &faultLineIterations, 0, 500))
-				{
-					faultLineDisplacementNeedingRegnerated = true;
-					terrainNeedReGeneration = true;
-
-				}
-
-			}
-
-			if (usingPerlinNoise)
-			{
-
-				  
-				ImGui::SliderFloat("Height Scale", &perlinNoiseHeightRange, 0.0f, 20.0f);
-
- 				if (ImGui::SliderFloat("Perlin frequancy", &frequancy, 0.0f, 10.0f))
-				{
-					perlinNeedingRegnerated = true;
-				}
-				 
-
-			}
-			else if (usingWaves)
-			{
-
-				ImGui::DragFloat("Maxium Height Field", &heightFieldMaxHight);
-
-				ImGui::Separator();
-
-				const char* items[] = { "Sin", "Cos", "Tan" };
-
-				int waveType = (int)yAxisWaveSettings.waveType;
-				ImGui::Separator();
-				ImGui::Text("Y-Axis Settings");
-				ImGui::Combo("Wave Type", &waveType, items, IM_ARRAYSIZE(items));
-
-				ImGui::DragFloat("Amplitude", &yAxisWaveSettings.amplitude);
-				ImGui::DragFloat("Period", &yAxisWaveSettings.period);
-				ImGui::Separator();
-				yAxisWaveSettings.waveType = (waveSettings::WaveType)waveType;
-			}
-			else if (heightFieldMaxHight)
-			{
-				ImGui::DragFloat("Maxium Height Field", &heightFieldMaxHight);
-
-			}
-			else if (useFBm)
-			{
-
-				float amp = (float)FractionalBrownianMotion::get_amplitude();
-				float freq = (float)FractionalBrownianMotion::get_frequency();
-				float lacunarity = (float)FractionalBrownianMotion::get_lacunarity();
-				float persistence = (float)FractionalBrownianMotion::get_persistence();
- 
-				if (ImGui::SliderFloat("amplitude", &amp, 0.0f, 10.0f))
-				{
-					fbmNeedingRegnerated = true;
-					terrainNeedReGeneration = true;
-
-				}
-				if(ImGui::SliderFloat("freqancy", &freq, 0.0f, 10.0f))
-				{
-					fbmNeedingRegnerated = true;
-					terrainNeedReGeneration = true;
-
-				}
-				if (ImGui::SliderFloat("Perlin frequancy", &frequancy, 0.0f, 10.0f))
-				{
-					fbmNeedingRegnerated = true;
-					terrainNeedReGeneration = true;
-
-				}
-				if (ImGui::SliderFloat("lacunarity", &lacunarity, 0.0f, 10.0f))
-				{
-					fbmNeedingRegnerated = true;
-					terrainNeedReGeneration = true;
-
-				}
-				if (ImGui::SliderFloat("persistence", &persistence, 0.0f, 10.0f))
-				{
-					fbmNeedingRegnerated = true;
-					terrainNeedReGeneration = true;
-
-				}
-				if (ImGui::Checkbox("Use expdentional ", &useExpedetional))
-				{
-					fbmNeedingRegnerated = true;
-					terrainNeedReGeneration = true;
-				}
-				if (useExpedetional)
-				{
-					ImGui::InputFloat("Exp", &fmbExpetional);
-
-				}
-
- 
-
-				FractionalBrownianMotion::set_amplitude(amp);
-				FractionalBrownianMotion::set_frequency(freq);
-				FractionalBrownianMotion::set_lacunarity(lacunarity);
-				FractionalBrownianMotion::set_persistence(persistence);
-				
-				if (ImGui::SliderInt("Octaves", &octaves, 0, 100))
-				{
-					fbmNeedingRegnerated = true;
-					terrainNeedReGeneration = true;
-
-				}
- 				ImGui::SliderFloat("Height Scale", &perlinNoiseHeightRange, 0.0f, 20.0f);
-
-			}
-			if (generateTerrain && (usingPerlinNoise || usingHightField || useFBm))
-			{
-
-				if (ImGui::SmallButton("ReGen height field"))
-				{
-					terrainNeedReGeneration =true ;
-					
-
-				}
-			}	
-		}
-		ImGui::End();
-
-
-	}
-
- }
 
 bool Terrain::LoadHeightMap(char * filename)
 {
@@ -677,234 +487,30 @@ void Terrain::NormalizeHeightMap()
 	return;
 }
 
-void Terrain::GenerateHieghtField(ID3D11Device* device,Sound * sound)
+
+
+
+void Terrain::GenerateDimondSquare()
 {
-	//if (terrainNeedReGeneration)
-	{
 
-	
-		int index = 0;
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::uniform_real_distribution<> dis(0, heightFieldMaxHight);
 
-		// Initialise the data in the height map (flat).
-		for (int j = 0; j < this->terrainHeight; j++)
-		{
-			for (int i = 0; i < this->terrainWidth; i++)
-			{
-				index = (this->terrainHeight * j) + i;
-
-				this->heightMap[index].x = (float)i;
-				this->heightMap[index].y = (float)dis(gen) * heightFieldMaxHight;
-				this->heightMap[index].z = (float)j;
-
-			}
-		}
  
-	}
-}
+		DiamondSquare::DiamondSquareAlgorithm(diamondSquarePoints, terrainWidth, terrainHeight, diamondSquareRange);
 
-void Terrain::GeneratePelinNoise(ID3D11Device* device, Sound * sound)
-{
-			float* f = NULL;
-
-	if (useMusicData)
-	{
-		f = sound->getData(BASS_DATA_FFT1024 | BASS_DATA_FFT_INDIVIDUAL | BASS_DATA_FLOAT, 1024);
-	}
-	 
-		int index = 0;
-
-
-		// Initialise the data in the height map (flat).
-		for (int j = 0; j < this->terrainHeight; j++)
-		{
-			for (int i = 0; i < this->terrainWidth; i++)
-			{
-				index = (this->terrainHeight * j) + i;
-
-				this->heightMap[index].x = (float)i;
-
-				double pelinNoise ;
-
-				if (perlinNeedingRegnerated)
-				{
-					pelinNoise = SimplexNoise::noise(j, i, frequancy);
-					perinNoiseValues[index] = pelinNoise;
-
-				}
-				else
-				{
-					pelinNoise = perinNoiseValues[index];
-				}
-				if (useMusicData)
-				{
-					this->heightMap[index].y = (float)pelinNoise * perlinNoiseHeightRange *f[i + j];
-				}
-				else
-				{
-					this->heightMap[index].y = (float)pelinNoise * perlinNoiseHeightRange;
-
-				}
-				
-				this->heightMap[index].z = (float)j;
-
-			}
-		}
-		perlinNeedingRegnerated = false;
-		delete[] f;
-		f =  0;
-	
-}
-
-void Terrain::GenerateFBmNoise(ID3D11Device * device, Sound * sound)
-{
-	float* f = NULL;
-
-	if (useMusicData)
-	{
-		f = sound->getData(BASS_DATA_FFT1024 | BASS_DATA_FFT_INDIVIDUAL | BASS_DATA_FLOAT, 1024);
-	}
-
-	int index = 0;
-
-	// Initialise the data in the height map (flat).
-	for (int j = 0; j < this->terrainHeight; j++)
-	{
-		for (int i = 0; i < this->terrainWidth; i++)
-		{
-			index = (this->terrainHeight * j) + i;
-
-			this->heightMap[index].x = (float)i;
-			double fbm;
-			if (fbmNeedingRegnerated)
-			{
-				 fbmNoiseValues[index] = FractionalBrownianMotion::FBm(i, j, octaves, frequancy);
-				 fbm = fbmNoiseValues[index];
-			}
-			else {
-				 fbm = fbmNoiseValues[index];
-			}
-			if (useMusicData)
-			{
-				if (fmbExpetional)
-				{
-					this->heightMap[index].y = pow(fmbExpetional, (float)fbm * perlinNoiseHeightRange *f[i + j]);
-				}
-				else
-				{
-					this->heightMap[index].y =  (float)fbm * perlinNoiseHeightRange *f[i + j];
-
-				}
-			}
-			else
-			{
-				if (fmbExpetional)
-				{
-					this->heightMap[index].y = pow(fmbExpetional, (float)fbm * perlinNoiseHeightRange);
-				}
-				else
-				{
-					this->heightMap[index].y = (float)fbm * perlinNoiseHeightRange;
-
-				}
-			}
-
-			this->heightMap[index].z = (float)j;
-
-		}
-	}
-				
-	fbmNeedingRegnerated = false;
-
-	delete[] f;
-	f = 0;
-}
-
-void Terrain::TerrainShader(ID3D11Device * device, Sound * sound,int iterations)
-{
-
-	float* f = NULL;
-
-	if (sound)
-	{
-		f = sound->getData(BASS_DATA_FFT1024 | BASS_DATA_FFT_INDIVIDUAL | BASS_DATA_FLOAT, 1024);
-	}
- 
-
-	if (faultLineDisplacementNeedingRegnerated)
-	{
-		heightMap = startingHeightmap;
+		//heightMap = startingHeightmap;
 		int indexDF = 0;
 		for (int j = 0; j < terrainHeight; j++)
 		{
 			for (int i = 0; i < terrainWidth; i++)
 			{
 				int indexDF = (this->terrainHeight * j) + i;
-				this->heightMap[indexDF].y = 0;
+				this->heightMap[indexDF].y = diamondSquarePoints[indexDF] ;
 			}
 		}
-
-		float displacement = faultLineDisplacement;
- 		for (int iter = 0; iter < iterations; iter++)
-		{
- 
-
-			int index = 0;
-			std::random_device rd;
-			std::mt19937 gen(rd());
-			std::uniform_real_distribution<> disWidth(0, terrainWidth);
-			std::uniform_real_distribution<> disHeight(0, terrainHeight);
+		 
+		 
 
 
-			XMINT2 randPoint1, randPoint2;
 
-			randPoint1.x = disWidth(gen);
-			randPoint2.x = disWidth(gen);
-
-			randPoint1.y= disHeight(gen);
-			randPoint2.y = disHeight(gen);
-
-			float a = (randPoint2.y - randPoint1.y);
-			float b = -(randPoint2.x - randPoint1.x);
-			float c = -randPoint1.x*(randPoint2.y - randPoint1.y) + randPoint1.y*(randPoint2.x - randPoint1.x);
- 
-
- 	 
-
-			for (int j = 0; j < terrainHeight; j++)
-			{
-				for (int i = 0; i < terrainWidth; i++)
-				{
-					index = (this->terrainHeight * j) + i;
-
-					if (a*i + b*j - c > 0)
-					{
-						this->heightMap[index].y += displacement;
-					}
-					else
-					{
-						this->heightMap[index].y -= displacement;
-					}
-					this->heightMap[index].z = (float)j;
-
-					this->heightMap[index].x = (float)i;
-				}
-			}
-			if (iter < iterations)
-			{
-				displacement = faultLineDisplacement - ((float)iter / (float)iterations) * ((float)displacement - (float)0.1);
-			}
-			else
-			{
-				displacement = faultLineDisplacement;
-			}
-		}
-
-		faultLineDisplacementNeedingRegnerated = false;
-	}
- 
+	
 }
-
- 

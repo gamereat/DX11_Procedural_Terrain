@@ -17,7 +17,7 @@ public:
 		const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix,
 		ID3D11ShaderResourceView* defaultTexture,
 		TerrainGenerationBufferType *terrinSetting, FaultLineDisplacementBufferType* faultLineSettings, TerrainSettingTextureType* terrainTextureSettings,
-		FractionalBrowningNoiseBuffer* fractionalBrowningNoiseSettings,
+		FractionalBrowningNoiseBuffer* fractionalBrowningNoiseSettings, DimondSquareBuffer* dimondSquareSettings,
 		Light* light[NUM_LIGHTS], ID3D11ShaderResourceView*depthMap[],
 		ID3D11ShaderResourceView* lowTexture, ID3D11ShaderResourceView* mediumTexture, ID3D11ShaderResourceView* hightTexture );
 	void Render(ID3D11DeviceContext * deviceContext, int indexCount);
@@ -39,6 +39,7 @@ private:
 
 	ID3D11Buffer* terrainTexturingBuffer;;
 	ID3D11Buffer* fractionalBrowningNoiseBuffer;;
+	ID3D11Buffer* dimondSquareBuffer;;
 
 	ID3D11Buffer* faultLineBuffer;
 	ID3D11Buffer* terrainBuffer;;

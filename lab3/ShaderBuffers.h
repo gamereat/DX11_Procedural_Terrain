@@ -16,7 +16,18 @@ const int NUM_LIGHTS = 4;
 const int MAX_FAULTLINE_ITERATIONS = 2500;
 
 
+struct DimondSquareBuffer  
+{
+	int widthOfGrid;
+	int heightOfGrid;
 
+	XMINT2 padding;
+
+	float topRightRandomNumber;
+	float topLeftRandomNumber;
+	float bottomRightRandomNumber;
+	float bottomLeftRandomNumber;
+};
 
 struct FractionalBrowningNoiseBuffer
 {
