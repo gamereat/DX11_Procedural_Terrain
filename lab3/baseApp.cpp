@@ -89,6 +89,18 @@ BaseApp::~BaseApp()
 		delete textureShader;
 		textureShader = nullptr;
 	}
+
+	if (sound)
+	{
+		delete sound;
+		sound = nullptr;
+	}
+
+	if (roadScene)
+	{
+		delete roadScene;
+		roadScene = nullptr;
+	}
 }
 
 void BaseApp::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight, Input *in)

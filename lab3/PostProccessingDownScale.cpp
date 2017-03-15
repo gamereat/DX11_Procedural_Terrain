@@ -13,6 +13,11 @@ PostProccessingDownScale::PostProccessingDownScale(D3D * directX3D, HWND hwnd, f
 
 PostProccessingDownScale::~PostProccessingDownScale()
 {
+	if (textureShader)
+	{
+		delete textureShader;
+		textureShader = nullptr;
+	}
 }
 
 

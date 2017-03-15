@@ -13,6 +13,11 @@ PostProccessingUpScale::PostProccessingUpScale(D3D * directX3D, HWND hwnd, float
 
 PostProccessingUpScale::~PostProccessingUpScale()
 {
+	if (textureShader)
+	{
+		delete textureShader;
+		textureShader = nullptr;
+	}
 }
 
 RenderTexture* PostProccessingUpScale::Render(D3D* directX3D, Camera* camera, OrthoMesh* orthoMesh, RenderTexture* currentRenderTextureh)

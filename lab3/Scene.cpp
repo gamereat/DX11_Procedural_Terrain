@@ -11,6 +11,11 @@ Scene::Scene(std::string sceneName)
 
 Scene::~Scene()
 {
+	if (depthTexture)
+	{
+		delete depthTexture;
+		depthTexture = nullptr;
+	}
 }
 
 void Scene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * deviceContext, Sound * sound)

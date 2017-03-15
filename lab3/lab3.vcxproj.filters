@@ -49,9 +49,6 @@
     <ClCompile Include="..\MiniIni\minIni.cpp">
       <Filter>miniINi</Filter>
     </ClCompile>
-    <ClCompile Include="..\ApplicationSettings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Terrain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -113,6 +110,9 @@
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="DiamondSquare.cpp" />
+    <ClCompile Include="..\ApplicationSettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\MiniIni\minGlue.h">

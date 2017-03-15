@@ -11,6 +11,11 @@ PostProcessingBase::PostProcessingBase(D3D * directX3D, HWND hwnd, float downsca
 
 PostProcessingBase::~PostProcessingBase()
 {
+	if (renderTexture)
+	{
+		delete renderTexture;
+		renderTexture = nullptr;
+	}
 }
 
 void PostProcessingBase::ToggleMenu()

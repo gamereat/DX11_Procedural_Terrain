@@ -19,6 +19,16 @@ PostProcessing::~PostProcessing()
 		orthoMeshDownScaled = nullptr;
 	}
  
+	if (downScale)
+	{
+		delete downScale;
+		downScale = nullptr;
+	}
+	if (UpScale)
+	{
+		delete UpScale;
+		UpScale = nullptr;
+	}
 }
 
 void PostProcessing::Init(D3D* directX3D, HWND hwnd, Timer* timer)

@@ -26,6 +26,8 @@ Terrain::Terrain(std::string name, ID3D11Device* device, ID3D11DeviceContext* de
 	yAxisWaveSettings.waveType = waveSettings::WaveType::cos;
 	zAxisWaveSettings.waveType = waveSettings::WaveType::cos;
 
+
+	diamondSquareRange = 10;
  
 }
 
@@ -40,6 +42,148 @@ Terrain::~Terrain()
 		heightMap = nullptr;
 	}
 
+	if (startingHeightmap)
+	{
+		delete[] startingHeightmap;
+		startingHeightmap = nullptr;
+	}
+
+}
+
+bool Terrain::CalculateNormals()
+{
+	int i, j, index1, index2, index3, index, count;
+	float vertex1[3], vertex2[3], vertex3[3], vector1[3], vector2[3], sum[3], length;
+	VectorType* normals;
+
+
+	// Create a temporary array to hold the un-normalized normal vectors.
+	normals = new VectorType[(terrainHeight - 1) * (terrainWidth - 1)];
+	if (!normals)
+	{
+		return false;
+	}
+
+	// Go through all the faces in the mesh and calculate their normals.
+	for (j = 0; j<(terrainHeight - 1); j++)
+	{
+		for (i = 0; i<(terrainWidth - 1); i++)
+		{
+			index1 = (j * terrainHeight) + i;
+			index2 = (j * terrainHeight) + (i + 1);
+			index3 = ((j + 1) * terrainHeight) + i;
+
+			// Get three vertices from the face.
+			vertex1[0] = heightMap[index1].x;
+			vertex1[1] = heightMap[index1].y;
+			vertex1[2] = heightMap[index1].z;
+
+			vertex2[0] = heightMap[index2].x;
+			vertex2[1] = heightMap[index2].y;
+			vertex2[2] = heightMap[index2].z;
+
+			vertex3[0] = heightMap[index3].x;
+			vertex3[1] = heightMap[index3].y;
+			vertex3[2] = heightMap[index3].z;
+
+			// Calculate the two vectors for this face.
+			vector1[0] = vertex1[0] - vertex3[0];
+			vector1[1] = vertex1[1] - vertex3[1];
+			vector1[2] = vertex1[2] - vertex3[2];
+			vector2[0] = vertex3[0] - vertex2[0];
+			vector2[1] = vertex3[1] - vertex2[1];
+			vector2[2] = vertex3[2] - vertex2[2];
+
+			index = (j * (terrainHeight - 1)) + i;
+
+			// Calculate the cross product of those two vectors to get the un-normalized value for this face normal.
+			normals[index].x = (vector1[1] * vector2[2]) - (vector1[2] * vector2[1]);
+			normals[index].y = (vector1[2] * vector2[0]) - (vector1[0] * vector2[2]);
+			normals[index].z = (vector1[0] * vector2[1]) - (vector1[1] * vector2[0]);
+		}
+	}
+
+	// Now go through all the vertices and take an average of each face normal 	
+	// that the vertex touches to get the averaged normal for that vertex.
+	for (j = 0; j<terrainHeight; j++)
+	{
+		for (i = 0; i<terrainWidth; i++)
+		{
+			// Initialize the sum.
+			sum[0] = 0.0f;
+			sum[1] = 0.0f;
+			sum[2] = 0.0f;
+
+			// Initialize the count.
+			count = 0;
+
+			// Bottom left face.
+			if (((i - 1) >= 0) && ((j - 1) >= 0))
+			{
+				index = ((j - 1) * (terrainHeight - 1)) + (i - 1);
+
+				sum[0] += normals[index].x;
+				sum[1] += normals[index].y;
+				sum[2] += normals[index].z;
+				count++;
+			}
+
+			// Bottom right face.
+			if ((i < (terrainWidth - 1)) && ((j - 1) >= 0))
+			{
+				index = ((j - 1) * (terrainHeight - 1)) + i;
+
+				sum[0] += normals[index].x;
+				sum[1] += normals[index].y;
+				sum[2] += normals[index].z;
+				count++;
+			}
+
+			// Upper left face.
+			if (((i - 1) >= 0) && (j < (terrainHeight - 1)))
+			{
+				index = (j * (terrainHeight - 1)) + (i - 1);
+
+				sum[0] += normals[index].x;
+				sum[1] += normals[index].y;
+				sum[2] += normals[index].z;
+				count++;
+			}
+
+			// Upper right face.
+			if ((i < (terrainWidth - 1)) && (j < (terrainHeight - 1)))
+			{
+				index = (j * (terrainHeight - 1)) + i;
+
+				sum[0] += normals[index].x;
+				sum[1] += normals[index].y;
+				sum[2] += normals[index].z;
+				count++;
+			}
+
+			// Take the average of the faces touching this vertex.
+			sum[0] = (sum[0] / (float)count);
+			sum[1] = (sum[1] / (float)count);
+			sum[2] = (sum[2] / (float)count);
+
+			// Calculate the length of this normal.
+			length = sqrt((sum[0] * sum[0]) + (sum[1] * sum[1]) + (sum[2] * sum[2]));
+
+			// Get an index to the vertex location in the height map array.
+			index = (j * terrainHeight) + i;
+
+			// Normalize the final shared normal for this vertex and store it in the height map array.
+			heightMap[index].nx = (sum[0] / length);
+			heightMap[index].ny = (sum[1] / length);
+			heightMap[index].nz = (sum[2] / length);
+		}
+	}
+
+	// Release the temporary normals.
+	delete[] normals;
+	normals = 0;
+
+	return true;
 }
 
 bool Terrain::InitializeTerrain(ID3D11Device* device, int terrainWidth, int terrainHeight)
@@ -75,6 +219,8 @@ bool Terrain::InitializeTerrain(ID3D11Device* device, int terrainWidth, int terr
 
 		}
 	} 
+
+
 	// Initialize the vertex and index buffer that hold the geometry for the terrain.
 	InitBuffers(device); 
 	return true;
@@ -158,6 +304,7 @@ bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* soun
 
 	return true;
 }
+
 void Terrain::InitBuffers(ID3D11Device* device)
 {
 	VertexType* vertices;
@@ -199,7 +346,7 @@ void Terrain::InitBuffers(ID3D11Device* device)
 			index4 = (terrainHeight * (j + 1)) + (i + 1);  // Upper right.
 
 														   // Bottom left.
-				// Upper right.
+			// Upper right.
 			vertices[index].position = XMFLOAT3(heightMap[index4].x, heightMap[index4].y, heightMap[index4].z);
 			vertices[index].normal = XMFLOAT3(heightMap[index4].nx, heightMap[index4].ny, heightMap[index4].nz);
 			vertices[index].texture = XMFLOAT2(u + increment, v + increment);
@@ -223,7 +370,7 @@ void Terrain::InitBuffers(ID3D11Device* device)
 			index++;
 			
 
-		// Upper right.
+			// Upper right.
 			vertices[index].position = XMFLOAT3(heightMap[index4].x, heightMap[index4].y, heightMap[index4].z);
 			vertices[index].normal = XMFLOAT3(heightMap[index4].nx, heightMap[index4].ny, heightMap[index4].nz);
 			vertices[index].texture = XMFLOAT2(u + increment, v + increment);
@@ -286,6 +433,10 @@ void Terrain::InitBuffers(ID3D11Device* device)
 	// Create the index buffer.
 	device->CreateBuffer(&indexBufferDesc, &indexData, &m_indexBuffer);
 
+	CalculateNormals();
+
+
+
 	// Release the arrays now that the buffers have been created and loaded.
 	delete[] vertices;
 	vertices = 0;
@@ -294,6 +445,7 @@ void Terrain::InitBuffers(ID3D11Device* device)
 	indices = 0;
 
  }
+
  XMMATRIX Terrain::SendData(ID3D11DeviceContext * deviceContext)
 {
 	unsigned int stride;
@@ -486,9 +638,6 @@ void Terrain::NormalizeHeightMap()
 
 	return;
 }
-
-
-
 
 void Terrain::GenerateDimondSquare()
 {

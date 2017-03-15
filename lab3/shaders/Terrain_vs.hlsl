@@ -153,10 +153,6 @@ OutputType main(InputType input)
     float4 worldPosition;
     
 
-
-
-
-
     // Change the position vector to be 4 units for proper matrix calculations.
     input.position.w = 1.0f;
  
@@ -202,18 +198,7 @@ OutputType main(InputType input)
         result.found = false;
         float hieght = heightOfGrid;
         float width = widthOfGrid;
-                
-        //do
-        //{
-                 
-        //    result = DiamondSquare(input.position.x, input.position.z, hieght, width, result.topLeft, result.topRight, result.bottomLeft, result.bottomRight);
-              
-        //    hieght /= 2;
-        //    width /= 2;
-                  
-        //} while (result.found == false);
 
-      //  input.position.y = result.result;
 		break;
 	}
 
@@ -262,11 +247,15 @@ OutputType main(InputType input)
 		// Normalize the light position vector.
         output.lightPos[i] = normalize(output.lightPos[i]);
     }
+
+    if(terrainGenerationType != 0)
+    {
           	// Calculate the normal vector against the world matrix only.
-    output.normal = mul(input.normal, (float3x3) worldMatrix);
+        output.normal = mul(input.normal, (float3x3) worldMatrix);
 	
            // Normalize the normal vector.
-    output.normal = normalize(output.normal);
+        output.normal = normalize(output.normal);
+    }
     return output;
 }
  
@@ -365,7 +354,6 @@ float FaultLineDisplacement(float x, float z)
     return yAxisChange;
 
 }
-
 
 float PelinNoise(float x, float y, float freqancy)
 {
@@ -468,6 +456,7 @@ int fastfloor(float fp)
 	int i = (int)fp;
 	return (fp < i) ? (i - 1) : (i);
 }
+
 float grad(int hash, float x) {
 	int h = hash & 0x0F;        // Convert low 4 bits of hash code
 	float grad = 1.0f + (h & 7);    // Gradient value 1.0, 2.0, ..., 8.0
@@ -475,6 +464,7 @@ float grad(int hash, float x) {
 									//  float grad = gradients1D[h];    // NOTE : Test of Gradient look-up table instead of the above
 	return (grad * x);              // Multiply the gradient with the distance
 }
+
 float grad(int hash, float x, float y) {
 	int h = hash & 0x3F;  // Convert low 3 bits of hash code
 	float u = h < 4 ? x : y;  // into 8 simple gradient directions,
@@ -482,7 +472,6 @@ float grad(int hash, float x, float y) {
 	return ((h & 1) ? -u : u) + ((h & 2) ? -2.0f*v : 2.0f*v);
 }
  
-
 float FractionalBrownianMotion(float x, float y, int octaves, float frequency, float amplitude,  float pelinFrequancy)
 {
 	float output = 0.f;
@@ -499,8 +488,6 @@ float FractionalBrownianMotion(float x, float y, int octaves, float frequency, f
 
 	return (output / denom);
 }
-
-
 
 dimondSquareResult DiamondSquare(int x, int y, float height, float width, float topLeft, float topRight, float bottomLeft, float bottomRight)
 {
@@ -621,6 +608,7 @@ float adverage(float a, float b)
 {
 	return ((a + b) / 2);
 }
+
 float adverage(float a, float b ,float c, float d)
 {
     return ((a + b + c+ d) / 4);

@@ -20,18 +20,87 @@ TerrainScene::~TerrainScene()
 	if (terrain)
 	{
 		delete terrain;
-		terrain = 0;
+		terrain = nullptr;
 	}
 
 	if (colourShader)
 	{
 		delete colourShader;
-		colourShader = 0;
+		colourShader = nullptr;
 	}
 
+	if (textureShader)
+	{
+		delete textureShader;
+		textureShader = nullptr;
+	}
 
+	if (terrainShader)
+	{
+		delete terrainShader;
+		terrainShader = nullptr;
+	}
+	if (depthShader)
+	{
+		delete depthShader;
+		depthShader = nullptr;
+	}
+
+	if (faultLineSettings)
+	{
+		delete faultLineSettings;
+		faultLineSettings = nullptr;
+	}
 	
+	if (distanceTess)
+	{
+		delete distanceTess;
+		distanceTess = nullptr;
+	}
+
+	if (terrainTextureSettings)
+	{
+		delete terrainTextureSettings;
+		terrainTextureSettings = nullptr;
+	}
+
+	if (terrainGeneration)
+	{
+		delete terrainGeneration;
+		terrainGeneration = nullptr;
+	}
+
+	if (diamondSquareSettings)
+	{
+		delete diamondSquareSettings;
+		diamondSquareSettings = nullptr;
+	}
+
+	if (fbnSettings)
+	{
+		delete fbnSettings;
+		fbnSettings = nullptr;
+
+	}
+
+	if (lowTexture)
+	{
+		delete lowTexture;
+		lowTexture = nullptr;
+	}
+	if (mediumTexture)
+	{
+		delete mediumTexture;
+		mediumTexture = nullptr;
+	}
+
+	if (hightTexture)
+	{
+		delete hightTexture;
+		hightTexture = nullptr;
+	}
 }
+
 
 void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * deviceContext,Sound* sound)
 {
@@ -43,10 +112,7 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
   	colourShader = new ColourShader(device, hwnd);
 	textureShader = new TextureShader(device, hwnd);
 
-
 	terrainShader = new TerrainShader(device,hwnd);
-
-
 
 	depthShader = new DepthShader(device, hwnd);
 	faultLineSettings = new FaultLineDisplacementBufferType();
