@@ -99,6 +99,17 @@ TerrainScene::~TerrainScene()
 		delete hightTexture;
 		hightTexture = nullptr;
 	}
+
+	if (waterMesh)
+	{
+		delete waterMesh;
+		waterMesh = nullptr;
+	}
+	if (waveInfo)
+	{
+		delete waveInfo;
+		waveInfo = nullptr;
+	}
 }
 
 
@@ -139,7 +150,9 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	mediumTexture = new Texture(device, deviceContext, L"../res/moss.png");
 	hightTexture = new Texture(device, deviceContext, L"../res/rock.png");
 
-	 
+	waveShader = new WaterShader(device, hwnd);
+
+	waterMesh = new PlaneMesh("Water", device, deviceContext, L"../res/bunny.png", 129);
 
 	diamondSquareSettings->widthOfGrid = 129;
 	diamondSquareSettings->heightOfGrid = 129;
@@ -150,10 +163,18 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	fbnSettings->fbnOctaves = 8;
 	fbnSettings->heightScale = 6.5;
 	fbnSettings->fbnPelinNoiseFreqnacy  = .9f;
+
+	waveInfo = new WavetBufferType();
+	waveInfo->amplutude = 0.4;
+	waveInfo->speed = 1.2;
+	waveInfo->steepnesss = 0.2;
+	waveInfo->freqancy = XMFLOAT3(1.9, 1.75, 1.75);
+
  }
 
 void TerrainScene::Update(Timer * timer)
 {
+	waveInfo->time = timer->GetTotalTimePast();
 
 
 	if (faultLineSettings->enableFaultLineDisplacement && sound->getData(BASS_DATA_FFT256 | BASS_DATA_FLOAT, 128)[1] > 0.4f)
@@ -224,16 +245,23 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 		depthMaps[i] = depthMap[i]->GetShaderResourceView();
 
 	}
-	 
-	//// Send geometry data (from mesh)
-	worldMatrix = 	terrain->SendData(device->GetDeviceContext());
-	//// Set shader parameters (matrices and texture)
-	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(),
-		terrainGeneration,faultLineSettings, terrainTextureSettings, fbnSettings,diamondSquareSettings, light, depthMaps,
-		lowTexture->GetTexture(), mediumTexture->GetTexture(), hightTexture->GetTexture());
-	//// Render object (combination of mesh geometry and shader process
-	terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
+	// 
+	////// Send geometry data (from mesh)
+	//worldMatrix = 	terrain->SendData(device->GetDeviceContext());
+	////// Set shader parameters (matrices and texture)
+	//terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(),
+	//	terrainGeneration,faultLineSettings, terrainTextureSettings, fbnSettings,diamondSquareSettings, light, depthMaps,
+	//	lowTexture->GetTexture(), mediumTexture->GetTexture(), hightTexture->GetTexture());
+	////// Render object (combination of mesh geometry and shader process
+	//terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
 
+
+
+	waterMesh->SendData(device->GetDeviceContext());
+
+	waveShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, waterMesh->GetTexture(), waveInfo);
+
+	waveShader->Render(device->GetDeviceContext(), waterMesh->GetIndexCount());
 
 	device->SetBackBufferRenderTarget();
 
@@ -262,16 +290,23 @@ void TerrainScene::MenuOptions()
 				terrain->ToggleMenu();
 
 			}
+			if (ImGui::MenuItem(waterMesh->getName().c_str()))
+			{
+				waterMesh->ToggleMenu();
+
+			}
 			ImGui::EndMenu();
 
 		}
 		ImGui::EndMenu();
 
 	}
+	waterMesh->GuiSettings(&waterMesh->menuOpen);
 	terrain->GuiSettings(&terrain->menuOpen);
 	sound->GUI_Menu(&soundOptions);
 	//terrain->Settings(&terrainOptions);
 	TerrainSettings(&terrainOptions);
+	WaterSettings(&terrainOptions);
 
 }
 
@@ -416,6 +451,26 @@ void TerrainScene::TerrainSettings(bool * is_open)
 			ImGui::End();
 
 	}
+}
+
+void TerrainScene::WaterSettings(bool * is_open)
+{
+	if (*is_open == true)
+	{
+		// Create the window
+		if (!ImGui::Begin("Water Settings", is_open, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::End();
+			return;
+		}
+
+		ImGui::DragFloat("Wave Aplitude", &waveInfo->amplutude);
+		ImGui::DragFloat3("Wave Freqancy", &waveInfo->freqancy.x);
+		ImGui::DragFloat("Wave Speed", &waveInfo->speed);
+		ImGui::DragFloat("Wave Steepness", &waveInfo->steepnesss);
+		
+		ImGui::End();
+	};
 }
 
  

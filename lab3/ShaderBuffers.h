@@ -15,7 +15,7 @@ const int NUM_LIGHTS = 4;
 
 const int MAX_FAULTLINE_ITERATIONS = 2500;
 
-
+ 
 struct DimondSquareBuffer  
 {
 	int widthOfGrid;

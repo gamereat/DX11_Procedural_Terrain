@@ -109,8 +109,13 @@
     <ClCompile Include="TerrainShader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="DiamondSquare.cpp" />
     <ClCompile Include="..\ApplicationSettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DiamondSquare.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WaterShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -193,6 +198,9 @@
     <ClInclude Include="DiamondSquare.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WaterShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\colour_ps.hlsl">
@@ -232,6 +240,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\depth_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\water_vs.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

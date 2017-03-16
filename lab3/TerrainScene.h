@@ -15,7 +15,7 @@
 #include "TerrainShader.h"
 #include "LSystem.h"
 #include <string>
-
+#include "WaterShader.h"
 
 
 /*
@@ -99,7 +99,15 @@ public:
 
 
 	void TerrainSettings(bool *is_open);
+
+	void WaterSettings(bool *is_open);
 private:
+
+	WavetBufferType* waveInfo;
+
+	WaterShader* waveShader;
+
+	PlaneMesh* waterMesh;
 
 	bool regenerateDiamondSquare;
 
