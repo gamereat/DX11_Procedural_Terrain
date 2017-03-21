@@ -19,7 +19,7 @@ TerrainScene::~TerrainScene()
 	// Release the Direct3D object.
 	if (terrain)
 	{
-		delete terrain;
+		delete terrain; 
 		terrain = nullptr;
 	}
 
@@ -152,7 +152,7 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 
 	waveShader = new WaterShader(device, hwnd);
 
-	waterMesh = new PlaneMesh("Water", device, deviceContext, L"../res/bunny.png", 129);
+	waterMesh = new PlaneMesh("Water", device, deviceContext, L"../res/tex_Water.jpg", 129);
 
 	diamondSquareSettings->widthOfGrid = 129;
 	diamondSquareSettings->heightOfGrid = 129;
@@ -246,14 +246,14 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 
 	}
 	// 
-	////// Send geometry data (from mesh)
-	//worldMatrix = 	terrain->SendData(device->GetDeviceContext());
-	////// Set shader parameters (matrices and texture)
-	//terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(),
-	//	terrainGeneration,faultLineSettings, terrainTextureSettings, fbnSettings,diamondSquareSettings, light, depthMaps,
-	//	lowTexture->GetTexture(), mediumTexture->GetTexture(), hightTexture->GetTexture());
-	////// Render object (combination of mesh geometry and shader process
-	//terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
+	//// Send geometry data (from mesh)
+	worldMatrix = 	terrain->SendData(device->GetDeviceContext());
+	//// Set shader parameters (matrices and texture)
+	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(),
+		terrainGeneration,faultLineSettings, terrainTextureSettings, fbnSettings,diamondSquareSettings, light, depthMaps,
+		lowTexture->GetTexture(), mediumTexture->GetTexture(), hightTexture->GetTexture());
+	//// Render object (combination of mesh geometry and shader process
+	terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
 
 
 
@@ -278,6 +278,11 @@ void TerrainScene::MenuOptions()
 		{
 			terrainOptions = terrainOptions ? false : true;
 
+		}		
+		if (ImGui::MenuItem("Water Settings "))
+		{
+			waterMenuOpen = waterMenuOpen ? false : true;
+
 		}
 		if (ImGui::MenuItem("Sound Details"))
 		{
@@ -301,13 +306,12 @@ void TerrainScene::MenuOptions()
 		ImGui::EndMenu();
 
 	}
-	waterMesh->GuiSettings(&waterMesh->menuOpen);
+//	waterMesh->GuiSettings(&waterMenuOpen);
 	terrain->GuiSettings(&terrain->menuOpen);
 	sound->GUI_Menu(&soundOptions);
 	//terrain->Settings(&terrainOptions);
 	TerrainSettings(&terrainOptions);
-	WaterSettings(&terrainOptions);
-
+	WaterSettings(&waterMenuOpen);
 }
 
 void TerrainScene::ResetLights(Light * lights[])

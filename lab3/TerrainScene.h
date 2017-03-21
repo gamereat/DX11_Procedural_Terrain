@@ -103,6 +103,8 @@ public:
 	void WaterSettings(bool *is_open);
 private:
 
+	bool waterMenuOpen;
+
 	WavetBufferType* waveInfo;
 
 	WaterShader* waveShader;
