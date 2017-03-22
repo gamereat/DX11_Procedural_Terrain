@@ -353,7 +353,10 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 	terrainTextureSettingsPtr = (TerrainSettingTextureType*)mappedResource.pData;
 
 	terrainTextureSettingsPtr->displayNormalMap = terrainTextureSettings->displayNormalMap;
-	terrainTextureSettingsPtr->padding = XMINT3(0, 0, 0);
+	terrainTextureSettingsPtr->enableLighting = terrainTextureSettings->enableLighting;
+	terrainTextureSettingsPtr->textureTiling = terrainTextureSettings->textureTiling;
+	terrainTextureSettingsPtr->padding = 0;
+//	terrainTextureSettingsPtr->padding = XMINT3(0,0, 0);
 	deviceContext->Unmap(terrainTexturingBuffer, 0);
 	bufferNumber = 1;
 	deviceContext->PSSetConstantBuffers(bufferNumber, 1, &terrainTexturingBuffer);

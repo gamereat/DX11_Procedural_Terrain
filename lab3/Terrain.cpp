@@ -477,24 +477,7 @@ void Terrain::Settings(bool* is_open)
 {
 	if (*is_open == true)
 	{
-		//// Create the window
-		//if (!ImGui::Begin("Terrain Settings", is_open, ImGuiWindowFlags_AlwaysAutoResize))
-		//{
-		//	ImGui::End();
-		//	return;
-		//}
 
-
-	
-		//if (ImGui::SmallButton("Restart Terrain"))
-		//{
-		//	resetTerrain = true;
-		//}
-
-		//ImGui::Checkbox("Generate terrain", &generateTerrain);
-
-	////	if (generateTerrain)
-	//	{
  
 			if (ImGui::InputFloat("Range", &diamondSquareRange))
 			{
@@ -502,23 +485,10 @@ void Terrain::Settings(bool* is_open)
 				terrainNeedReGeneration = true;
 			}
 
-			
 
-			//}
-			//if (generateTerrain )
-			//{
-
-			//	if (ImGui::SmallButton("ReGen height field"))
-			//	{
-			//		terrainNeedReGeneration =true ;
-			//		
-
-			//	}
-			//}
-			
-			//	ImGui::End();
 	
-		}
+		
+	}
 
 
 

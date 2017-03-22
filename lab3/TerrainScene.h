@@ -16,7 +16,7 @@
 #include "LSystem.h"
 #include <string>
 #include "WaterShader.h"
-
+#include <random>
 
 /*
 Terrain Scene 
@@ -102,6 +102,8 @@ public:
 
 	void WaterSettings(bool *is_open);
 private:
+
+	int seed;
 
 	bool waterMenuOpen;
 

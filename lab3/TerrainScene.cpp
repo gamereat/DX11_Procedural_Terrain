@@ -3,7 +3,7 @@
 #include "../ApplicationSettings.h"
 #include <random>
 
-
+#include  <algorithm>
 TerrainScene::TerrainScene(string sceneName)
 	: Scene(sceneName)
 {
@@ -146,13 +146,15 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	terrainGeneration = new TerrainGenerationBufferType();
 	diamondSquareSettings = new DimondSquareBuffer();
 	fbnSettings = new FractionalBrowningNoiseBuffer();
-	lowTexture = new Texture(device, deviceContext, L"../res/grass.png");
+	lowTexture = new Texture(device, deviceContext, L"../res/rock.png");
 	mediumTexture = new Texture(device, deviceContext, L"../res/moss.png");
 	hightTexture = new Texture(device, deviceContext, L"../res/rock.png");
 
 	waveShader = new WaterShader(device, hwnd);
 
 	waterMesh = new PlaneMesh("Water", device, deviceContext, L"../res/tex_Water.jpg", 129);
+
+	waterMesh->setTranslation(XMFLOAT3(-25, -28, 50));
 
 	diamondSquareSettings->widthOfGrid = 129;
 	diamondSquareSettings->heightOfGrid = 129;
@@ -165,11 +167,15 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	fbnSettings->fbnPelinNoiseFreqnacy  = .9f;
 
 	waveInfo = new WavetBufferType();
-	waveInfo->amplutude = 0.4;
+	waveInfo->amplutude = 0.2;
 	waveInfo->speed = 1.2;
 	waveInfo->steepnesss = 0.2;
-	waveInfo->freqancy = XMFLOAT3(1.9, 1.75, 1.75);
+	waveInfo->freqancy = XMFLOAT3(0.25, 0.4, 0.1);
 
+	terrainTextureSettings->textureTiling = 1; 
+ 
+	std::random_device rd;
+	seed = rd();
  }
 
 void TerrainScene::Update(Timer * timer)
@@ -182,6 +188,8 @@ void TerrainScene::Update(Timer * timer)
  
 		faultLineSettings->numberOfIterations++;
 	}
+	std::random_device source;
+
 
 
 	// If needing to genereat rnadom numbers 
@@ -190,16 +198,18 @@ void TerrainScene::Update(Timer * timer)
 		regenerateFaultLines = false;
 		for (int i = 0; i <  MAX_FAULTLINE_ITERATIONS; i++)
 		{
-			std::random_device rd;
-			std::mt19937 gen(rd());
-			std::uniform_real_distribution<> disWidth(0, 100);
-			std::uniform_real_distribution<> disHeight(0, 100);
+ 
+			std::mt19937 gen(seed +i);
+			std::uniform_real_distribution<> disWidth(0, 129);
+			std::uniform_real_distribution<> disWidth2(0, 129);
+			std::uniform_real_distribution<> disHeight(0, 129);
+			std::uniform_real_distribution<> disHeight2(0, 129);
 
 			faultLineSettings->interationsRandomPoints[i].x = disWidth(gen);
-			faultLineSettings->interationsRandomPoints[i].z = disWidth(gen);
+			faultLineSettings->interationsRandomPoints[i].z = disWidth2(gen);
 
 			faultLineSettings->interationsRandomPoints[i].y = disHeight(gen);
-			faultLineSettings->interationsRandomPoints[i].w = disHeight(gen);
+			faultLineSettings->interationsRandomPoints[i].w = disHeight2(gen);
  
 		}
 	}
@@ -207,8 +217,7 @@ void TerrainScene::Update(Timer * timer)
 	{
 		regenerateDiamondSquare = false;
 		terrain->diamondSquareNeedRegenerated = true;
-		std::random_device rd;
-		std::mt19937 gen(rd());
+ 		std::mt19937 gen(seed);
 		std::uniform_real_distribution<> dis(0, 1);
 		diamondSquareSettings->bottomLeftRandomNumber = dis(gen);
 		diamondSquareSettings->bottomRightRandomNumber = dis(gen);
@@ -257,7 +266,7 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 
 
 
-	waterMesh->SendData(device->GetDeviceContext());
+	worldMatrix = waterMesh->SendData(device->GetDeviceContext());
 
 	waveShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, waterMesh->GetTexture(), waveInfo);
 
@@ -306,7 +315,7 @@ void TerrainScene::MenuOptions()
 		ImGui::EndMenu();
 
 	}
-//	waterMesh->GuiSettings(&waterMenuOpen);
+	waterMesh->GuiSettings(&waterMesh->menuOpen);
 	terrain->GuiSettings(&terrain->menuOpen);
 	sound->GUI_Menu(&soundOptions);
 	//terrain->Settings(&terrainOptions);
@@ -387,7 +396,16 @@ void TerrainScene::TerrainSettings(bool * is_open)
 			ImGui::End();
 			return;
 		}
-		
+
+ 
+		if (ImGui::InputInt("Terrain Seed", &seed))
+		{
+			regenerateDiamondSquare = true;
+			regenerateFaultLines = true;
+
+		}
+ 
+
 			int currnetGen = terrainGeneration->terrainGenerationType;
 
 
@@ -396,7 +414,16 @@ void TerrainScene::TerrainSettings(bool * is_open)
 				regenerateDiamondSquare = true;
 
 			}
+			
+ 			bool enableLighting = terrainTextureSettings->enableLighting;
 
+			if (ImGui::Checkbox("Enable Lighting", &enableLighting))
+			{
+			}
+			if (ImGui::DragInt("TerrainTexturing", &terrainTextureSettings->textureTiling))
+			{
+			}
+			terrainTextureSettings->enableLighting = enableLighting;
 			terrainGeneration->terrainGenerationType = (TerrainGeneration)currnetGen;
 			if (terrainGeneration->terrainGenerationType == TerrainGeneration::FaultLineDisplacement)
 			{
@@ -418,12 +445,18 @@ void TerrainScene::TerrainSettings(bool * is_open)
 					if (ImGui::SliderFloat("Smoothing Value ", &faultLineSettings->smoothingValue, 0, 1, "%.3f", 0.1f))
 					{
 					}
+					bool dispalyNormalMap = terrainTextureSettings->displayNormalMap;
 
-					if (ImGui::Checkbox("Display Normal map", &terrainTextureSettings->displayNormalMap))
+					if (ImGui::Checkbox("Display Normal map", &dispalyNormalMap))
 					{
 					}
+
+					terrainTextureSettings->displayNormalMap = dispalyNormalMap;
+
 					if (ImGui::Button("Regenerate Fault Line Values"))
 					{
+						std::random_device rd;
+						seed = rd();
 						regenerateFaultLines = true;
 					}
 				}
@@ -446,6 +479,8 @@ void TerrainScene::TerrainSettings(bool * is_open)
 				terrain->Settings(&f);
 				if (ImGui::Button("Regenerate DiamondSquare Alorigumth "))
 				{
+					std::random_device rd;
+					seed = rd();
 					regenerateDiamondSquare = true;
 				}
 			}

@@ -72,9 +72,13 @@ struct TerrainGenerationBufferType
 
 struct TerrainSettingTextureType
 {
-	bool displayNormalMap;
+	
 
-	XMINT3 padding;
+	int enableLighting;
+	int padding;
+	int textureTiling;
+
+	int displayNormalMap;
 };
  
 struct FaultLineDisplacementBufferType
