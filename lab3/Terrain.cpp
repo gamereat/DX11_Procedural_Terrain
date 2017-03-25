@@ -9,7 +9,7 @@ Terrain::Terrain(std::string name, ID3D11Device* device, ID3D11DeviceContext* de
 : PlaneMesh(name,device, deviceContext, textureFilename, resolution)
 {
 	generateTerrain = false;
-	usingWaves = false;
+
 	heightMap = nullptr;
 
 	xAxisWaveSettings.amplitude = 1;
@@ -245,6 +245,13 @@ bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* soun
  		
 	}
 
+	if (faultLineDisplacementRegenerated)
+	{
+		faultLineDisplacementRegenerated = false;
+		GenerateFaultLineDisplacement();
+		terrainNeedReGeneration = true;
+
+	}
 	if (simplexNoiseRegenerated)
 	{		
 		simplexNoiseRegenerated = false;
@@ -462,7 +469,7 @@ void Terrain::Settings(bool* is_open , TerrainGeneration generation)
 
  			}
 
-			if (ImGui::InputFloat("Range", &diamondSquareRange))
+			if (ImGui::InputInt("Range", &diamondSquareRange))
 			{
 				GenerateDimondSquare();
 				terrainNeedReGeneration = true;
@@ -511,6 +518,19 @@ void Terrain::Settings(bool* is_open , TerrainGeneration generation)
 
 			}
 	
+		}
+		else if (generation == TerrainGeneration::FaultLineDisplacement)
+		{
+			if (ImGui::Checkbox("Enable Smoothing", &enableSmoothing))
+			{
+				faultLineDisplacementRegenerated = true;
+				GenerateFaultLineDisplacement();
+			}
+			if (ImGui::DragFloat("Smoothing Value ", &smoothingValue))
+			{
+				terrainNeedReGeneration = true;
+
+ 			}
 		}
 	
 		
@@ -735,4 +755,75 @@ void Terrain::GenerateSimplexNoiseNoise()
 
 void Terrain::GenerateFBmNoise()
 {
+}
+
+void Terrain::GenerateFaultLineDisplacement()
+{
+	int index = 0;
+	
+	for (int j = 0; j < this->terrainHeight; j++)
+	{
+		for (int i = 0; i < this->terrainWidth; i++)
+		{
+			index = (this->terrainHeight * j) + i;
+
+			this->heightMap[index].x = (float)i;
+
+
+			this->heightMap[index].y = (float)FaultLineDisplacement(i, j);
+
+
+			this->heightMap[index].z = (float)j;
+		}
+	}
+	faultLineDisplacementRegenerated = false;
+}
+
+float Terrain::FaultLineDisplacement(int x, int z)
+{
+	float yAxisChange = 0;
+
+
+	float displacement = faultLineSettings->startingDisplacement;
+	for (int iter = 0; iter <  faultLineSettings->numberOfIterations; iter++)
+	{
+
+
+
+		XMFLOAT2 randPoint1, randPoint2;
+
+		randPoint1 = XMFLOAT2((float)faultLineSettings->interationsRandomPoints[iter].x, (float)faultLineSettings->interationsRandomPoints[iter].y);
+		randPoint2 = XMFLOAT2((float)faultLineSettings->interationsRandomPoints[iter].z, (float)faultLineSettings->interationsRandomPoints[iter].w);
+
+
+		float a = (float)((float)randPoint2.y - (float)randPoint1.y);
+		float b = (float)-((float)randPoint2.x - (float)randPoint1.x);
+		float c = (float)(-(float)randPoint1.x * ((float)randPoint2.y - (float)randPoint1.y)) + ((float)randPoint1.y * ((float)randPoint2.x - (float)randPoint1.x));
+
+
+
+		if (((a * z) + (b * x) - c) > 0)
+		{
+			yAxisChange += displacement;
+		}
+		else
+		{
+			yAxisChange -= displacement;
+		}
+
+
+		if (iter <  faultLineSettings->numberOfIterations)
+		{
+			displacement = faultLineSettings->startingDisplacement - ((float)iter / (float)faultLineSettings->numberOfIterations) * ((float)displacement - (float)faultLineSettings->minimumDisplacement);
+		}
+		else
+		{
+			displacement = faultLineSettings->startingDisplacement;
+		}
+	}
+
+
+
+
+	return yAxisChange;
 }

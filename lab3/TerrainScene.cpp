@@ -70,11 +70,6 @@ TerrainScene::~TerrainScene()
 		terrainGeneration = nullptr;
 	}
 
-	if (diamondSquareSettings)
-	{
-		delete diamondSquareSettings;
-		diamondSquareSettings = nullptr;
-	}
 
 	if (fbnSettings)
 	{
@@ -178,6 +173,10 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	seed = rd();
 
 	terrain->seed = &seed;
+
+	terrainGeneration->enableGPUEffect = true;
+
+	terrain->faultLineSettings = faultLineSettings;
  }
 
 void TerrainScene::Update(Timer * timer)
@@ -196,6 +195,8 @@ void TerrainScene::Update(Timer * timer)
 	// If needing to genereat rnadom numbers 
 	if (regenerateFaultLines)
 	{
+		terrain->faultLineDisplacementRegenerated = true;
+
 		regenerateFaultLines = false;
 		for (int i = 0; i <  MAX_FAULTLINE_ITERATIONS; i++)
 		{
@@ -267,7 +268,7 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 	worldMatrix = 	terrain->SendData(device->GetDeviceContext());
 	//// Set shader parameters (matrices and texture)
 	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(),
-		terrainGeneration,faultLineSettings, terrainTextureSettings, fbnSettings,diamondSquareSettings, light, depthMaps,
+		terrainGeneration,faultLineSettings, terrainTextureSettings,fbnSettings, light, depthMaps,
 		lowTexture->GetTexture(), mediumTexture->GetTexture(), hightTexture->GetTexture());
 	//// Render object (combination of mesh geometry and shader process
 	terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
@@ -405,7 +406,39 @@ void TerrainScene::TerrainSettings(bool * is_open)
 			return;
 		}
 
+		ImGui::Text("Terrain Generation Settings - will effect how terrain looks");
  
+		/////////////////////////////////////////////////////////////////
+		// GENERAL TERRAIN SETTINGS
+		/////////////////////////////////////////////////////////////////
+		if (terrainGeneration->terrainGenerationType != TerrainGeneration::DiamondSquare)
+		{	
+			ImGui::Separator();
+
+			ImGui::Text("Will make caculations in real time on the GPU rather than pre caculated on the CPU if enabled");
+			if (ImGui::Checkbox("Enable GPU Generation", &terrainGeneration->enableGPUEffect))
+			{
+				regenerateFaultLines = true;
+
+			}
+
+			ImGui::Text("WARNING: This may be force On or Off for some techniques");
+			ImGui::Text("WARNING: Results on GPU may not be identical to ones made of CPU");
+
+		}
+	//	else
+		{
+		//	terrainGeneration->enableGPUEffect = true;
+
+		}
+
+
+		/////////////////////////////////////////////////////////////////
+		// SEED SETTINGS
+		/////////////////////////////////////////////////////////////////
+		ImGui::Separator();
+
+		ImGui::Text("Seed used to generate any pure random numbers (NOTE: Using Mersenne Twister 19937 generator)");
 		if (ImGui::InputInt("Terrain Seed", &seed))
 		{
 			regenerateDiamondSquare = true;
@@ -416,14 +449,20 @@ void TerrainScene::TerrainSettings(bool * is_open)
 		}
  
 
+		/////////////////////////////////////////////////////////////////
+		// PICKING TECHNIQUE SETTINGS
+		/////////////////////////////////////////////////////////////////
+		ImGui::Separator();
+
+		ImGui::Text("Type of proccedural Techniques to use");
 		int currnetGen = terrainGeneration->terrainGenerationType;
-
-
+	
 		if (ImGui::Combo("Terrain Generation Type", &currnetGen, TerrainGeneration_str, IM_ARRAYSIZE(TerrainGeneration_str)))
 		{
 
 			terrainGeneration->terrainGenerationType = (TerrainGeneration)currnetGen;
  
+			terrainGeneration->enableGPUEffect = false;
 			switch (terrainGeneration->terrainGenerationType)
 			{
 			case TerrainGeneration::DiamondSquare:
@@ -440,6 +479,14 @@ void TerrainScene::TerrainSettings(bool * is_open)
 			{
 				break;
 			}
+			case TerrainGeneration::FaultLineDisplacement:
+			{
+				terrain->faultLineDisplacementRegenerated = true;
+				terrainGeneration->enableGPUEffect = true;
+				regenerateFaultLines = true;
+
+				break;
+			}
 			default:
 				break;
 			}
@@ -447,54 +494,48 @@ void TerrainScene::TerrainSettings(bool * is_open)
 		}
 			
 	
- 		bool enableLighting = terrainTextureSettings->enableLighting;
 
-		if (ImGui::Checkbox("Enable Lighting", &enableLighting))
-		{
-		}
-		terrainTextureSettings->enableLighting = enableLighting;
 
-		bool dispalyNormalMap = terrainTextureSettings->displayNormalMap;
 
-		if (ImGui::Checkbox("Display Normal map", &dispalyNormalMap))
-		{
-		}
 
-		terrainTextureSettings->displayNormalMap = dispalyNormalMap;	
-				
-		if (ImGui::DragInt("TerrainTexturing", &terrainTextureSettings->textureTiling))
-		{
-		}
+		/////////////////////////////////////////////////////////////////
+		// INDVIDURAL TECHIQUE SETTINGS
+		/////////////////////////////////////////////////////////////////
+		ImGui::Separator();
+
+		ImGui::Text("Given Techique settings - Settings for selected  techique ");
 
 		if (terrainGeneration->terrainGenerationType == TerrainGeneration::FaultLineDisplacement)
 		{
 
-			if (ImGui::Checkbox("Enable Fault Line Displacement", &faultLineSettings->enableFaultLineDisplacement))
+	
+
+			if (ImGui::SliderInt("Number of Iterations", &faultLineSettings->numberOfIterations, 0, MAX_FAULTLINE_ITERATIONS))
 			{
+				regenerateFaultLines = true;
+
 			}
-			if (faultLineSettings->enableFaultLineDisplacement)
+
+			if (ImGui::SliderFloat("Displacement Value ", &faultLineSettings->startingDisplacement, 0, 5))
 			{
-				if (ImGui::SliderInt("Number of Iterations", &faultLineSettings->numberOfIterations, 0, MAX_FAULTLINE_ITERATIONS))
-				{
-				}
-				if (ImGui::SliderFloat("Displacement Value ", &faultLineSettings->startingDisplacement, 0, 1))
-				{
-				}
-				if (ImGui::SliderFloat("Minimum displacement value ", &faultLineSettings->minimumDisplacement, 0, faultLineSettings->startingDisplacement))
-				{
-				}
-				if (ImGui::SliderFloat("Smoothing Value ", &faultLineSettings->smoothingValue, 0, 1, "%.3f", 0.1f))
-				{
-				}
+				regenerateFaultLines = true;
+
+			}
+
+			if (ImGui::SliderFloat("Minimum displacement value ", &faultLineSettings->minimumDisplacement, 0, faultLineSettings->startingDisplacement))
+			{
+				regenerateFaultLines = true;
+
+			}
 
 
-				if (ImGui::Button("Regenerate Fault Line Values"))
-				{
-					std::random_device rd;
-					seed = rd();
-					regenerateFaultLines = true;
-				}
+			if (ImGui::Button("Regenerate Fault Line Values"))
+			{
+				std::random_device rd;
+				seed = rd();
+				regenerateFaultLines = true;
 			}
+			
 		}
 		
 		else if (terrainGeneration->terrainGenerationType == TerrainGeneration::FractionalBrowningNoise)
@@ -530,9 +571,53 @@ void TerrainScene::TerrainSettings(bool * is_open)
 		}
 
 
-
+		if (!terrainGeneration->enableGPUEffect)
+		{
 			bool f = true;
 			terrain->Settings(&f, terrainGeneration->terrainGenerationType);
+		}
+
+
+
+
+			/////////////////////////////////////////////////////////////////
+			// TEXTURE GUI
+			/////////////////////////////////////////////////////////////////
+			ImGui::Separator();
+
+
+			ImGui::Text("Terrain Texture Settings");
+
+			ImGui::Text("How many times the texture will repeat");
+			if (ImGui::DragInt("TerrainTexturing", &terrainTextureSettings->textureTiling))
+			{
+			}
+
+
+			/////////////////////////////////////////////////////////////////
+			// DEBUG GUI
+			/////////////////////////////////////////////////////////////////
+			ImGui::Separator();
+
+			ImGui::Text("Debug Settings");
+			ImGui::Text("Enables and disables lights - useful when terrain get larger than range of lights");
+			ImGui::Text("Allows to Visulize normals to show if working corrently");
+			bool enableLighting = terrainTextureSettings->enableLighting;
+
+			if (ImGui::Checkbox("Enable Lighting", &enableLighting))
+			{
+			}
+			terrainTextureSettings->enableLighting = enableLighting;
+
+ 			ImGui::SameLine();
+			bool dispalyNormalMap = terrainTextureSettings->displayNormalMap;
+
+			if (ImGui::Checkbox("Display Normal map", &dispalyNormalMap))
+			{
+			}
+
+			terrainTextureSettings->displayNormalMap = dispalyNormalMap;
+
 		ImGui::End();
 
 	}

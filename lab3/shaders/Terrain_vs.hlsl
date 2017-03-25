@@ -31,9 +31,12 @@ cbuffer TerrainBuffer : register(cb3)
 	*/
     int terrainGenerationType;
 
+    int enableGPUEffect;
+
+
     float highScale;
     
-    int2 padding2;
+    int padding2;
 }
 
 cbuffer FaltLineDisplacementBuffer : register(cb4)
@@ -156,43 +159,47 @@ OutputType main(InputType input)
     // Change the position vector to be 4 units for proper matrix calculations.
     input.position.w = 1.0f;
  
+    if (enableGPUEffect == 1)
+    {
 
-	switch (terrainGenerationType)
-	{
+        switch (terrainGenerationType)
+        {
 	
 	    // FAULT LINE DISPLACEMENT
-	    case 0:
+            case 0:
 	    {	
-		    input.position.y = FaultLineDisplacement(input.position.x, input.position.z);
-		    output.normal = CaculateNormalMapFaultLineDisplacement(input.position.xyz);
-		    break;
-	    }
-	    //PELIN NOISE
-	    case 1:
-	    {
-		    break;
-	    }
+                    input.position.y = FaultLineDisplacement(input.position.x, input.position.z);
+                    output.normal = CaculateNormalMapFaultLineDisplacement(input.position.xyz);
+                    break;
+                }
 	    // FractionalBrowningNoise
-	    case 2:
+            case 1:
 	    {
 			
-		    input.position.y = FractionalBrownianMotion(input.position.x, input.position.z, fbnOctaves, fbnFrequancy, fbnAmplitude, fbnPelinNoiseFreqnacy) * heightScale;
+                    input.position.y = FractionalBrownianMotion(input.position.x, input.position.z, fbnOctaves, fbnFrequancy, fbnAmplitude, fbnPelinNoiseFreqnacy) * heightScale;
 
 		
-		    break;
-	    }
+                    break;
+                }
 	    // SimplexNoise 
-	    case 3:
+            case 2:
 	    {
-	    //	input.position.y = PelinNoise(input.position.x, input.position.z,1);
-		    break;
-	    }
+                    input.position.y = PelinNoise(input.position.x, input.position.z, 1);
+                    break;
+                }
+
+        // Diamond Square
+            case 3:
+	    {
+ 
+                    break;
+            
+                }
 
 
 
-
-	}
-	 
+        }
+    }
 	// Calculate the position of the vertex against the world, view, and projection matrices.
     output.position = mul(input.position, worldMatrix);
     output.position = mul(output.position, viewMatrix);

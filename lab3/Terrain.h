@@ -55,8 +55,9 @@ public:
 
 	bool diamondSquareNeedRegenerated;
 	bool simplexNoiseRegenerated;
+	bool faultLineDisplacementRegenerated;
 	int* seed;
-
+	FaultLineDisplacementBufferType* faultLineSettings;
 private:
 
 
@@ -68,11 +69,10 @@ private:
  
 	void GenerateDimondSquare();
 	void GenerateSimplexNoiseNoise();
- 
-
  	void GenerateFBmNoise();
+	void GenerateFaultLineDisplacement();
 
-	float diamondSquareRange;
+	int diamondSquareRange;
 	bool resetTerrain; 
 
 	double* perinNoiseValues;
@@ -82,15 +82,14 @@ private:
 	float diamondSquarePoints[129 * 129];
 
 	bool useMusicData;
-	bool usingWaves;
-	bool terrainNeedReGeneration;
+ 	bool terrainNeedReGeneration;
 	bool generateTerrain;
 	int terrainWidth, terrainHeight;
 	HeightMapType* heightMap;
 	
 
 
-
+	float FaultLineDisplacement(int x, int z);
 	HeightMapType* startingHeightmap;
 	waveSettings xAxisWaveSettings, yAxisWaveSettings, zAxisWaveSettings;
 };

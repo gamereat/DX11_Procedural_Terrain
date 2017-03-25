@@ -47,7 +47,6 @@ The Current Terrain Shader being Used
 enum TerrainGeneration
 {
 	FaultLineDisplacement,
-	PerlinNoise,
 	FractionalBrowningNoise,
 	SimplexNoise,
 	DiamondSquare,
@@ -62,9 +61,10 @@ struct TerrainGenerationBufferType
 	*/
 	TerrainGeneration terrainGenerationType;
 
-	float highScale;
+	bool enableGPUEffect;
 
-	XMINT2 padding;
+	float  highScale;
+	int  padding;
 };
 
 

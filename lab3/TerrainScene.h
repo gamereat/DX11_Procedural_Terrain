@@ -27,11 +27,10 @@ Used to show proseduraly generated terrain
  class TerrainScene :
 	public Scene
 {
-	 const char* TerrainGeneration_str[5] =
+	 const char* TerrainGeneration_str[4] =
 	 {
 		 "FaultLineDisplacement",
-		 "PerlinNoise",
-		 "FractionalBrowningNoise",
+ 		 "FractionalBrowningNoise",
 		 "SimplexNoise",
 		 "DiamondSquare",
 	 };
