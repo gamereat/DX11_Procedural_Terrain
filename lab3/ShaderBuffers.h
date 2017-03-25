@@ -51,8 +51,6 @@ enum TerrainGeneration
 	FractionalBrowningNoise,
 	SimplexNoise,
 	DiamondSquare,
-	MidwayPointDisplacement,
-	RandomNoise,
 
 };
 

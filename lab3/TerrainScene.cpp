@@ -176,6 +176,8 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
  
 	std::random_device rd;
 	seed = rd();
+
+	terrain->seed = &seed;
  }
 
 void TerrainScene::Update(Timer * timer)
@@ -188,8 +190,7 @@ void TerrainScene::Update(Timer * timer)
  
 		faultLineSettings->numberOfIterations++;
 	}
-	std::random_device source;
-
+ 
 
 
 	// If needing to genereat rnadom numbers 
@@ -224,6 +225,13 @@ void TerrainScene::Update(Timer * timer)
 		diamondSquareSettings->topLeftRandomNumber = dis(gen);
 		diamondSquareSettings->topRightRandomNumber = dis(gen);
 	}
+	else if (regenerateSimplexNoise)
+	{
+		regenerateSimplexNoise = false;
+		terrain->simplexNoiseRegenerated = true;
+
+	}
+
 }
 
 void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[])
@@ -403,91 +411,129 @@ void TerrainScene::TerrainSettings(bool * is_open)
 			regenerateDiamondSquare = true;
 			regenerateFaultLines = true;
 
+			regenerateSimplexNoise = true;
+
 		}
  
 
-			int currnetGen = terrainGeneration->terrainGenerationType;
+		int currnetGen = terrainGeneration->terrainGenerationType;
 
 
-			if (ImGui::Combo("Terrain Generation Type", &currnetGen, TerrainGeneration_str, IM_ARRAYSIZE(TerrainGeneration_str)))
+		if (ImGui::Combo("Terrain Generation Type", &currnetGen, TerrainGeneration_str, IM_ARRAYSIZE(TerrainGeneration_str)))
+		{
+
+			terrainGeneration->terrainGenerationType = (TerrainGeneration)currnetGen;
+ 
+			switch (terrainGeneration->terrainGenerationType)
+			{
+			case TerrainGeneration::DiamondSquare:
 			{
 				regenerateDiamondSquare = true;
-
+				break;
 			}
+			case TerrainGeneration::SimplexNoise:
+			{
+				regenerateSimplexNoise = true;
+				break;
+			}
+			case TerrainGeneration::FractionalBrowningNoise:
+			{
+				break;
+			}
+			default:
+				break;
+			}
+
+		}
 			
- 			bool enableLighting = terrainTextureSettings->enableLighting;
+	
+ 		bool enableLighting = terrainTextureSettings->enableLighting;
 
-			if (ImGui::Checkbox("Enable Lighting", &enableLighting))
-			{
-			}
-			if (ImGui::DragInt("TerrainTexturing", &terrainTextureSettings->textureTiling))
-			{
-			}
-			terrainTextureSettings->enableLighting = enableLighting;
-			terrainGeneration->terrainGenerationType = (TerrainGeneration)currnetGen;
-			if (terrainGeneration->terrainGenerationType == TerrainGeneration::FaultLineDisplacement)
-			{
+		if (ImGui::Checkbox("Enable Lighting", &enableLighting))
+		{
+		}
+		terrainTextureSettings->enableLighting = enableLighting;
 
-				if (ImGui::Checkbox("Enable Fault Line Displacement", &faultLineSettings->enableFaultLineDisplacement))
-				{
-				}
-				if (faultLineSettings->enableFaultLineDisplacement)
-				{
-					if (ImGui::SliderInt("Number of Iterations", &faultLineSettings->numberOfIterations, 0, MAX_FAULTLINE_ITERATIONS))
-					{
-					}
-					if (ImGui::SliderFloat("Displacement Value ", &faultLineSettings->startingDisplacement, 0, 1))
-					{
-					}
-					if (ImGui::SliderFloat("Minimum displacement value ", &faultLineSettings->minimumDisplacement, 0, faultLineSettings->startingDisplacement))
-					{
-					}
-					if (ImGui::SliderFloat("Smoothing Value ", &faultLineSettings->smoothingValue, 0, 1, "%.3f", 0.1f))
-					{
-					}
-					bool dispalyNormalMap = terrainTextureSettings->displayNormalMap;
+		bool dispalyNormalMap = terrainTextureSettings->displayNormalMap;
 
-					if (ImGui::Checkbox("Display Normal map", &dispalyNormalMap))
-					{
-					}
+		if (ImGui::Checkbox("Display Normal map", &dispalyNormalMap))
+		{
+		}
 
-					terrainTextureSettings->displayNormalMap = dispalyNormalMap;
-
-					if (ImGui::Button("Regenerate Fault Line Values"))
-					{
-						std::random_device rd;
-						seed = rd();
-						regenerateFaultLines = true;
-					}
-				}
-			}
-		
-			else if (terrainGeneration->terrainGenerationType == TerrainGeneration::FractionalBrowningNoise)
-			{
+		terrainTextureSettings->displayNormalMap = dispalyNormalMap;	
 				
-				ImGui::DragFloat("Fbn Octaves", &fbnSettings->fbnOctaves, 1, 1, 16);
-				ImGui::DragFloat("Fbn Amplitude", &fbnSettings->fbnAmplitude, 0.05f, 0.0f, 2);
-				ImGui::DragFloat("Fbn Lacunarity", &fbnSettings->fbnLacunarity, 0.05f, 0.0f, 2);
-				ImGui::DragFloat("Fbn Frequancy", &fbnSettings->fbnFrequancy, 0.05f, 0.0f, 15);
-				ImGui::DragFloat("Fbn Pelin Noise Freqancy", &fbnSettings->fbnPelinNoiseFreqnacy, 0.05f, 0.0f, 10);
-				ImGui::DragFloat("Fbn Persistence", &fbnSettings->fbnPersistence, 0.05f, 0.0f, 10);
-				ImGui::DragFloat("Fbn height Scale", &fbnSettings->heightScale,0.05f, 0.0f, 15);
- 			}
-			else if (terrainGeneration->terrainGenerationType == TerrainGeneration::DiamondSquare)
+		if (ImGui::DragInt("TerrainTexturing", &terrainTextureSettings->textureTiling))
+		{
+		}
+
+		if (terrainGeneration->terrainGenerationType == TerrainGeneration::FaultLineDisplacement)
+		{
+
+			if (ImGui::Checkbox("Enable Fault Line Displacement", &faultLineSettings->enableFaultLineDisplacement))
 			{
-				bool f = true;
-				terrain->Settings(&f);
-				if (ImGui::Button("Regenerate DiamondSquare Alorigumth "))
+			}
+			if (faultLineSettings->enableFaultLineDisplacement)
+			{
+				if (ImGui::SliderInt("Number of Iterations", &faultLineSettings->numberOfIterations, 0, MAX_FAULTLINE_ITERATIONS))
+				{
+				}
+				if (ImGui::SliderFloat("Displacement Value ", &faultLineSettings->startingDisplacement, 0, 1))
+				{
+				}
+				if (ImGui::SliderFloat("Minimum displacement value ", &faultLineSettings->minimumDisplacement, 0, faultLineSettings->startingDisplacement))
+				{
+				}
+				if (ImGui::SliderFloat("Smoothing Value ", &faultLineSettings->smoothingValue, 0, 1, "%.3f", 0.1f))
+				{
+				}
+
+
+				if (ImGui::Button("Regenerate Fault Line Values"))
 				{
 					std::random_device rd;
 					seed = rd();
-					regenerateDiamondSquare = true;
+					regenerateFaultLines = true;
 				}
 			}
+		}
+		
+		else if (terrainGeneration->terrainGenerationType == TerrainGeneration::FractionalBrowningNoise)
+		{
+				
+			ImGui::DragFloat("Fbn Octaves", &fbnSettings->fbnOctaves, 1, 1, 16);
+			ImGui::DragFloat("Fbn Amplitude", &fbnSettings->fbnAmplitude, 0.05f, 0.0f, 2);
+			ImGui::DragFloat("Fbn Lacunarity", &fbnSettings->fbnLacunarity, 0.05f, 0.0f, 2);
+			ImGui::DragFloat("Fbn Frequancy", &fbnSettings->fbnFrequancy, 0.05f, 0.0f, 15);
+			ImGui::DragFloat("Fbn Pelin Noise Freqancy", &fbnSettings->fbnPelinNoiseFreqnacy, 0.05f, 0.0f, 10);
+			ImGui::DragFloat("Fbn Persistence", &fbnSettings->fbnPersistence, 0.05f, 0.0f, 10);
+			ImGui::DragFloat("Fbn height Scale", &fbnSettings->heightScale,0.05f, 0.0f, 15);
+ 		}
+		else if (terrainGeneration->terrainGenerationType == TerrainGeneration::DiamondSquare)
+		{
+
+			if (ImGui::Button("Regenerate DiamondSquare Alorigumth "))
+			{
+				std::random_device rd;
+				seed = rd();
+				regenerateDiamondSquare = true;
+			}
+		}
+		else if (terrainGeneration->terrainGenerationType == TerrainGeneration::SimplexNoise)
+		{
+
+			if (ImGui::Button("Regenerate Simplex Noise "))
+			{
+				std::random_device rd;
+				seed = rd();
+				regenerateSimplexNoise = true;
+			}
+		}
 
 
 
-			ImGui::End();
+			bool f = true;
+			terrain->Settings(&f, terrainGeneration->terrainGenerationType);
+		ImGui::End();
 
 	}
 }

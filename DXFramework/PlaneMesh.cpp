@@ -48,6 +48,7 @@ void PlaneMesh::InitBuffers(ID3D11Device* device)
 	v = 0;
 	increment = 1.0f / m_resolution;
 	
+ 
 
 	// Load the vertex and index arrays with the terrain data.
 	for (j = 0; j<(m_resolution - 1); j++)

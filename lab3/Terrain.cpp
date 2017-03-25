@@ -28,7 +28,13 @@ Terrain::Terrain(std::string name, ID3D11Device* device, ID3D11DeviceContext* de
 
 
 	diamondSquareRange = 10;
+
+	smoothingValue = false;
  
+	perlinNoiseFrequancy = 1;
+	perlinNoiseHeightRange = 1;
+
+	smoothingValue = 1;
 }
 
 
@@ -48,6 +54,47 @@ Terrain::~Terrain()
 		startingHeightmap = nullptr;
 	}
 
+}
+bool Terrain::InitializeTerrain(ID3D11Device* device, int terrainWidth, int terrainHeight)
+{
+	int index;
+	float height = 0.0;
+ 
+	// Save the dimensions of the terrain.
+	this->terrainWidth = terrainWidth;
+	this->terrainHeight = terrainHeight; 
+	// Create the structure to hold the terrain data.
+	this->heightMap = new HeightMapType[this->terrainWidth * this->terrainHeight];
+	this->startingHeightmap = new HeightMapType[this->terrainWidth * this->terrainHeight];
+	this->perinNoiseValues = new double[this->terrainWidth * this->terrainHeight];
+	this->diamondSquarePoints;;
+	if (!this->heightMap)
+	{
+		return false;
+	}
+
+	// Initialise the data in the height map (flat).
+	for (int j = 0; j<this->terrainHeight; j++)
+	{
+		for (int i = 0; i<this->terrainWidth; i++)
+		{
+			index = (this->terrainHeight * j) + i;
+			 
+			double pelinNoise = SimplexNoise::noise(j, i, perlinNoiseFrequancy);
+			perinNoiseValues[index] = pelinNoise;
+			this->heightMap[index].x = (float)i;
+			this->heightMap[index].y = (float)height;
+			this->heightMap[index].z = (float)j;
+			startingHeightmap[index].y = (float)height;
+			diamondSquarePoints[index] = 0;
+
+		}
+	} 
+
+
+	// Initialize the vertex and index buffer that hold the geometry for the terrain.
+	InitBuffers(device); 
+	return true;
 }
 
 bool Terrain::CalculateNormals()
@@ -186,45 +233,6 @@ bool Terrain::CalculateNormals()
 	return true;
 }
 
-bool Terrain::InitializeTerrain(ID3D11Device* device, int terrainWidth, int terrainHeight)
-{
-	int index;
-	float height = 0.0;
- 
-	// Save the dimensions of the terrain.
-	this->terrainWidth = terrainWidth;
-	this->terrainHeight = terrainHeight; 
-	// Create the structure to hold the terrain data.
-	this->heightMap = new HeightMapType[this->terrainWidth * this->terrainHeight];
-	this->startingHeightmap = new HeightMapType[this->terrainWidth * this->terrainHeight];
-	this->diamondSquarePoints;;
-	if (!this->heightMap)
-	{
-		return false;
-	}
-
-	// Initialise the data in the height map (flat).
-	for (int j = 0; j<this->terrainHeight; j++)
-	{
-		for (int i = 0; i<this->terrainWidth; i++)
-		{
-			index = (this->terrainHeight * j) + i;
-			 
-
-			this->heightMap[index].x = (float)i;
-			this->heightMap[index].y = (float)height;
-			this->heightMap[index].z = (float)j;
-			startingHeightmap[index].y = (float)height;
-			diamondSquarePoints[index] = 0;
-
-		}
-	} 
-
-
-	// Initialize the vertex and index buffer that hold the geometry for the terrain.
-	InitBuffers(device); 
-	return true;
-}
 
 bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* sound)
 {
@@ -233,13 +241,26 @@ bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* soun
 	{	
 		diamondSquareNeedRegenerated = false;
 		GenerateDimondSquare();
-
-		InitBuffers(device);
-		
+		terrainNeedReGeneration = true;
+ 		
 	}
+
+	if (simplexNoiseRegenerated)
+	{		
+		simplexNoiseRegenerated = false;
+
+		GenerateSimplexNoiseNoise();
+		terrainNeedReGeneration = true;
+	}
+
 	if (terrainNeedReGeneration )
 	{
 		terrainNeedReGeneration = false;
+
+		if (enableSmoothing)
+		{
+			NormalizeHeightMap();
+		}
 		InitBuffers(device);
 
 	}
@@ -250,57 +271,6 @@ bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* soun
 		resetTerrain = false;
 		InitializeTerrain(device, this->terrainHeight, this->terrainWidth);
 	}
-	bool result;
-	//the toggle is just a bool that I use to make sure this is only called ONCE when you press a key
-	//until you release the key and start again. We dont want to be generating the terrain 500
-	//times per second. 
-	if (generateTerrain)
-	{
-		int index;
-		float height = 0.0;
- 
-		if(usingWaves)
-		{
-
-			for (int j = 0; j < terrainHeight; j++)
-			{
-				for (int i = 0; i < terrainWidth; i++)
-				{
-					index = (terrainHeight * j) + i;
-
-					heightMap[index].x = (float)i;
-					 
-					switch (yAxisWaveSettings.waveType)
-					{
-					case waveSettings::sin:
-						heightMap[index].y = (float)(sin((float)i / (terrainWidth / yAxisWaveSettings.period))*yAxisWaveSettings.amplitude);
-						break;
-					case waveSettings::cos:
-						heightMap[index].y = (float)(cos((float)i / (terrainWidth / yAxisWaveSettings.period))*yAxisWaveSettings.amplitude);
-						break;
-
-					case waveSettings::tan:
-						heightMap[index].y = (float)(tan((float)i / (terrainWidth / yAxisWaveSettings.period))*yAxisWaveSettings.amplitude);
-						break;
-					default:
-						break;
-					}
-
-					heightMap[index].z = (float)j;
-
-				}
-			}
-
- 
-		}
-
-		// Initialize the vertex and index buffer that hold the geometry for the terrain.
-	 
-
- 	}
- 
-
-
 
 	return true;
 }
@@ -473,19 +443,75 @@ void Terrain::InitBuffers(ID3D11Device* device)
 		XMMatrixRotationY(rotate.y) *  XMMatrixRotationZ(rotate.z);
 }
 
-void Terrain::Settings(bool* is_open)
+void Terrain::Settings(bool* is_open , TerrainGeneration generation)
 {
 	if (*is_open == true)
 	{
 
- 
+		if (generation == TerrainGeneration::DiamondSquare)
+		{
+
+			if (ImGui::Checkbox("Enable Smoothing", &enableSmoothing))
+			{
+				terrainNeedReGeneration = true;
+				GenerateDimondSquare();
+			}
+			if (ImGui::DragFloat("Smoothing Value ", &smoothingValue))
+			{
+				terrainNeedReGeneration = true;
+
+ 			}
+
 			if (ImGui::InputFloat("Range", &diamondSquareRange))
 			{
 				GenerateDimondSquare();
 				terrainNeedReGeneration = true;
 			}
+		}
+		else if (generation == TerrainGeneration::SimplexNoise)
+		{
 
+			if (ImGui::Checkbox("Enable Smoothing", &enableSmoothing))
+			{
+				GenerateSimplexNoiseNoise();
+				terrainNeedReGeneration = true;
+				simplexNoiseRegenerated = true;
 
+			}
+			if (ImGui::DragFloat("Smoothing Value ", &smoothingValue))
+			{
+				terrainNeedReGeneration = true;
+
+				simplexNoiseRegenerated = true;
+			}
+			if (ImGui::InputFloat("Perlin Noise Frequancy", &perlinNoiseFrequancy))
+			{
+
+				terrainNeedReGeneration = true;
+
+				simplexNoiseRegenerated = true;
+			}
+
+			if (ImGui::InputFloat("Perlin Noise Height Range", &perlinNoiseHeightRange))
+			{
+				terrainNeedReGeneration = true;
+
+				simplexNoiseRegenerated = true;
+			}
+
+			
+		}
+		else if (generation == TerrainGeneration::FractionalBrowningNoise)
+		{
+
+			if (ImGui::Checkbox("Enable Smoothing", &enableSmoothing))
+			{
+				GenerateFBmNoise();
+				terrainNeedReGeneration = true;
+
+			}
+	
+		}
 	
 		
 	}
@@ -598,11 +624,41 @@ void Terrain::NormalizeHeightMap()
 	int i, j;
 
 
-	for (j = 0; j<terrainHeight; j++)
+	if (smoothingValue > 0)
 	{
-		for (i = 0; i<terrainWidth; i++)
+
+		for (j = 0; j < terrainHeight - 1; j++)
 		{
-			heightMap[(terrainHeight * j) + i].y /= 15.0f;
+			for (i = 0; i < terrainWidth - 1; i++)
+			{
+				float totalHeight = 0;
+				int countPoints = 0;
+				for (int aroundX = j - smoothingValue; aroundX <= j + smoothingValue; aroundX++)
+				{
+					if (aroundX < 0 || aroundX > terrainWidth - 1) continue;
+
+					for (int aroundZ = i - smoothingValue; aroundZ <= i + smoothingValue; aroundZ++)
+					{
+						if (aroundZ < 0 || aroundZ > terrainHeight - 1) continue;
+
+
+						int indexDF = (this->terrainHeight * aroundX) + aroundZ;
+
+						totalHeight += heightMap[indexDF].y;
+						countPoints++;
+
+					}
+
+
+				}
+
+				if (countPoints != 0 && totalHeight != 0)
+				{
+					heightMap[(terrainHeight * j) + i].y = totalHeight / (float)countPoints;
+
+				}
+
+			}
 		}
 	}
 
@@ -632,4 +688,51 @@ void Terrain::GenerateDimondSquare()
 
 
 	
+}
+
+
+void Terrain::GenerateSimplexNoiseNoise()
+{
+	 
+
+	int index = 0;
+
+
+	// Initialise the data in the height map (flat).
+	for (int j = 0; j < this->terrainHeight; j++)
+	{
+		for (int i = 0; i < this->terrainWidth; i++)
+		{
+			index = (this->terrainHeight * j) + i;
+
+			this->heightMap[index].x = (float)i;
+
+			double pelinNoise;
+
+			//if (simplexNoiseRegenerated)
+			//{
+			//	pelinNoise =;
+			//	perinNoiseValues[index] = pelinNoise;
+
+			//}
+			//else
+			//{
+			//	pelinNoise = perinNoiseValues[index];
+			//}
+
+		
+			
+			this->heightMap[index].y = (float)SimplexNoise::noise(j, i, perlinNoiseFrequancy) * perlinNoiseHeightRange;
+
+		
+			this->heightMap[index].z = (float)j;
+
+		}
+	}
+	simplexNoiseRegenerated = false;
+ 
+}
+
+void Terrain::GenerateFBmNoise()
+{
 }

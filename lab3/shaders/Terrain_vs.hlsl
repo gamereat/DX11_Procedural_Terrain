@@ -160,53 +160,37 @@ OutputType main(InputType input)
 	switch (terrainGenerationType)
 	{
 	
-	// FAULT LINE DISPLACEMENT
-	case 0:
-	{	
-		input.position.y = FaultLineDisplacement(input.position.x, input.position.z);
-		output.normal = CaculateNormalMapFaultLineDisplacement(input.position.xyz);
-		break;
-	}
-	//PELIN NOISE
-	case 1:
-	{
-		break;
-	}
-	// FractionalBrowningNoise
-	case 2:
-	{
+	    // FAULT LINE DISPLACEMENT
+	    case 0:
+	    {	
+		    input.position.y = FaultLineDisplacement(input.position.x, input.position.z);
+		    output.normal = CaculateNormalMapFaultLineDisplacement(input.position.xyz);
+		    break;
+	    }
+	    //PELIN NOISE
+	    case 1:
+	    {
+		    break;
+	    }
+	    // FractionalBrowningNoise
+	    case 2:
+	    {
 			
-		input.position.y = FractionalBrownianMotion(input.position.x, input.position.z, fbnOctaves, fbnFrequancy, fbnAmplitude, fbnPelinNoiseFreqnacy) * heightScale;
+		    input.position.y = FractionalBrownianMotion(input.position.x, input.position.z, fbnOctaves, fbnFrequancy, fbnAmplitude, fbnPelinNoiseFreqnacy) * heightScale;
 
 		
-		break;
-	}
-	// SimplexNoise 
-	case 3:
-	{
-		input.position.y = PelinNoise(input.position.x, input.position.z,1);
-		break;
-	}
-	// Diamond Square 
-	case 4:
-	{   
-        dimondSquareResult result;
-        result.bottomLeft = bottomLeftRandomNumber;
-        result.bottomRight = bottomRightRandomNumber;
-        result.topLeft = topLeftRandomNumber;
-        result.topRight = topRightRandomNumber;
-        result.found = false;
-        float hieght = heightOfGrid;
-        float width = widthOfGrid;
+		    break;
+	    }
+	    // SimplexNoise 
+	    case 3:
+	    {
+	    //	input.position.y = PelinNoise(input.position.x, input.position.z,1);
+		    break;
+	    }
 
-		break;
-	}
 
-	// Random Noise
-	case 5:
-	{
-		break;
-	}
+
+
 	}
 	 
 	// Calculate the position of the vertex against the world, view, and projection matrices.

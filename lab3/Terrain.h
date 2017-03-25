@@ -3,6 +3,7 @@
 
 #include <d3d11.h>
  #include <stdio.h>
+#include "ShaderBuffers.h"
 
 /*
 Terrain Mesh
@@ -50,21 +51,33 @@ public:
  	bool GenerateHeightMap(ID3D11Device * device, bool keydown, class Sound * sound);
 	void InitBuffers(ID3D11Device * device);
 	XMMATRIX SendData(ID3D11DeviceContext* deviceContext);
-	void Settings(bool* is_open);	
+	void Settings(bool * is_open, TerrainGeneration generation);
+
 	bool diamondSquareNeedRegenerated;
+	bool simplexNoiseRegenerated;
+	int* seed;
 
 private:
+
+
 	bool LoadHeightMap(char*);
 	void NormalizeHeightMap();
+	float smoothingValue;
+	bool enableSmoothing;
 
  
 	void GenerateDimondSquare();
+	void GenerateSimplexNoiseNoise();
  
-   
-private:
+
+ 	void GenerateFBmNoise();
 
 	float diamondSquareRange;
 	bool resetTerrain; 
+
+	double* perinNoiseValues;
+	float perlinNoiseFrequancy;
+	float perlinNoiseHeightRange;
 
 	float diamondSquarePoints[129 * 129];
 
