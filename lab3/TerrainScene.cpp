@@ -426,9 +426,9 @@ void TerrainScene::TerrainSettings(bool * is_open)
 			ImGui::Text("WARNING: Results on GPU may not be identical to ones made of CPU");
 
 		}
-	//	else
+		else
 		{
-		//	terrainGeneration->enableGPUEffect = true;
+			terrainGeneration->enableGPUEffect = true;
 
 		}
 

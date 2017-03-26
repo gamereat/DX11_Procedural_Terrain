@@ -109,6 +109,7 @@
     <ClCompile Include="LineMesh.cpp" />
     <ClCompile Include="LSystem.cpp" />
     <ClCompile Include="LSystemScene.cpp" />
+    <ClCompile Include="LSystemShader.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="SimplexNoise.cpp" />
     <ClCompile Include="PostProccessingDownScale.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="LineMesh.h" />
     <ClInclude Include="LSystem.h" />
     <ClInclude Include="LSystemScene.h" />
+    <ClInclude Include="LSystemShader.h" />
     <ClInclude Include="SimplexNoise.h" />
     <ClInclude Include="PostProccessingDownScale.h" />
     <ClInclude Include="PostProccessingUpScale.h" />
@@ -182,14 +184,14 @@
     <FxCompile Include="shaders\FaultLineDisplacement_vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
     </FxCompile>
-    <FxCompile Include="shaders\noise_vs.hlsl">
+    <FxCompile Include="shaders\Lsystem_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\Lsystem_vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
     </FxCompile>
-    <FxCompile Include="shaders\Terrain_ds.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Domain</ShaderType>
-    </FxCompile>
-    <FxCompile Include="shaders\Terrain_hs.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Hull</ShaderType>
+    <FxCompile Include="shaders\noise_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="shaders\Terrain_ps.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
@@ -210,6 +212,9 @@
     <FxCompile Include="shaders\water_vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Settings-Files\Graphics.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

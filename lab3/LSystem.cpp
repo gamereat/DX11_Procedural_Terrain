@@ -2,13 +2,12 @@
 
 #include "../imgui/imgui.h"
 
-LSystem::LSystem(ID3D11Device *myDevice)
+LSystem::LSystem(ID3D11Device *myDevice, XMINT2 startPoint)
 {
 	iterations = 0;
 
 
-	startPos.x = SIZE_OF_NETWORK / 2;
-	startPos.y = SIZE_OF_NETWORK / 2;
+	startPos = startPoint;
 	lenghtOfLine = 4;
 	angle = 90;
 	textureNeedingUpdated = false;
@@ -31,9 +30,9 @@ LSystem::LSystem(ID3D11Device *myDevice)
 
  }
 
-
-LSystem::LSystem(ID3D11Device * device, int itertaions, int lineLength, std::unordered_map<char, std::string> rules) : LSystem(device)
-{
+LSystem::LSystem(ID3D11Device * device, int itertaions, int lineLength, std::unordered_map<char, std::string> rules, const char * start, XMINT2 startPoint) : LSystem(device, startPoint)
+ {
+	this->start = start;
 	iterations = itertaions;
 	lenghtOfLine = lineLength;
 	textureNeedingUpdated = true;
@@ -46,6 +45,8 @@ LSystem::LSystem(ID3D11Device * device, int itertaions, int lineLength, std::uno
 
 
  }
+
+ 
 
 LSystem::~LSystem()
 {
@@ -268,12 +269,7 @@ void LSystem::Gui_menu(bool * is_open)
 {
 	if (*is_open)
 	{
-		// Create the window
-		if (!ImGui::Begin("L-System ", is_open, ImGuiWindowFlags_AlwaysAutoResize))
-		{
-			ImGui::End();
-			return;
-		}
+
 		if (ImGui::InputFloat("Angle", &angle))
 		{
 			textureNeedingUpdated = true;
@@ -298,8 +294,7 @@ void LSystem::Gui_menu(bool * is_open)
 			textureNeedingUpdated = true;
 			Update();
 		}
-		ImGui::End();
-
+ 
 	}
 }
 
@@ -381,7 +376,7 @@ void LSystem::Update()
 	if (textureNeedingUpdated)
 	{
 		textureNeedingUpdated = false;
-		std::string product = RecursiveCreateProduct("fX", iterations);
+		std::string product = RecursiveCreateProduct(start, iterations);
 		updateNetwork(product);
 	}
 }

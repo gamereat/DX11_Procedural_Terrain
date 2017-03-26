@@ -25,7 +25,8 @@ public:
 	Constructor creates l-system texture 
 	@param device	The device for the given d3d window
 	*/
-	LSystem(ID3D11Device *device);
+	LSystem(ID3D11Device *device, XMINT2 startPoint = XMINT2(SIZE_OF_NETWORK / 2, SIZE_OF_NETWORK / 2));
+
 
 	/*
 	Constructor creates l-system texture
@@ -34,7 +35,7 @@ public:
 	@param lineLength	How long each line should be used when using turle graphics
 	@param rules		The rules for the given l=system
 	*/
-	LSystem(ID3D11Device *device,int itertaions, int lineLength, std::unordered_map<char, std::string> rules);
+	LSystem(ID3D11Device * device, int itertaions, int lineLength, std::unordered_map<char, std::string> rules, const char * start, XMINT2 startPoint = XMINT2(SIZE_OF_NETWORK/2, SIZE_OF_NETWORK/2));
 	~LSystem();
 
 	/*
@@ -68,12 +69,17 @@ public:
 	Will update the given l-system with the latest settings
  	*/
 	void Update();
+	/*
+	If the texture needs to be updated. ie if any settings have changd on it 
+	*/
+	bool textureNeedingUpdated;
 private:
 
 
 	float* nextBuf ;
 
 
+	const char* start;
 
 
 
@@ -103,10 +109,7 @@ private:
 	*/
 	std::vector<XMINT2> BresenhamAlgorithm(XMINT2 startPos,XMINT2 endPos);
 
-	/*
-	If the texture needs to be updated. ie if any settings have changd on it 
-	*/
-	bool textureNeedingUpdated;
+
 
 	/*
 	The current product that has been creatd using the l-system

@@ -4,7 +4,7 @@
 #include "../DXFramework/CubeMesh.h"
 #include "../DXFramework/QuadMesh.h"
 #include "../DXFramework/DoubleTriangleMesh.h"
-
+#include "LSystemShader.h"
 #include "ColourShader.h"
 #include "Terrain.h"
 #include "../DXFramework/CubeMesh.h"
@@ -15,13 +15,44 @@
 #include "TerrainShader.h"
  #include "LSystem.h"
 
+const int NUMBER_LSYSTEMS =11;
+
+
+//http://algorithmicbotany.org/papers/abop/abop-ch1.pdf
+enum lSystemTypes
+{
+	DragonCurve,
+	KochCurve,
+	SierpinskisCarpet,
+	HeighwayDragon,
+	JoinedCrossCurves,
+	modifiedKoch1,
+	modifiedKoch2,
+	modifiedKoch3,
+	modifiedKoch4,
+	modifiedKoch5,
+	modifiedKoch6,
+};
 /*
 L-System Scene
 @author Alan Yeats
 L-System scene used to display a L-system Represented on a dynamic texture on a plane
 */
  class LSystemScene :	public Scene
+{const char* lSystemTypes_str[NUMBER_LSYSTEMS]
 {
+	"Dragon curve",
+	"Koch curve",
+	"Sierpinski's Carpet",
+	"Heighway Dragon",
+	"Joined Cross Curves",
+	"Modified Koch Curve 1",
+	"Modified Koch Curve 2",
+	"Modified Koch Curve 3",
+	"Modified Koch Curve 4",
+	"Modified Koch Curve 5",
+	"Modified Koch Curve 6",
+ };
 public:
 	LSystemScene(string sceneName);
 	~LSystemScene();
@@ -81,7 +112,17 @@ public:
   	*/
 	virtual void SceneInformationPopUp(bool* is_open);
 	 
+
 private:
+
+
+	void LSystemMenu(bool* is_open);
+
+	lSystemTypes currentLSystem;
+	
+	LSystemShader* lSystemShader; 
+
+	CubeMesh* cube;
 	/*
 	If the l-system needs to be updated or not 
 	*/
@@ -94,10 +135,12 @@ private:
 	Plane meshed used to display the l-sytem on 
 	*/
 	PlaneMesh* planeMesh;
+
+
  	/*
 	L-system object that creates texture based on the l system rules
 	*/
-	LSystem* lSystem;
+	LSystem* lSystem[NUMBER_LSYSTEMS];
 	/*
 	Texture shader 
 	*/

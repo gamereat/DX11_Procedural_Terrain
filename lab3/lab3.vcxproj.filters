@@ -38,6 +38,9 @@
     <Filter Include="Source Files\Noise">
       <UniqueIdentifier>{f61afe17-7863-45af-9ba9-3fd72e8fe1f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Settings">
+      <UniqueIdentifier>{57a4d3a4-d96e-49e2-85ec-8d2e492ea793}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -103,20 +106,23 @@
     <ClCompile Include="SimplexNoise.cpp">
       <Filter>Source Files\Noise</Filter>
     </ClCompile>
-    <ClCompile Include="DepthShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TerrainShader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="..\ApplicationSettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DiamondSquare.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="LSystemShader.cpp">
+      <Filter>Source Files\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthShader.cpp">
+      <Filter>Source Files\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="WaterShader.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="DiamondSquare.cpp">
+      <Filter>Source Files\Noise</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -195,11 +201,14 @@
     <ClInclude Include="TerrainShader.h">
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>
-    <ClInclude Include="DiamondSquare.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="WaterShader.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DiamondSquare.h">
+      <Filter>Header Files\Noise</Filter>
+    </ClInclude>
+    <ClInclude Include="LSystemShader.h">
+      <Filter>Header Files\Shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -245,11 +254,16 @@
     <FxCompile Include="shaders\water_vs.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\Terrain_ds.hlsl">
+    <FxCompile Include="shaders\Lsystem_vs.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\Terrain_hs.hlsl">
+    <FxCompile Include="shaders\Lsystem_ps.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Settings-Files\Graphics.ini">
+      <Filter>Settings</Filter>
+    </None>
   </ItemGroup>
 </Project>
