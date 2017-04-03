@@ -186,7 +186,7 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * hsFilename, WCHAR * d
 }
 
 
-void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * defaultTexture, TerrainGenerationBufferType * terrinSetting, FaultLineDisplacementBufferType * faultLineSettings, TerrainSettingTextureType * terrainTextureSettings, FractionalBrowningNoiseBuffer * fractionalBrowningNoiseSettings, Light * light[NUM_LIGHTS], ID3D11ShaderResourceView * depthMap[], ID3D11ShaderResourceView * lowTexture, ID3D11ShaderResourceView * mediumTexture, ID3D11ShaderResourceView * hightTexture)
+void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * defaultTexture, TerrainGenerationBufferType * terrinSetting, FaultLineDisplacementBufferType * faultLineSettings, TerrainSettingTextureType * terrainTextureSettings, FractionalBrowningNoiseBuffer * fractionalBrowningNoiseSettings, Light * light[NUM_LIGHTS], ID3D11ShaderResourceView * depthMap[], ID3D11ShaderResourceView * lowTexture, ID3D11ShaderResourceView * mediumTexture, ID3D11ShaderResourceView * hightTexture, ID3D11ShaderResourceView* underWaterTexture, ID3D11ShaderResourceView* hitByWaterTexture)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -329,9 +329,20 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 	terrainTextureSettingsPtr->displayNormalMap = terrainTextureSettings->displayNormalMap;
 	terrainTextureSettingsPtr->enableLighting = terrainTextureSettings->enableLighting;
 	terrainTextureSettingsPtr->textureTiling = terrainTextureSettings->textureTiling;
+	terrainTextureSettingsPtr->maxHeightOfWater = terrainTextureSettings->maxHeightOfWater;
+	terrainTextureSettingsPtr->medHeightOfWater = terrainTextureSettings->medHeightOfWater;
+	terrainTextureSettingsPtr->minHeightOfWater = terrainTextureSettings->minHeightOfWater;
+	terrainTextureSettingsPtr->maxHightOfHill = terrainTextureSettings->maxHightOfHill;
+
+	terrainTextureSettingsPtr->topHighPercentage = terrainTextureSettings->topHighPercentage;
+	terrainTextureSettingsPtr->midHighPercentage = terrainTextureSettings->midHighPercentage;
+	terrainTextureSettingsPtr->blendingPercentage = terrainTextureSettings->blendingPercentage;
+	terrainTextureSettingsPtr->minHightOfTerrain = terrainTextureSettings->minHightOfTerrain;
+
+
+
 	terrainTextureSettingsPtr->padding = 0;
-//	terrainTextureSettingsPtr->padding = XMINT3(0,0, 0);
-	deviceContext->Unmap(terrainTexturingBuffer, 0);
+ 	deviceContext->Unmap(terrainTexturingBuffer, 0);
 	bufferNumber = 1;
 	deviceContext->PSSetConstantBuffers(bufferNumber, 1, &terrainTexturingBuffer);
 
@@ -394,13 +405,15 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 
 	deviceContext->PSSetShaderResources(1, 1, &lowTexture);
 	deviceContext->PSSetShaderResources(2, 1, &mediumTexture);
-	deviceContext->PSSetShaderResources(3, 1, &hightTexture); 
+	deviceContext->PSSetShaderResources(3, 1, &hightTexture);
+	deviceContext->PSSetShaderResources(4, 1, &underWaterTexture);
+	deviceContext->PSSetShaderResources(5, 1, &hitByWaterTexture);
 
 
-	deviceContext->PSSetShaderResources(4, 1, (&depthMap[0]));
-	deviceContext->PSSetShaderResources(5, 1, (&depthMap[1]));
-	deviceContext->PSSetShaderResources(6, 1, (&depthMap[2]));
-	deviceContext->PSSetShaderResources(7, 1, (&depthMap[3]));
+	deviceContext->PSSetShaderResources(6, 1, (&depthMap[0]));
+	deviceContext->PSSetShaderResources(7, 1, (&depthMap[1]));
+	deviceContext->PSSetShaderResources(8, 1, (&depthMap[2]));
+	deviceContext->PSSetShaderResources(9, 1, (&depthMap[3]));
 
 }
 

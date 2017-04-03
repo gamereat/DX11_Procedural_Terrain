@@ -50,6 +50,7 @@ enum TerrainGeneration
 	FractionalBrowningNoise,
 	SimplexNoise,
 	DiamondSquare,
+	ParticleDeposition
 
 };
 
@@ -70,13 +71,34 @@ struct TerrainGenerationBufferType
 
 struct TerrainSettingTextureType
 {
-	
+ 
+
+
+	float topHighPercentage;
+	float midHighPercentage;
+
+	float blendingPercentage;
+	float minHightOfTerrain;
 
 	int enableLighting;
-	int padding;
+
+
 	int textureTiling;
 
 	int displayNormalMap;
+
+	float minHeightOfWater;
+
+	float medHeightOfWater;
+
+	float maxHeightOfWater;
+
+	float maxHightOfHill;
+
+	float  padding;
+
+
+
 };
  
 struct FaultLineDisplacementBufferType

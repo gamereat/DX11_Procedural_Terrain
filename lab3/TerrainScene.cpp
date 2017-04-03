@@ -143,7 +143,9 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	fbnSettings = new FractionalBrowningNoiseBuffer();
 	lowTexture = new Texture(device, deviceContext, L"../res/rock.png");
 	mediumTexture = new Texture(device, deviceContext, L"../res/moss.png");
-	hightTexture = new Texture(device, deviceContext, L"../res/rock.png");
+	hightTexture = new Texture(device, deviceContext, L"../res/snow.png");
+	underWaterTexture = new Texture(device, deviceContext, L"../res/Sand2_S.jpg");
+	hitByWaterTexture = new Texture(device, deviceContext, L"../res/Sand4_S.jpg");
 
 	waveShader = new WaterShader(device, hwnd);
 
@@ -177,13 +179,23 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	terrainGeneration->enableGPUEffect = true;
 
 	terrain->faultLineSettings = faultLineSettings;
+
+
+	terrainTextureSettings->topHighPercentage = 75;
+
+	terrainTextureSettings->midHighPercentage = 40;
+
+
+	terrainTextureSettings->blendingPercentage = 5;
  }
 
 void TerrainScene::Update(Timer * timer)
 {
 	waveInfo->time = timer->GetTotalTimePast();
 
-
+	terrainTextureSettings->medHeightOfWater = waterMesh->getTranslation().y;
+	terrainTextureSettings->maxHeightOfWater = waterMesh->getTranslation().y + waveInfo->steepnesss;
+	terrainTextureSettings->minHeightOfWater = waterMesh->getTranslation().y - waveInfo->steepnesss;
 	if (faultLineSettings->enableFaultLineDisplacement && sound->getData(BASS_DATA_FFT256 | BASS_DATA_FLOAT, 128)[1] > 0.4f)
 	{
  
@@ -191,7 +203,14 @@ void TerrainScene::Update(Timer * timer)
 	}
  
 
+	terrainTextureSettings->maxHightOfHill = terrain->getMaxHeight() + terrain->getTranslation().y;
+	terrainTextureSettings->minHightOfTerrain = terrain->getMinHight() + terrain->getTranslation().y;
 
+	if (terrainTextureSettings->minHightOfTerrain < terrainTextureSettings->maxHeightOfWater)
+	{
+		terrainTextureSettings->minHightOfTerrain = terrainTextureSettings->maxHeightOfWater;
+
+	}
 	// If needing to genereat rnadom numbers 
 	if (regenerateFaultLines)
 	{
@@ -202,16 +221,174 @@ void TerrainScene::Update(Timer * timer)
 		{
  
 			std::mt19937 gen(seed +i);
-			std::uniform_real_distribution<> disWidth(0, 129);
-			std::uniform_real_distribution<> disWidth2(0, 129);
-			std::uniform_real_distribution<> disHeight(0, 129);
-			std::uniform_real_distribution<> disHeight2(0, 129);
+			std::mt19937 genSide(seed + seed + i);
+			std::mt19937 genSideSecond(seed * seed + i);
+			std::uniform_real_distribution<> disWidth(1, 128);
+			std::uniform_real_distribution<> disWidth2(1, 128);
+			std::uniform_real_distribution<> disHeight(1, 128);
+			std::uniform_real_distribution<> disHeight2(1, 128);
 
-			faultLineSettings->interationsRandomPoints[i].x = disWidth(gen);
-			faultLineSettings->interationsRandomPoints[i].z = disWidth2(gen);
 
-			faultLineSettings->interationsRandomPoints[i].y = disHeight(gen);
-			faultLineSettings->interationsRandomPoints[i].w = disHeight2(gen);
+
+
+			std::uniform_real_distribution<> sideToChoice(0, 3);
+			int firstSide = sideToChoice(genSide);
+
+			switch (firstSide)
+			{
+				// x = 0 ; y 0->129
+			case 0:
+			{
+				faultLineSettings->interationsRandomPoints[i].x = 1;
+				faultLineSettings->interationsRandomPoints[i].y = disHeight(gen);
+				int firstSide = 0;
+				do {
+					firstSide = sideToChoice(genSideSecond);
+				} while (firstSide ==0);
+				switch (firstSide)
+				{
+					// x = 129 ; y 0->129
+				case 1:
+				{
+					faultLineSettings->interationsRandomPoints[i].z = 128;
+					faultLineSettings->interationsRandomPoints[i].w = disHeight2(gen);
+					break;
+				}
+				// x = 0->129 ; y 0
+				case 2:
+				{
+					faultLineSettings->interationsRandomPoints[i].z = disWidth2(gen);;
+					faultLineSettings->interationsRandomPoints[i].w = 1;
+					break;
+				}
+				// x = 0->129 ; y 129
+				case 3:
+				{
+					faultLineSettings->interationsRandomPoints[i].z = disWidth2(gen);;
+					faultLineSettings->interationsRandomPoints[i].w = 128;
+					break;
+				}
+				}
+
+				break;
+			}
+			// x = 129 ; y 0->129
+			case 1:
+			{
+				faultLineSettings->interationsRandomPoints[i].x = 128;
+				faultLineSettings->interationsRandomPoints[i].y = disHeight(gen);
+				int firstSide = 1;
+				do {
+					firstSide = sideToChoice(genSideSecond);
+				} while (firstSide == 1);
+				switch (firstSide)
+				{
+					// x = 0 ; y 0->129
+				case 0:
+				{
+					faultLineSettings->interationsRandomPoints[i].z = 1;
+					faultLineSettings->interationsRandomPoints[i].w = disHeight2(gen);
+					break;
+				}
+				// x = 0->129 ; y 0
+				case 2:
+				{
+					faultLineSettings->interationsRandomPoints[i].z = disWidth2(gen);;
+					faultLineSettings->interationsRandomPoints[i].w = 1;
+					break;
+				}
+				// x = 0->129 ; y 129
+				case 3:
+				{
+					faultLineSettings->interationsRandomPoints[i].z = disWidth2(gen);;
+					faultLineSettings->interationsRandomPoints[i].w = 128;
+					break;
+				}
+				}
+
+				break;
+			}
+			// x = 0->129 ; y 0
+			case 2:
+			{
+				faultLineSettings->interationsRandomPoints[i].x = disWidth(gen);
+				faultLineSettings->interationsRandomPoints[i].y = 1;
+				int firstSide = 2;
+				do {
+					firstSide = sideToChoice(genSideSecond);
+				} while (firstSide == 2);
+				switch (firstSide)
+				{
+					// x = 0 ; y 0->129
+				case 0:
+				{
+					faultLineSettings->interationsRandomPoints[i].z = 1;
+					faultLineSettings->interationsRandomPoints[i].w = disHeight2(gen);
+					break;
+				}
+				// x = 0 ; y 0->129
+				case 1:
+				{
+					faultLineSettings->interationsRandomPoints[i].z = 128;
+					faultLineSettings->interationsRandomPoints[i].w = disHeight2(gen);
+					break;
+				}
+				// x = 0->129 ; y 129
+				case 3:
+				{
+					faultLineSettings->interationsRandomPoints[i].z = disWidth2(gen);;
+					faultLineSettings->interationsRandomPoints[i].w = 128;
+					break;
+				}
+				}
+
+				break;
+ 			}
+			// x = 0->129 ; y 129
+			case 3:
+			{
+				faultLineSettings->interationsRandomPoints[i].x = disWidth(gen);
+				faultLineSettings->interationsRandomPoints[i].y = 128;
+				int firstSide = 3;
+				do {
+					firstSide = sideToChoice(genSideSecond);
+				} while (firstSide == 3);
+				switch (firstSide)
+				{
+					// x = 0 ; y 0->129
+				case 0:
+				{
+					faultLineSettings->interationsRandomPoints[i].z = 1;
+					faultLineSettings->interationsRandomPoints[i].w = disHeight2(gen);
+					break;
+				}
+				// x = 0 ; y 0->129
+				case 1:
+				{
+					faultLineSettings->interationsRandomPoints[i].z = 129;
+					faultLineSettings->interationsRandomPoints[i].w = disHeight2(gen);
+					break;
+				}
+				// x = 0->129 ; y 0
+				case 2:
+				{
+					faultLineSettings->interationsRandomPoints[i].z = disWidth2(gen);;
+					faultLineSettings->interationsRandomPoints[i].w = 1;
+					break;
+				}
+				}
+
+				break;
+			}
+			default:
+				break;
+			}
+
+			//faultLineSettings->interationsRandomPoints[i].x = disWidth(gen);
+			//faultLineSettings->interationsRandomPoints[i].z = disWidth2(gen);
+
+			//faultLineSettings->interationsRandomPoints[i].y = disHeight(gen);
+			//faultLineSettings->interationsRandomPoints[i].w = disHeight2(gen);
  
 		}
 	}
@@ -219,8 +396,10 @@ void TerrainScene::Update(Timer * timer)
 	{
 		regenerateDiamondSquare = false;
 		terrain->diamondSquareNeedRegenerated = true;
- 		std::mt19937 gen(seed);
+		std::mt19937 gen(seed);
 		std::uniform_real_distribution<> dis(0, 1);
+
+
 		diamondSquareSettings->bottomLeftRandomNumber = dis(gen);
 		diamondSquareSettings->bottomRightRandomNumber = dis(gen);
 		diamondSquareSettings->topLeftRandomNumber = dis(gen);
@@ -232,7 +411,19 @@ void TerrainScene::Update(Timer * timer)
 		terrain->simplexNoiseRegenerated = true;
 
 	}
+	if (regenerateCellularAutomata)
+	{
+		regenerateCellularAutomata = false;
+		terrain->cellularAutomataRegenerate = true;
 
+	}
+
+	if (regenerateParticleDeposition)
+	{
+		regenerateParticleDeposition = false;
+		terrain->particleDepositionRegeneate = true;
+
+	}
 }
 
 void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[])
@@ -269,7 +460,7 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 	//// Set shader parameters (matrices and texture)
 	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(),
 		terrainGeneration,faultLineSettings, terrainTextureSettings,fbnSettings, light, depthMaps,
-		lowTexture->GetTexture(), mediumTexture->GetTexture(), hightTexture->GetTexture());
+		lowTexture->GetTexture(), mediumTexture->GetTexture(), hightTexture->GetTexture(), underWaterTexture->GetTexture(), hitByWaterTexture->GetTexture());
 	//// Render object (combination of mesh geometry and shader process
 	terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
 
@@ -428,7 +619,7 @@ void TerrainScene::TerrainSettings(bool * is_open)
 		}
 		else
 		{
-			terrainGeneration->enableGPUEffect = true;
+		//	terrainGeneration->enableGPUEffect = true;
 
 		}
 
@@ -462,21 +653,26 @@ void TerrainScene::TerrainSettings(bool * is_open)
 
 			terrainGeneration->terrainGenerationType = (TerrainGeneration)currnetGen;
  
-			terrainGeneration->enableGPUEffect = false;
-			switch (terrainGeneration->terrainGenerationType)
+ 			switch (terrainGeneration->terrainGenerationType)
 			{
 			case TerrainGeneration::DiamondSquare:
 			{
+				terrainGeneration->enableGPUEffect = false;
+
 				regenerateDiamondSquare = true;
 				break;
 			}
 			case TerrainGeneration::SimplexNoise:
 			{
+				terrainGeneration->enableGPUEffect = false;
+
 				regenerateSimplexNoise = true;
 				break;
 			}
 			case TerrainGeneration::FractionalBrowningNoise:
 			{
+				terrainGeneration->enableGPUEffect = false;
+
 				break;
 			}
 			case TerrainGeneration::FaultLineDisplacement:
@@ -485,6 +681,20 @@ void TerrainScene::TerrainSettings(bool * is_open)
 				terrainGeneration->enableGPUEffect = true;
 				regenerateFaultLines = true;
 
+				break;
+			}
+			//case TerrainGeneration::CellularAutomata:
+			//{
+			//	terrain->cellularAutomataRegenerate = true;
+			//	terrainGeneration->enableGPUEffect = false;
+			//	regenerateFaultLines = true;
+			//	break;
+			//}
+			case TerrainGeneration::ParticleDeposition:
+			{
+				terrain->particleDepositionRegeneate = true;
+				terrainGeneration->enableGPUEffect = false;
+				regenerateParticleDeposition = true;
 				break;
 			}
 			default:
@@ -593,6 +803,18 @@ void TerrainScene::TerrainSettings(bool * is_open)
 			{
 			}
 
+			ImGui::InputFloat("Min Height of Wave", &terrainTextureSettings->minHeightOfWater);
+			ImGui::InputFloat("mid Height of Wave", &terrainTextureSettings->medHeightOfWater);
+			ImGui::InputFloat("max Height of Wave", &terrainTextureSettings->maxHeightOfWater);
+
+
+
+			ImGui::SliderFloat("Hight of tip of hill starts ", &terrainTextureSettings->topHighPercentage, 0, 100);
+			ImGui::SliderFloat("HIght of start of hill starts ", &terrainTextureSettings->midHighPercentage, 0, 100);
+			ImGui::SliderFloat("Blending ammount of textures", &terrainTextureSettings->blendingPercentage, 0, 100);
+			ImGui::Text("Max Hight Of hill %f", terrainTextureSettings->maxHightOfHill);
+			ImGui::Text("Min Hight Of hill %f", terrainTextureSettings->minHightOfTerrain);
+
 
 			/////////////////////////////////////////////////////////////////
 			// DEBUG GUI
@@ -615,6 +837,7 @@ void TerrainScene::TerrainSettings(bool * is_open)
 			if (ImGui::Checkbox("Display Normal map", &dispalyNormalMap))
 			{
 			}
+
 
 			terrainTextureSettings->displayNormalMap = dispalyNormalMap;
 

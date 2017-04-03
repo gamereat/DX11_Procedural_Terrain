@@ -19,7 +19,7 @@ public:
 		TerrainGenerationBufferType *terrinSetting, FaultLineDisplacementBufferType* faultLineSettings, TerrainSettingTextureType* terrainTextureSettings,
 		FractionalBrowningNoiseBuffer* fractionalBrowningNoiseSettings, 
 		Light* light[NUM_LIGHTS], ID3D11ShaderResourceView*depthMap[],
-		ID3D11ShaderResourceView* lowTexture, ID3D11ShaderResourceView* mediumTexture, ID3D11ShaderResourceView* hightTexture );
+		ID3D11ShaderResourceView* lowTexture, ID3D11ShaderResourceView* mediumTexture, ID3D11ShaderResourceView* hightTexture, ID3D11ShaderResourceView* underWaterTexture, ID3D11ShaderResourceView* hitByWaterTexture);
 	void Render(ID3D11DeviceContext * deviceContext, int indexCount);
 
  

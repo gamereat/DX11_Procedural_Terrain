@@ -40,6 +40,19 @@ private:
 	 
 	struct VectorType
 	{
+		VectorType(float x, float y, float z)
+		{
+			this->x = x;
+			this->y = y;
+			this->z = z;
+
+		}
+		VectorType()
+		{
+			x = 0;
+			y = 0;
+			z = 0;
+		}
 		float x, y, z;
 	};
 public:
@@ -56,8 +69,14 @@ public:
 	bool diamondSquareNeedRegenerated;
 	bool simplexNoiseRegenerated;
 	bool faultLineDisplacementRegenerated;
+	bool fbmregenereed;;
+	bool cellularAutomataRegenerate;
+	bool particleDepositionRegeneate;
 	int* seed;
 	FaultLineDisplacementBufferType* faultLineSettings;
+
+	float getMaxHeight();
+	float getMinHight();
 private:
 
 
@@ -71,6 +90,16 @@ private:
 	void GenerateSimplexNoiseNoise();
  	void GenerateFBmNoise();
 	void GenerateFaultLineDisplacement();
+	void GenerateCellularAutomata();
+	void GenereatParticleDeposition();
+
+
+	int particleDepositionIterations;
+	int numberOfHills;	
+	float CellularAutomataRule(float neibours[8], float center);
+	int cellularAutomationIterations;
+	int chanceOfNewHill;
+	float chanceOfRoll;
 
 	int diamondSquareRange;
 	bool resetTerrain; 

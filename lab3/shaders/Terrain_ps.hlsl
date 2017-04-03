@@ -6,11 +6,13 @@ Texture2D defaultTexture : register(t0);
 Texture2D lowTexture : register(t1);
 Texture2D mediumTexture : register(t2);
 Texture2D highTexture : register(t3);
+Texture2D underWaterTexture : register(t4);
+Texture2D hitByWaterTexture : register(t5);
 
-Texture2D depthMapTexture : register(t4);
-Texture2D depthMapTexture1 : register(t5);
-Texture2D depthMapTexture2 : register(t6);
-Texture2D depthMapTexture3 : register(t7);
+Texture2D depthMapTexture : register(t6);
+Texture2D depthMapTexture1 : register(t7);
+Texture2D depthMapTexture2 : register(t8);
+Texture2D depthMapTexture3 : register(t9);
 
 SamplerState SampleTypeWrap : register(s0);
 SamplerState SampleTypeClamp : register(s1);
@@ -44,14 +46,29 @@ cbuffer LightBuffer : register(cb0)
 
 cbuffer TerrainSettingTextureBuffer : register(cb1)
  {
+    
+    float topHighPercentage;
+    float midHighPercentage;
+
+    float blendingPercentage;
+    float minHightOfTerrain;
+ 
      int enableLighting;
 
-    int padding;  
     
     int textureTiling;
     
     int displayNormalMap;
 
+    float minHeightOfWater;
+
+    float medHeightOfWater;
+
+    float maxHeightOfWater;
+
+    float maxHightOfHill;
+
+    float  padding;
 
 };
  
@@ -64,6 +81,7 @@ struct InputType
     float3 lightPos[4] : TEXCOORD5;
     float3 position3D : TEXCOORD10;
     float3 viewDirection : TEXCOORD11;
+    
 };
  
 float4 main(InputType input) : SV_TARGET
@@ -324,22 +342,135 @@ float4 main(InputType input) : SV_TARGET
  //   textureColor = texture0.Sample(SampleTypeWrap, input.tex);
    
     float4 lowTexColour = lowTexture.Sample(SampleTypeWrap, input.tex);
-
-    float4 mediumTexColour = mediumTexture.Sample(SampleTypeWrap, input.tex);
-
+    float4 medTexColour = mediumTexture.Sample(SampleTypeWrap, input.tex);
     float4 highTexColour = highTexture.Sample(SampleTypeWrap, input.tex);
 
-    // Calculate the slope of this point.
-    float slope = 1.0f - input.normal.y;
-    float blendAmount;
+ 
+
+    float4 underWaterColour = underWaterTexture.Sample(SampleTypeWrap, input.tex);
+
+    float4 inWaterColour = hitByWaterTexture.Sample(SampleTypeWrap, input.tex);
 
 
-    textureColor = lowTexColour;
+    float heightPercentage = ((input.position3D.y - minHightOfTerrain) / (maxHightOfHill - minHightOfTerrain)) * 100;
 
-	float4 depth= depthMapTexture.Sample(SampleTypeWrap, input.tex);
-    depth.w = 1;
+    if (heightPercentage + blendingPercentage > topHighPercentage)
+    {
+        if (heightPercentage > topHighPercentage)
+        {
+            textureColor = highTexColour;
+        }else
+        {
+    
+            float pecetageOff = topHighPercentage - heightPercentage;
+            float blendPoint = (pecetageOff) / (blendingPercentage);
+            textureColor = lerp(highTexColour, medTexColour, blendPoint);
+
+            
+        }
+           
+
+    }
+    else if (heightPercentage + blendingPercentage  > midHighPercentage)
+    {
+        if (heightPercentage > midHighPercentage)
+        {
+            textureColor = medTexColour;
+        }
+        else
+        {
+    
+            float pecetageOff = midHighPercentage - heightPercentage;
+            float blendPoint = (pecetageOff) / (blendingPercentage);
+            textureColor = lerp(medTexColour, lowTexColour, blendPoint);
+
+            
+        }
+ 
+    }else
+    {
+        textureColor = lowTexColour;
+        
+    }
+
+    // If it could be under water at some point 
+    if (input.position3D.y < maxHeightOfWater)
+    {
+
+    // if above the medium line but bellow max line then will blend with above water texture and in water texutre
+        if (input.position3D.y >= medHeightOfWater)
+        {
+
+            float blendPoint = (input.position3D.y - medHeightOfWater) / (maxHeightOfWater - medHeightOfWater);
+            textureColor = lerp(inWaterColour, lowTexColour, blendPoint);
+
+        }
+        // else we will bend with bellow water and in water
+        else
+        {
+            float4 red = float4(1, 0, 0, 1);
+            float4 blue = float4(0, 0,1, 1);
+            float blendPoint = (input.position3D.y - minHeightOfWater) / (medHeightOfWater - minHeightOfWater);
+            textureColor = lerp(inWaterColour, underWaterColour, blendPoint);
+        //    textureColor = float4(1, 0, 0, 1);
+
+        }
+        if (input.position3D.y < minHeightOfWater)
+        {
+            textureColor = underWaterColour;
+
+        }
+   
+    }
+    else
+    {
+  //     
+
+   
+        float heightPercentage = ((input.position3D.y) / (maxHightOfHill)) * 100;
+        
+ 
+
+     //   float slope = 1.0f - input.normal.y;
+  
+     //   float blendAmount = 0;
+     //// Determine which texture to use based on height.
+     //   if (slope > 0.2)
+     //   {
+     //       blendAmount = slope / 0.2f;
+     //       textureColor = lerp(lowTexColour, medTexColour, blendAmount);
+     //      // textureColor = highTexColour;
+
+     //   }
+     //   //else
+     //   //{
+     //   //    textureColor = lowTexColour;
+            
+     //   //}
+ 	
+     //   if ((slope < 0.7) && (slope >= 0.2f))
+     //   {
+     //       blendAmount = (slope - 0.2f) * (1.0f / (0.7f - 0.2f));
+     //       textureColor = lerp(medTexColour, highTexColour, blendAmount);
+     //   }
+
+     //   if (slope >= 0.7)
+     //   {
+     //       textureColor = highTexColour;
+     //   }
+
+
+    }
+
+  //  float heightPercentage = ((input.position3D.y) / (maxHightOfHill)) * 100;
+
+
+
 	// Combine the light and texture color.
     color = color * textureColor;
+
+
+
     if (enableLighting==1)
     {
         return color;

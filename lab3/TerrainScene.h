@@ -27,12 +27,13 @@ Used to show proseduraly generated terrain
  class TerrainScene :
 	public Scene
 {
-	 const char* TerrainGeneration_str[4] =
+	 const char* TerrainGeneration_str[5] =
 	 {
 		 "FaultLineDisplacement",
  		 "FractionalBrowningNoise",
 		 "SimplexNoise",
 		 "DiamondSquare",
+		 "ParticleDeposition"
 	 };
 public:
 	TerrainScene(string sceneName);
@@ -100,6 +101,9 @@ public:
 	void WaterSettings(bool *is_open);
 private:
 
+	bool regenerateParticleDeposition;
+
+	bool regenerateCellularAutomata;
 
 	bool regenerateSimplexNoise;
 
@@ -131,7 +135,15 @@ private:
 
 	*/
 	Texture* mediumTexture;
+	/*
 
+	*/
+	Texture* underWaterTexture;
+
+	/*
+
+	*/
+	Texture* hitByWaterTexture;
 	/*
 
 	*/

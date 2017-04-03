@@ -100,6 +100,7 @@
     <ClCompile Include="..\ApplicationSettings.cpp" />
     <ClCompile Include="..\MiniIni\minIni.cpp" />
     <ClCompile Include="baseApp.cpp" />
+    <ClCompile Include="CellularAutomata.cpp" />
     <ClCompile Include="ColourShader.cpp" />
     <ClCompile Include="DepthShader.cpp" />
     <ClCompile Include="DiamondSquare.cpp" />
@@ -130,6 +131,7 @@
     <ClInclude Include="..\MiniIni\minGlue.h" />
     <ClInclude Include="..\MiniIni\minIni.hpp" />
     <ClInclude Include="baseApp.h" />
+    <ClInclude Include="CellularAutomata.h" />
     <ClInclude Include="ColourShader.h" />
     <ClInclude Include="DepthShader.h" />
     <ClInclude Include="DiamondSquare.h" />

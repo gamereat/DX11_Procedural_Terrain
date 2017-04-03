@@ -124,6 +124,9 @@
     <ClCompile Include="DiamondSquare.cpp">
       <Filter>Source Files\Noise</Filter>
     </ClCompile>
+    <ClCompile Include="CellularAutomata.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\MiniIni\minGlue.h">
@@ -209,6 +212,9 @@
     </ClInclude>
     <ClInclude Include="LSystemShader.h">
       <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="CellularAutomata.h">
+      <Filter>Header Files\Noise</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

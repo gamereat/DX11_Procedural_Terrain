@@ -259,6 +259,27 @@ bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* soun
 		GenerateSimplexNoiseNoise();
 		terrainNeedReGeneration = true;
 	}
+	if (fbmregenereed)
+	{
+		fbmregenereed = false;
+		GenerateFBmNoise();
+		terrainNeedReGeneration = true;
+
+	}
+	if (cellularAutomataRegenerate)
+	{
+		cellularAutomataRegenerate = false;
+		GenerateCellularAutomata();
+		terrainNeedReGeneration = true;
+	}
+
+	if (particleDepositionRegeneate)
+	{
+		particleDepositionRegeneate = false;
+		GenereatParticleDeposition();
+		terrainNeedReGeneration = true;
+
+	}
 
 	if (terrainNeedReGeneration )
 	{
@@ -269,14 +290,15 @@ bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* soun
 			NormalizeHeightMap();
 		}
 		InitBuffers(device);
-
+ 
 	}
 
-
+	CalculateNormals();
 	if (resetTerrain)
 	{
 		resetTerrain = false;
 		InitializeTerrain(device, this->terrainHeight, this->terrainWidth);
+		CalculateNormals();
 	}
 
 	return true;
@@ -413,7 +435,6 @@ void Terrain::InitBuffers(ID3D11Device* device)
 	CalculateNormals();
 
 
-
 	// Release the arrays now that the buffers have been created and loaded.
 	delete[] vertices;
 	vertices = 0;
@@ -423,7 +444,7 @@ void Terrain::InitBuffers(ID3D11Device* device)
 
  }
 
- XMMATRIX Terrain::SendData(ID3D11DeviceContext * deviceContext)
+XMMATRIX Terrain::SendData(ID3D11DeviceContext * deviceContext)
 {
 	unsigned int stride;
 	unsigned int offset;
@@ -516,6 +537,11 @@ void Terrain::Settings(bool* is_open , TerrainGeneration generation)
 				GenerateFBmNoise();
 				terrainNeedReGeneration = true;
 
+			}			
+			if (ImGui::DragFloat("Smoothing Value ", &smoothingValue))
+			{
+				fbmregenereed = true;
+				terrainNeedReGeneration = true;
 			}
 	
 		}
@@ -532,6 +558,60 @@ void Terrain::Settings(bool* is_open , TerrainGeneration generation)
 
  			}
 		}
+		//else if (generation == TerrainGeneration::CellularAutomata)
+		//{
+		//	if (ImGui::DragInt("Number Of itterations", &cellularAutomationIterations,0,150))
+		//	{
+		//		cellularAutomataRegenerate = true;
+		//	}
+
+		//	if (ImGui::Checkbox("Enable Smoothing", &enableSmoothing))
+		//	{
+		//		cellularAutomataRegenerate = true;
+		//		GenerateFaultLineDisplacement();
+		//	}
+		//	if (ImGui::DragFloat("Smoothing Value ", &smoothingValue))
+		//	{
+		//		terrainNeedReGeneration = true;
+
+		//	}
+		//}
+		else if (generation == TerrainGeneration::ParticleDeposition)
+		{
+			if (ImGui::SliderInt("Number of Iterations", &particleDepositionIterations, 1, 100))
+			{
+				numberOfHills = 0;
+ 				particleDepositionRegeneate = true;
+
+			}
+			if (ImGui::SliderInt("Change of new hill", &chanceOfNewHill, 0, 100))
+			{
+				numberOfHills = 0;
+ 				particleDepositionRegeneate = true;
+
+			}
+			if (ImGui::DragFloat("Change of roll", &chanceOfRoll, 0, 100))
+			{
+				numberOfHills = 0;
+ 				particleDepositionRegeneate = true;
+
+
+			}
+
+			 
+				if (ImGui::Checkbox("Enable Smoothing", &enableSmoothing))
+				{
+					numberOfHills = 0;
+ 					particleDepositionRegeneate = true;
+					GenereatParticleDeposition();
+				}
+				if (ImGui::DragFloat("Smoothing Value ", &smoothingValue))
+				{
+					numberOfHills = 0;
+ 					terrainNeedReGeneration = true;
+
+				}
+		}
 	
 		
 	}
@@ -540,6 +620,55 @@ void Terrain::Settings(bool* is_open , TerrainGeneration generation)
 
 }
 
+
+float Terrain::getMaxHeight()
+{
+
+	int index = 0;
+
+	float topHight = -10000;
+
+	// Initialise the data in the height map (flat).
+	for (int j = 0; j < this->terrainHeight; j++)
+	{
+		for (int i = 0; i < this->terrainWidth; i++)
+		{
+			index = (this->terrainHeight * j) + i;
+		
+			if (heightMap[index].y > topHight)
+			{
+				topHight = heightMap[index].y;
+			}
+		}
+	}
+
+	return topHight;
+	
+}
+
+float Terrain::getMinHight()
+{
+
+	int index = 0;
+
+	float minHight = 10000;
+
+	// Initialise the data in the height map (flat).
+	for (int j = 0; j < this->terrainHeight; j++)
+	{
+		for (int i = 0; i < this->terrainWidth; i++)
+		{
+			index = (this->terrainHeight * j) + i;
+
+			if (heightMap[index].y < minHight)
+			{
+				minHight = heightMap[index].y;
+			}
+		}
+	}
+
+	return minHight;
+}
 
 bool Terrain::LoadHeightMap(char * filename)
 {
@@ -778,6 +907,256 @@ void Terrain::GenerateFaultLineDisplacement()
 	}
 	faultLineDisplacementRegenerated = false;
 }
+
+void Terrain::GenerateCellularAutomata()
+{
+	int index;
+
+	// start by putting though random noise 
+	perlinNoiseHeightRange = 1;
+	perlinNoiseFrequancy = 1;
+	GenerateSimplexNoiseNoise();
+
+	float* newValues = new float[terrainHeight *  terrainWidth] ;
+	for (int k = 0; k < cellularAutomationIterations; k++)
+	{
+		for (int j = 0; j < this->terrainHeight; j++)
+		{
+			for (int i = 0; i < this->terrainWidth; i++)
+			{
+				index = (this->terrainHeight * j) + i;
+
+				// check if a edge 
+
+				if (i == 0 || i == this->terrainWidth  || j == 0 || j == this->terrainHeight )
+				{
+					newValues[(this->terrainHeight * j) + i] = 0;
+					continue;
+
+				}
+
+				float center = this->heightMap[(this->terrainHeight * j) + i].y;
+
+				float right = this->heightMap[(this->terrainHeight * j + 1) + i].y;
+				float left = this->heightMap[(this->terrainHeight * j - 1) + i].y;
+				float above = this->heightMap[(this->terrainHeight * j) + i - 1].y;
+				float bellow = this->heightMap[(this->terrainHeight * j) + i + 1].y;
+
+				float bottomRight = this->heightMap[(this->terrainHeight * j - 1) + i - 1].y;
+				float bottomLeft = this->heightMap[(this->terrainHeight * j - 1) + i + 1].y;
+				float topRight = this->heightMap[(this->terrainHeight * j + 1) + i - 1 - 1].y;
+				float topLeft = this->heightMap[(this->terrainHeight * j + 1) + i + 1 + 1].y;
+				float neibours[8];
+				neibours[0] = right;
+				neibours[1] = left;
+				neibours[2] = above;
+				neibours[3] = bellow;
+				neibours[4] = bottomRight;
+				neibours[5] = bottomLeft;
+				neibours[6] = topRight;
+				neibours[7] = topLeft;
+				newValues[(this->terrainHeight * j) + i] = CellularAutomataRule(neibours, center);
+
+			}
+		}
+
+		// set new values
+		for (int j = 0; j < this->terrainHeight; j++)
+		{
+			for (int i = 0; i < this->terrainWidth; i++)
+			{
+				this->heightMap[(this->terrainHeight * j) + i].y = newValues[(this->terrainHeight * j) + i];
+			}
+		}
+	}
+	delete[] newValues;
+}
+
+void Terrain::GenereatParticleDeposition()
+{
+	int index = 0;
+	numberOfHills = 1;
+	std::vector<VectorType> hillPoints;
+
+	std::mt19937 gen(*seed );
+
+	std::uniform_real_distribution<> disPosX(0, terrainWidth);
+	std::uniform_real_distribution<> disPosZ(0, terrainHeight);
+	hillPoints.push_back(VectorType((int)disPosX(gen), 0, (int)disPosZ(gen)));
+
+	for (int j = 0; j < this->terrainHeight; j++)
+	{
+		for (int i = 0; i < this->terrainWidth; i++)
+		{
+			index = (this->terrainHeight * j) + i;
+
+			this->heightMap[index].y = 0;
+		}
+	}
+
+	for (int k= 0; k< particleDepositionIterations;k++)
+	{
+
+
+		std::mt19937 gen(*seed + k); 
+
+		std::uniform_real_distribution<> disChanceOfHill(0, 100);
+
+		int hillHit = (int)disChanceOfHill(gen);
+		if (chanceOfNewHill > hillHit)
+		{
+			numberOfHills++;
+
+			hillPoints.push_back(VectorType((int)disPosX(gen), 0,(int) disPosZ(gen)));
+
+
+		}
+		for (int j = 0; j < this->terrainHeight; j++)
+		{
+			for (int i = 0; i < this->terrainWidth; i++)
+			{
+				index = (this->terrainHeight * j) + i;
+
+				for (VectorType hill : hillPoints)
+				{
+					if (i == hill.x && hill.z == j)
+					{
+						this->heightMap[index].y++;
+					}
+				}
+
+				if (this->heightMap[index].y > 0)
+				{
+
+					std::mt19937 gen(*seed + i * j +k);
+
+					std::uniform_real_distribution<> disChanceOfRoll(0, 100);
+					int rollHit = disChanceOfRoll(gen);
+					if (chanceOfRoll > rollHit)
+					{
+						std::uniform_real_distribution<> disMoveDir(0, 4);
+
+						int moveDir = disMoveDir(gen);
+						switch (moveDir)
+						{
+						case 0:
+						{
+							if (j < terrainHeight)
+							{
+								heightMap[(terrainHeight * j ) + i].y++;
+							}
+							break;
+						}
+						case 1:
+						{
+							if (j > 1)
+							{
+								heightMap[(terrainHeight * j) + i].y++;
+							}
+							break;
+						}
+						case 2:
+						{
+							if (i > 1)
+							{
+								heightMap[(terrainHeight * j ) + i].y++;
+							}
+							break;
+						}
+						case 3:
+						{
+							if (i < terrainHeight)
+							{
+								heightMap[(terrainHeight * j ) + i].y++;
+							}
+							break;
+						}
+
+						//case 4:
+						//{
+						//	if (j < terrainHeight && i >0)
+						//	{
+						//		heightMap[(terrainHeight * j + 2) + i -2].y++;
+						//	}
+						//	break;
+						//}
+						//case 5:
+						//{
+						//	if (j > 1 && i >0)
+						//	{
+						//		heightMap[(terrainHeight * j - 2) + i -2].y++;
+						//	}
+						//	break;
+						//}
+						//case 6:
+						//{
+						//	if (i > 1 && j >1)
+						//	{
+						//		heightMap[(terrainHeight * j-2) + i - 2].y++;
+						//	}
+						//	break;
+						//}
+						//case 7:
+						//{
+						//	if (i < terrainHeight && j >1)
+						//	{
+						//		heightMap[(terrainHeight * j - 2) + i + 2].y++;
+						//	}
+						//	break;
+						//}
+						}
+
+ 
+					}
+					
+				}
+				else
+				{
+					
+				}
+
+				this->heightMap[index].x = (float)i;
+ 				this->heightMap[index].z = (float)j;
+
+
+			}
+		}
+	}
+}
+
+float Terrain::CellularAutomataRule(float neibours[8], float center)
+{
+	int numberOfNabHigher = 0;
+	int numberOfNabLower = 0;
+
+	for (int i = 0; i < 8; i++)
+	{
+		if (center > neibours[i])
+		{
+			numberOfNabLower++;
+		}
+		else if (center < neibours[i])
+		{
+			numberOfNabHigher++;
+		}
+	}
+
+
+	if (numberOfNabLower > 6 )
+	{
+		return center +1;
+
+	}
+	
+	if (numberOfNabLower < 1)
+	{
+		return center - 1;
+
+	}
+	return center;
+}
+
+ 
 
 float Terrain::FaultLineDisplacement(int x, int z)
 {
