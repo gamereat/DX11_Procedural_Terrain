@@ -1,8 +1,8 @@
-// tessellation shader.cpp
 #include "WaterShader.h"
 
 WaterShader::WaterShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, hwnd)
 {
+	// Load in shaders
 	InitShader(L"shaders/water_vs.hlsl",L"shaders/texture_ps.hlsl");
 
 }
@@ -10,27 +10,37 @@ WaterShader::WaterShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, h
 
 WaterShader::~WaterShader()
 {
-	// Release the sampler state.
-	if (m_sampleState)
+
+	// Clean up memory
+
+	if (sampleState)
 	{
-		m_sampleState->Release();
-		m_sampleState = 0;
+		sampleState->Release();
+		sampleState = nullptr;
 	}
 
-	// Release the matrix constant buffer.
-	if (m_matrixBuffer)
+ 	if (matrixBuffer)
 	{
-		m_matrixBuffer->Release();
-		m_matrixBuffer = 0;
+		matrixBuffer->Release();
+		matrixBuffer = nullptr;
 	}
 
-
-
-	// Release the layout.
-	if (m_layout)
+	if (sampleStateClamp)
 	{
-		m_layout->Release();
-		m_layout = 0;
+		sampleStateClamp->Release();
+		sampleStateClamp = nullptr;
+	}
+
+	if (waterBuffer)
+	{
+		waterBuffer->Release();
+		waterBuffer = nullptr;
+	}
+
+ 	if (layout)
+	{
+		layout->Release();
+		layout = nullptr;
 	}
 
 	//Release base shader components
@@ -42,12 +52,10 @@ void WaterShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 {
 	D3D11_BUFFER_DESC matrixBufferDesc;
 	D3D11_SAMPLER_DESC samplerDesc;
-	D3D11_BUFFER_DESC planetDesc;
-	 
+	D3D11_BUFFER_DESC planetDesc;	 
 
 	// Load (+ compile) shader files
 	loadVertexShader(vsFilename);
-
 	loadPixelShader(psFilename);
 
 	// Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
@@ -58,11 +66,8 @@ void WaterShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 	matrixBufferDesc.MiscFlags = 0;
 	matrixBufferDesc.StructureByteStride = 0;
 
-
-
-
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	m_device->CreateBuffer(&matrixBufferDesc, NULL, &m_matrixBuffer);
+	m_device->CreateBuffer(&matrixBufferDesc, NULL, &matrixBuffer);
 
 	// Create a texture sampler state description.
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -80,10 +85,9 @@ void WaterShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	// Create the texture sampler state.
-	m_device->CreateSamplerState(&samplerDesc, &m_sampleState);
+	m_device->CreateSamplerState(&samplerDesc, &sampleState);
 
 	
-
 
 	planetDesc.Usage = D3D11_USAGE_DYNAMIC;
 	planetDesc.ByteWidth = sizeof(WavetBufferType);
@@ -92,7 +96,7 @@ void WaterShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 	planetDesc.MiscFlags = 0;
 	planetDesc.StructureByteStride = 0;
 
-	m_device->CreateBuffer(&planetDesc, NULL, &planetBuffer);
+	m_device->CreateBuffer(&planetDesc, NULL, &waterBuffer);
 
 
 	// Create the texture sampler state. 
@@ -124,16 +128,16 @@ void WaterShader::InitShader(WCHAR* vsFilename, WCHAR* hsFilename, WCHAR* dsFile
 }
 
 
-void WaterShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * texture, WavetBufferType * waveInfo)
+void WaterShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, 
+	const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * texture, 
+	WavetBufferType * waveInfo)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	MatrixBufferType* dataPtr;
-	WavetBufferType* plantPtr;
+	WavetBufferType* waterPtr;
 	unsigned int bufferNumber;
 	XMMATRIX tworld, tview, tproj;
-
-
 
 	// Transpose the matrices to prepare them for the shader.
 	tworld = XMMatrixTranspose(worldMatrix);
@@ -141,7 +145,7 @@ void WaterShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const
 	tproj = XMMatrixTranspose(projectionMatrix);
 
 	// Lock the constant buffer so it can be written to.
-	result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	result = deviceContext->Map(matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	// Get a pointer to the data in the constant buffer.
 	dataPtr = (MatrixBufferType*)mappedResource.pData;
@@ -152,36 +156,36 @@ void WaterShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const
 	dataPtr->projection = tproj;
 
 	// Unlock the constant buffer.
-	deviceContext->Unmap(m_matrixBuffer, 0);
+	deviceContext->Unmap(matrixBuffer, 0);
 
 	// Set the position of the constant buffer in the vertex shader.
 	bufferNumber = 0;
 
 	// Now set the constant buffer in the vertex shader with the updated values.
-	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &matrixBuffer);
 
 	// Set the position of the constant buffer in the vertex shader.
 	bufferNumber = 0;
 
-	deviceContext->Map(planetBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	plantPtr = (WavetBufferType*)mappedResource.pData;
+	deviceContext->Map(waterBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	waterPtr = (WavetBufferType*)mappedResource.pData;
 
-	plantPtr->speed = waveInfo->speed;
-	plantPtr->amplutude = waveInfo->amplutude;
-	plantPtr->freqancy = waveInfo->freqancy;
-	plantPtr->steepnesss = waveInfo->steepnesss;
-	plantPtr->time = waveInfo->time;
-	plantPtr->padding = 0;
-	plantPtr->padding = float(0);
+	waterPtr->speed = waveInfo->speed;
+	waterPtr->amplutude = waveInfo->amplutude;
+	waterPtr->freqancy = waveInfo->freqancy;
+	waterPtr->steepnesss = waveInfo->steepnesss;
+	waterPtr->time = waveInfo->time;
+	waterPtr->padding = 0;
+	waterPtr->padding = float(0);
 
 	//	 Unlock the constant buffer.
-	deviceContext->Unmap(planetBuffer, 0);
+	deviceContext->Unmap(waterBuffer, 0);
 
 	//	 Set the position of the constant buffer in the vertex shader.
 	bufferNumber = 1;
 
 	//	 Now set the constant buffer in the vertex shader with the updated values.
-	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &planetBuffer);
+	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &waterBuffer);
 	
 	// Set shader texture resource in the pixel shader.
 	deviceContext->PSSetShaderResources(0, 1, &texture);
@@ -192,7 +196,7 @@ void WaterShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const
 void WaterShader::Render(ID3D11DeviceContext* deviceContext, int indexCount)
 {
 	// Set the sampler state in the pixel shader.
-	deviceContext->PSSetSamplers(0, 1, &m_sampleState);
+	deviceContext->PSSetSamplers(0, 1, &sampleState);
 	deviceContext->PSSetSamplers(1, 1, &sampleStateClamp);
 
 	// Base render function.

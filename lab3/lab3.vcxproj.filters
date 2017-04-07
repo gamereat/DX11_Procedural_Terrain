@@ -61,9 +61,6 @@
     <ClCompile Include="TextureShader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="DistanceBasedTesselation.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
     <ClCompile Include="LineMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -147,9 +144,6 @@
     <ClInclude Include="TextureShader.h">
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>
-    <ClInclude Include="DistanceBasedTesselation.h">
-      <Filter>Header Files\Shaders</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderBuffers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -198,14 +192,8 @@
     <ClInclude Include="SimplexNoise.h">
       <Filter>Header Files\Noise</Filter>
     </ClInclude>
-    <ClInclude Include="DepthShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TerrainShader.h">
       <Filter>Header Files\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="WaterShader.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DiamondSquare.h">
       <Filter>Header Files\Noise</Filter>
@@ -215,6 +203,12 @@
     </ClInclude>
     <ClInclude Include="CellularAutomata.h">
       <Filter>Header Files\Noise</Filter>
+    </ClInclude>
+    <ClInclude Include="WaterShader.h">
+      <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthShader.h">
+      <Filter>Header Files\Shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

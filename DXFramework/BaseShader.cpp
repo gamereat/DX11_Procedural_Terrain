@@ -117,7 +117,7 @@ void BaseShader::loadVertexShader(WCHAR* filename)
 
 	// Create the vertex input layout.
 	result = m_device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(),
-		&m_layout);
+		&layout);
 	if (FAILED(result))
 	{
 		//return false;
@@ -226,7 +226,7 @@ void BaseShader::loadVertexShader(WCHAR * filename, const  char* functionEntyPoi
 
 	// Create the vertex input layout.
 	result = m_device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(),
-		&m_layout);
+		&layout);
 	if (FAILED(result))
 	{
 		//return false;
@@ -493,7 +493,7 @@ void BaseShader::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, W
 void BaseShader::Render(ID3D11DeviceContext* deviceContext, int indexCount)
 {
 	// Set the vertex input layout.
-	deviceContext->IASetInputLayout(m_layout);
+	deviceContext->IASetInputLayout(layout);
 
 	// Set the vertex and pixel shaders that will be used to render.
 	deviceContext->VSSetShader(m_vertexShader, NULL, 0);

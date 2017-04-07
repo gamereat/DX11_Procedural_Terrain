@@ -1,9 +1,9 @@
-// texture shader.cpp
-#include "textureshader.h"
+ #include "textureshader.h"
 
 
 TextureShader::TextureShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, hwnd)
 {
+	//Load in Shaders
 	InitShader(L"shaders/texture_vs.hlsl", L"shaders/texture_ps.hlsl");
 }
 
@@ -11,24 +11,24 @@ TextureShader::TextureShader(ID3D11Device* device, HWND hwnd) : BaseShader(devic
 TextureShader::~TextureShader()
 {
 	// Release the sampler state.
-	if (m_sampleState)
+	if (sampleState)
 	{
-		m_sampleState->Release();
-		m_sampleState = 0;
+		sampleState->Release();
+		sampleState = 0;
 	}
 
 	// Release the matrix constant buffer.
-	if (m_matrixBuffer)
+	if (matrixBuffer)
 	{
-		m_matrixBuffer->Release();
-		m_matrixBuffer = 0;
+		matrixBuffer->Release();
+		matrixBuffer = 0;
 	}
 
 	// Release the layout.
-	if (m_layout)
+	if (layout)
 	{
-		m_layout->Release();
-		m_layout = 0;
+		layout->Release();
+		layout = 0;
 	}
 
 	//Release base shader components
@@ -54,7 +54,7 @@ void TextureShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 	matrixBufferDesc.StructureByteStride = 0;
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	m_device->CreateBuffer(&matrixBufferDesc, NULL, &m_matrixBuffer);
+	m_device->CreateBuffer(&matrixBufferDesc, NULL, &matrixBuffer);
 
 	// Create a texture sampler state description.
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -72,13 +72,16 @@ void TextureShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	// Create the texture sampler state.
-	m_device->CreateSamplerState(&samplerDesc, &m_sampleState);
+	m_device->CreateSamplerState(&samplerDesc, &sampleState);
 
 }
 
 
-void TextureShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture)
+void TextureShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, 
+	const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, 
+	ID3D11ShaderResourceView* texture)
 {
+
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	MatrixBufferType* dataPtr;
@@ -92,7 +95,7 @@ void TextureShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, cons
 	tproj = XMMatrixTranspose(projectionMatrix);
 
 	// Lock the constant buffer so it can be written to.
-	result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	result = deviceContext->Map(matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	// Get a pointer to the data in the constant buffer.
 	dataPtr = (MatrixBufferType*)mappedResource.pData;
@@ -103,13 +106,13 @@ void TextureShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, cons
 	dataPtr->projection = tproj;
 
 	// Unlock the constant buffer.
-	deviceContext->Unmap(m_matrixBuffer, 0);
+	deviceContext->Unmap(matrixBuffer, 0);
 
 	// Set the position of the constant buffer in the vertex shader.
 	bufferNumber = 0;
 
 	// Now set the constant buffer in the vertex shader with the updated values.
-	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &matrixBuffer);
 
 	// Set shader texture resource in the pixel shader.
 	deviceContext->PSSetShaderResources(0, 1, &texture);
@@ -118,7 +121,7 @@ void TextureShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, cons
 void TextureShader::Render(ID3D11DeviceContext* deviceContext, int indexCount)
 {
 	// Set the sampler state in the pixel shader.
-	deviceContext->PSSetSamplers(0, 1, &m_sampleState);
+	deviceContext->PSSetSamplers(0, 1, &sampleState);
 
 	// Base render function.
 	BaseShader::Render(deviceContext, indexCount);

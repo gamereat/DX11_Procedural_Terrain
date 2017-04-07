@@ -17,7 +17,6 @@
 #include "Terrain.h"
 #include "../DXFramework/CubeMesh.h"
 #include "TextureShader.h"
-#include "DistanceBasedTesselation.h"
 #include "../DXFramework/Model.h"
 #include "Sound.h"
 #include "LineMesh.h"

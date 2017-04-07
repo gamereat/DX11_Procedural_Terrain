@@ -9,7 +9,6 @@
 #include "Terrain.h"
 #include "../DXFramework/CubeMesh.h"
 #include "TextureShader.h"
-#include "DistanceBasedTesselation.h"
 #include "../DXFramework/Model.h"
 #include "Sound.h"
 #include "TerrainShader.h"
@@ -169,7 +168,6 @@ private:
 	*/
 	bool regenerateFaultLines;
 
-	DistanceBasedTesselation* distanceTess;
 	/*
 	Terraom Shader
 	*/

@@ -18,7 +18,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lab1", "lab1\lab1.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lab2", "lab2\lab2.vcxproj", "{8D32638D-B9AF-49BB-9F63-E85D2483D0B4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lab3", "lab3\lab3.vcxproj", "{28090894-3802-42D2-AAF0-5BE491277319}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CourseWork", "lab3\lab3.vcxproj", "{28090894-3802-42D2-AAF0-5BE491277319}"
 EndProject
 Global
 	GlobalSection(Performance) = preSolution

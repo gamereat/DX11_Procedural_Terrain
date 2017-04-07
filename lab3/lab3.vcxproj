@@ -15,6 +15,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>E01_ColourShader</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>CourseWork</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -104,7 +105,6 @@
     <ClCompile Include="ColourShader.cpp" />
     <ClCompile Include="DepthShader.cpp" />
     <ClCompile Include="DiamondSquare.cpp" />
-    <ClCompile Include="DistanceBasedTesselation.cpp" />
     <ClCompile Include="EmptyScene.cpp" />
     <ClCompile Include="FractionalBrownianMotion.cpp" />
     <ClCompile Include="LineMesh.cpp" />
@@ -135,7 +135,6 @@
     <ClInclude Include="ColourShader.h" />
     <ClInclude Include="DepthShader.h" />
     <ClInclude Include="DiamondSquare.h" />
-    <ClInclude Include="DistanceBasedTesselation.h" />
     <ClInclude Include="EmptyScene.h" />
     <ClInclude Include="FractionalBrownianMotion.h" />
     <ClInclude Include="LineMesh.h" />

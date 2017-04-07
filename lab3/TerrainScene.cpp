@@ -52,11 +52,6 @@ TerrainScene::~TerrainScene()
 		faultLineSettings = nullptr;
 	}
 	
-	if (distanceTess)
-	{
-		delete distanceTess;
-		distanceTess = nullptr;
-	}
 
 	if (terrainTextureSettings)
 	{
@@ -123,7 +118,6 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	depthShader = new DepthShader(device, hwnd);
 	faultLineSettings = new FaultLineDisplacementBufferType();
 
-	distanceTess = new DistanceBasedTesselation(device, hwnd);
 
 	terrainTextureSettings = new TerrainSettingTextureType();
 	tessSettings.maxDistance = 10;

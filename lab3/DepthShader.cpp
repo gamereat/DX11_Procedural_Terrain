@@ -4,6 +4,7 @@
 
 DepthShader::DepthShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, hwnd)
 {
+	// load shaders in
 	InitShader(L"shaders/depth_vs.hlsl", L"shaders/depth_ps.hlsl");
 }
 
@@ -11,17 +12,17 @@ DepthShader::DepthShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, h
 DepthShader::~DepthShader()
 {
 	// Release the matrix constant buffer.
-	if (m_matrixBuffer)
+	if (matrixBuffer)
 	{
-		m_matrixBuffer->Release();
-		m_matrixBuffer = 0;
+		matrixBuffer->Release();
+		matrixBuffer = 0;
 	}
 
 	// Release the layout.
-	if (m_layout)
+	if (layout)
 	{
-		m_layout->Release();
-		m_layout = 0;
+		layout->Release();
+		layout = 0;
 	}
 
 	//Release base shader components
@@ -46,7 +47,7 @@ void DepthShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 	matrixBufferDesc.StructureByteStride = 0;
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	m_device->CreateBuffer(&matrixBufferDesc, NULL, &m_matrixBuffer);
+	m_device->CreateBuffer(&matrixBufferDesc, NULL, &matrixBuffer);
 
 }
 
@@ -66,7 +67,7 @@ void DepthShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const 
 	tproj = XMMatrixTranspose(projectionMatrix);
 
 	// Lock the constant buffer so it can be written to.
-	result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	result = deviceContext->Map(matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	// Get a pointer to the data in the constant buffer.
 	dataPtr = (MatrixBufferType*)mappedResource.pData;
@@ -77,13 +78,13 @@ void DepthShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const 
 	dataPtr->projection = tproj;
 
 	// Unlock the constant buffer.
-	deviceContext->Unmap(m_matrixBuffer, 0);
+	deviceContext->Unmap(matrixBuffer, 0);
 
 	// Set the position of the constant buffer in the vertex shader.
 	bufferNumber = 0;
 
 	// Now set the constant buffer in the vertex shader with the updated values.
-	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &matrixBuffer);
 }
 
 

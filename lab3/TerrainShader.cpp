@@ -4,6 +4,7 @@
 
 TerrainShader::TerrainShader(ID3D11Device * device, HWND hwnd) : BaseShader(device, hwnd)
 {
+	// Load in Shaders
  	InitShader(L"shaders/Terrain_vs.hlsl",   L"shaders/Terrain_ps.hlsl" );
  
 }
@@ -11,35 +12,72 @@ TerrainShader::TerrainShader(ID3D11Device * device, HWND hwnd) : BaseShader(devi
  
 
 TerrainShader::~TerrainShader()
-{	// Release the sampler state.
- 
- 
-	// Release the sampler state.
-	if (m_sampleState)
+{	
+	// Release memory
+
+	if (sampleState)
 	{
-		m_sampleState->Release();
-		m_sampleState = 0;
+		sampleState->Release();
+		sampleState = nullptr;
 	}
 
-	// Release the matrix constant buffer.
-	if (m_matrixBuffer)
+	if (matrixBuffer)
 	{
-		m_matrixBuffer->Release();
-		m_matrixBuffer = 0;
+		matrixBuffer->Release();
+		matrixBuffer = nullptr;
 	}
-	 
-	// Release the layout.
-	if (m_layout)
+	
+	if (sampleStateClamp)
 	{
-		m_layout->Release();
-		m_layout = 0;
+		sampleStateClamp->Release();
+		sampleStateClamp = nullptr;
+	}
+	
+	if (lightBuffer)
+	{
+		lightBuffer->Release();
+		lightBuffer = nullptr;
+	}
+
+	if (secondaryLightBuffer)
+	{
+		secondaryLightBuffer->Release();
+		secondaryLightBuffer = nullptr;
+	}
+
+	if (terrainTexturingBuffer)
+	{
+		terrainTexturingBuffer->Release();
+		terrainTexturingBuffer = nullptr;
+	}
+
+	if (fractionalBrowningNoiseBuffer)
+	{
+		fractionalBrowningNoiseBuffer->Release();
+		fractionalBrowningNoiseBuffer = nullptr;
+	}
+
+	if (faultLineBuffer)
+	{
+		faultLineBuffer->Release();
+		faultLineBuffer = nullptr;
+	}
+
+	if (terrainGenerationBuffer)
+	{
+		terrainGenerationBuffer->Release();
+	}
+	if (layout)
+	{
+		layout->Release();
+		layout = nullptr;
 	}
 
 
 	if (faultLineBuffer)
 	{
 		faultLineBuffer->Release();
-		faultLineBuffer = 0;
+		faultLineBuffer = nullptr;
 	}
 }
 
@@ -54,7 +92,7 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	D3D11_BUFFER_DESC dimondSquareDesc;
 	D3D11_BUFFER_DESC terrainBufferDesc;
 	D3D11_BUFFER_DESC lightBufferDesc;
-	D3D11_BUFFER_DESC lightBufferDesc2;
+	D3D11_BUFFER_DESC secondaryLightBufferDesc;
 	D3D11_SAMPLER_DESC samplerDesc;
 
 	// Load (+ compile) shader files
@@ -70,7 +108,7 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	matrixBufferDesc.StructureByteStride = 0;
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	m_device->CreateBuffer(&matrixBufferDesc, NULL, &m_matrixBuffer);
+	m_device->CreateBuffer(&matrixBufferDesc, NULL, &matrixBuffer);
 
 	// Create a texture sampler state description.
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -88,14 +126,14 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	// Create the texture sampler state.
-	m_device->CreateSamplerState(&samplerDesc, &m_sampleState);
+	m_device->CreateSamplerState(&samplerDesc, &sampleState);
 
 	// Required a CLAMPED sampler for sampling the depth map
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 	// Create the texture sampler state.
-	m_device->CreateSamplerState(&samplerDesc, &m_sampleStateClamp);
+	m_device->CreateSamplerState(&samplerDesc, &sampleStateClamp);
 
 
 
@@ -120,7 +158,7 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	terrainBufferDesc.StructureByteStride = 0;
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	m_device->CreateBuffer(&terrainBufferDesc, NULL, &terrainBuffer);
+	m_device->CreateBuffer(&terrainBufferDesc, NULL, &terrainGenerationBuffer);
 
 	
 	// Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
@@ -157,18 +195,18 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	lightBufferDesc.StructureByteStride = 0;
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	m_device->CreateBuffer(&lightBufferDesc, NULL, &m_LightBuffer);
+	m_device->CreateBuffer(&lightBufferDesc, NULL, &lightBuffer);
 
 	// Setup the description of the camera dynamic constant buffer that is in the vertex shader.
-	lightBufferDesc2.Usage = D3D11_USAGE_DYNAMIC;
-	lightBufferDesc2.ByteWidth = sizeof(LightBufferType2);
-	lightBufferDesc2.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	lightBufferDesc2.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	lightBufferDesc2.MiscFlags = 0;
-	lightBufferDesc2.StructureByteStride = 0;
+	secondaryLightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	secondaryLightBufferDesc.ByteWidth = sizeof(LightBufferType2);
+	secondaryLightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	secondaryLightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	secondaryLightBufferDesc.MiscFlags = 0;
+	secondaryLightBufferDesc.StructureByteStride = 0;
 
 	// Create the camera constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	m_device->CreateBuffer(&lightBufferDesc2, NULL, &m_LightBuffer2);
+	m_device->CreateBuffer(&secondaryLightBufferDesc, NULL, &secondaryLightBuffer);
 
 
 }
@@ -186,7 +224,12 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * hsFilename, WCHAR * d
 }
 
 
-void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * defaultTexture, TerrainGenerationBufferType * terrinSetting, FaultLineDisplacementBufferType * faultLineSettings, TerrainSettingTextureType * terrainTextureSettings, FractionalBrowningNoiseBuffer * fractionalBrowningNoiseSettings, Light * light[NUM_LIGHTS], ID3D11ShaderResourceView * depthMap[], ID3D11ShaderResourceView * lowTexture, ID3D11ShaderResourceView * mediumTexture, ID3D11ShaderResourceView * hightTexture, ID3D11ShaderResourceView* underWaterTexture, ID3D11ShaderResourceView* hitByWaterTexture)
+void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix,
+	ID3D11ShaderResourceView * defaultTexture, TerrainGenerationBufferType * terrinSetting,
+	FaultLineDisplacementBufferType * faultLineSettings, TerrainSettingTextureType * terrainTextureSettings, 
+	FractionalBrowningNoiseBuffer * fractionalBrowningNoiseSettings, Light * light[NUM_LIGHTS], ID3D11ShaderResourceView * depthMap[],
+	ID3D11ShaderResourceView * lowTexture, ID3D11ShaderResourceView * mediumTexture, ID3D11ShaderResourceView * hightTexture, 
+	ID3D11ShaderResourceView* underWaterTexture, ID3D11ShaderResourceView* hitByWaterTexture)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -197,8 +240,7 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 	LightBufferType* lightPtr;
 	LightBufferType2* lightPtr2;
 	TerrainSettingTextureType* terrainTextureSettingsPtr;
-	unsigned int bufferNumber;
-	XMMATRIX tworld, tview, tproj;
+ 	XMMATRIX tworld, tview, tproj;
 	XMMATRIX tLightViewMatrix[NUM_LIGHTS], tLightProjectionMatrix[NUM_LIGHTS];
 
 
@@ -211,8 +253,9 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 		tLightViewMatrix[i] = XMMatrixTranspose(light[i]->GetViewMatrix());
 		tLightProjectionMatrix[i] = XMMatrixTranspose(light[i]->GetProjectionMatrix());
 	}
+
 	// Lock the constant buffer so it can be written to.
-	result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	result = deviceContext->Map(matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	// Get a pointer to the data in the constant buffer.
 	dataPtr = (MatrixBufferType2*)mappedResource.pData;
@@ -229,13 +272,11 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 
 	}
 	// Unlock the constant buffer.
-	deviceContext->Unmap(m_matrixBuffer, 0);
-
-	// Set the position of the constant buffer in the vertex shader.
-	bufferNumber = 0;
+	deviceContext->Unmap(matrixBuffer, 0);
+ 
 
 	// Now set the constant buffer in the vertex shader with the updated values.
-	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+	deviceContext->VSSetConstantBuffers(0, 1, &matrixBuffer);
 
 
 
@@ -243,7 +284,7 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 
 	//Additional
 	// Send light data to pixel shader
-	deviceContext->Map(m_LightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	deviceContext->Map(lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	lightPtr = (LightBufferType*)mappedResource.pData;
 
 	for (int i = 0; i < NUM_LIGHTS; i++)
@@ -289,39 +330,34 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 		lightPtr->isSpecular[i] = light[i]->GetMakesSpecular();
 
 	}
-	deviceContext->Unmap(m_LightBuffer, 0);
-	bufferNumber = 0;
-	deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_LightBuffer);
+	deviceContext->Unmap(lightBuffer, 0);
+ 	deviceContext->PSSetConstantBuffers(0, 1, &lightBuffer);
 
 	// Send light data to vertex shader
-	deviceContext->Map(m_LightBuffer2, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	deviceContext->Map(secondaryLightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	lightPtr2 = (LightBufferType2*)mappedResource.pData;
 
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
 		lightPtr2->position[i] = XMFLOAT4(light[i]->GetPosition().x, light[i]->GetPosition().y, light[i]->GetPosition().z, 0);
 	}
-	deviceContext->Unmap(m_LightBuffer2, 0);
-	bufferNumber = 2;
-	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_LightBuffer2);
+	deviceContext->Unmap(secondaryLightBuffer, 0);
+ 	deviceContext->VSSetConstantBuffers(2, 1, &secondaryLightBuffer);
 
 
 
 	// Send light data to vertex shader
-	deviceContext->Map(terrainBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	deviceContext->Map(terrainGenerationBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	terrinGenPtr = (TerrainGenerationBufferType*)mappedResource.pData;
 	terrinGenPtr->highScale = terrinSetting->highScale;
 	terrinGenPtr->enableGPUEffect = terrinSetting->enableGPUEffect;
 	terrinGenPtr->terrainGenerationType = terrinSetting->terrainGenerationType;
 	terrinGenPtr->padding = 0;
-	deviceContext->Unmap(terrainBuffer, 0);
-	bufferNumber = 3;
-	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &terrainBuffer);
+	deviceContext->Unmap(terrainGenerationBuffer, 0);
+ 	deviceContext->VSSetConstantBuffers(3, 1, &terrainGenerationBuffer);
+	 
 
-
-
-
-
+	// Load in Terrain Texturing settings
 	
  	deviceContext->Map(terrainTexturingBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	terrainTextureSettingsPtr = (TerrainSettingTextureType*)mappedResource.pData;
@@ -343,13 +379,12 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 
 	terrainTextureSettingsPtr->padding = 0;
  	deviceContext->Unmap(terrainTexturingBuffer, 0);
-	bufferNumber = 1;
-	deviceContext->PSSetConstantBuffers(bufferNumber, 1, &terrainTexturingBuffer);
+ 	deviceContext->PSSetConstantBuffers(1, 1, &terrainTexturingBuffer);
 
 
 
 
-
+	// Load in fbn settings
 
  	deviceContext->Map(fractionalBrowningNoiseBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	fbnPtr = (FractionalBrowningNoiseBuffer*)mappedResource.pData;
@@ -363,12 +398,12 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 	fbnPtr->fbnPelinNoiseFreqnacy = fractionalBrowningNoiseSettings->fbnPelinNoiseFreqnacy;
 	fbnPtr->fbnPersistence  = fractionalBrowningNoiseSettings->fbnPersistence;
 	deviceContext->Unmap(fractionalBrowningNoiseBuffer, 0);
-	bufferNumber = 5;
-	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &fractionalBrowningNoiseBuffer);
+ 	deviceContext->VSSetConstantBuffers(5, 1, &fractionalBrowningNoiseBuffer);
 
 
 
 
+	// load in fault line settings
 
 	result = deviceContext->Map(faultLineBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
@@ -393,9 +428,8 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 		}
 	}
 	deviceContext->Unmap(faultLineBuffer, 0);
-	bufferNumber = 4;
-
-	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &faultLineBuffer);
+ 
+	deviceContext->VSSetConstantBuffers(4, 1, &faultLineBuffer);
 
 
 
@@ -426,8 +460,8 @@ void TerrainShader::Render(ID3D11DeviceContext * deviceContext, int indexCount)
 {
 
 	// Set the sampler state in the pixel shader.
-	deviceContext->PSSetSamplers(0, 1, &m_sampleState);
-	deviceContext->PSSetSamplers(1, 1, &m_sampleStateClamp);
+	deviceContext->PSSetSamplers(0, 1, &sampleState);
+	deviceContext->PSSetSamplers(1, 1, &sampleStateClamp);
 
 	// Base render function.
 	BaseShader::Render(deviceContext, indexCount);
