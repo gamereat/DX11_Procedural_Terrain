@@ -1,12 +1,7 @@
 #pragma once
 #include "Scene.h"
-
-#include "../DXFramework/SphereMesh.h"
-#include "../DXFramework/CubeMesh.h"
-#include "../DXFramework/QuadMesh.h"
 #include "../DXFramework/DoubleTriangleMesh.h"
 #include "ColourShader.h"
-#include "../DXFramework/CubeMesh.h"
 #include "Scene.h"
 
 
@@ -55,8 +50,7 @@ public:
 	The given menu options for the scene
 	*/
 	void MenuOptions();
-
-
+	
 	/*
 	Will set lights back to correct position in the world
 	Used when changing scene so lights so the scene in the best light :D and are light correctly

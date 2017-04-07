@@ -1,30 +1,27 @@
 #pragma once
 #include "..\DXFramework\BaseApplication.h"
-#include "Scene.h"
-#include "../DXFramework/baseapplication.h"
 #include "D3D.h"
-#include "../DXFramework/PointMesh.h"
-
-#include "../DXFramework/PlaneMesh.h"
-#include "../DXFramework/SphereMesh.h"
 #include "../DXFramework/Light.h"
-#include "TextureShader.h"
 #include "../DXFramework/OrthoMesh.h"
 #include "../DXFramework/RenderTexture.h"
-#include "../DXFramework/TessellationMesh.h"
-#include "../DXFramework/QuadMesh.h"
-#include "../DXFramework/Model.h"
 #include "PostProcessing.h"
 #include "EmptyScene.h"
 #include "TerrainScene.h"
 #include "LSystemScene.h"
 #include "../DXFramework/Model.h"
-#include "RoadScene.h"
 #include "ShaderBuffers.h"
 #include "Sound.h"
+#include "TextureShader.h"
 
 /*
-Base application used to host given scenes
+*/
+
+/*
+* Base app 
+*
+* @author      Alan Yeats
+*
+* Base application used to host given scenes
 */
 class BaseApp :	public BaseApplication
 {
@@ -58,21 +55,14 @@ protected:
 	Adds menu bar option to top of application to expose function to the user
 	*/
 	void CreateMainMenuBar();
-
-
+	
 private:
 	
 	/*
 	L-System Scene used to show a 2D l-system on a dynamic texture
 	*/
 	LSystemScene* lSystemScene;
-
-	/*
-	Road scene .......
-	*/
-	RoadScene* roadScene;
-
- 
+	
 	/*
 	Terrain scene used to show procedural generated terrain
 	*/
@@ -91,14 +81,12 @@ private:
 	Render to the screen
 	*/
 	void RenderToScreen();
-
-
+	
 	/*
 	Lights used within the world all usable at any point
 	*/
 	Light* lights[NUM_LIGHTS];
-
-
+	
 	/*
 	holds all the depth textures from each light
 	*/
@@ -113,8 +101,7 @@ private:
 	Texture that has been up scaled to correct size after post processing
 	*/
 	RenderTexture* upScaleTexture;
-
-
+	
 	/*
 	OrthorMesh that is scaled to correct size
 	*/

@@ -96,11 +96,7 @@ BaseApp::~BaseApp()
 		sound = nullptr;
 	}
 
-	if (roadScene)
-	{
-		delete roadScene;
-		roadScene = nullptr;
-	}
+
 }
 
 void BaseApp::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight, Input *in)
@@ -120,8 +116,6 @@ void BaseApp::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHe
 	emptyScene = new EmptyScene("Empty Scene");
 	emptyScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), sound);
 
-	roadScene = new RoadScene("Road Scene");
-	roadScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), sound);
 
 	lSystemScene = new LSystemScene("L-System Scene");
 	lSystemScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), sound);
@@ -272,16 +266,8 @@ void BaseApp::CreateMainMenuBar()
 			currentScene->ResetLights(lights);
 			lSystemScene->isEnbaled = true;
 			terrainScene->isEnbaled = false;
-			roadScene->isEnbaled = false;
 		}
-		if (ImGui::MenuItem(roadScene->getSceneName().c_str()))
-		{
-			currentScene = roadScene;
-			currentScene->ResetLights(lights);
-			roadScene->isEnbaled = true;
-			lSystemScene->isEnbaled = false;
-			terrainScene->isEnbaled = false;
-		}
+
 		ImGui::EndMenu();
 	}
 	if (ImGui::BeginMenu("Lights"))
