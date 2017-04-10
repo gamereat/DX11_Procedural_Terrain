@@ -1,4 +1,5 @@
- #ifndef _COLOURSHADER_H_
+
+#ifndef _COLOURSHADER_H_
 #define _COLOURSHADER_H_
 
 #include "../DXFramework/BaseShader.h"

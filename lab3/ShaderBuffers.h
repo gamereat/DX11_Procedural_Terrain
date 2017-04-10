@@ -15,6 +15,46 @@ const int NUM_LIGHTS = 4;
 
 const int MAX_FAULTLINE_ITERATIONS = 2500;
 
+struct waveSettings
+{
+public:
+	enum WaveType {
+		sin,
+		cos,
+		tan
+	};
+	float period;
+	float amplitude;
+
+	WaveType waveType;
+
+
+};
+
+
+struct HeightMapType
+{
+	float x, y, z;
+	float nx, ny, nz;
+};
+
+struct VectorType
+{
+	VectorType(float x, float y, float z)
+	{
+		this->x = x;
+		this->y = y;
+		this->z = z;
+
+	}
+	VectorType()
+	{
+		x = 0;
+		y = 0;
+		z = 0;
+	}
+	float x, y, z;
+};
  
 struct DimondSquareBuffer  
 {

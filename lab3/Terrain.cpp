@@ -10,7 +10,7 @@ Terrain::Terrain(std::string name, ID3D11Device* device, ID3D11DeviceContext* de
 {
 	generateTerrain = false;
 
-	heightMap = nullptr;
+	terrainArray = nullptr;
 
 	xAxisWaveSettings.amplitude = 1;
 	yAxisWaveSettings.amplitude = 1;
@@ -42,10 +42,10 @@ Terrain::~Terrain()
 {
 	PlaneMesh::~PlaneMesh();
 
-	if (heightMap)
+	if (terrainArray)
 	{
-		delete[] heightMap;
-		heightMap = nullptr;
+		delete[] terrainArray;
+		terrainArray = nullptr;
 	}
 
 	if (startingHeightmap)
@@ -64,11 +64,11 @@ bool Terrain::InitializeTerrain(ID3D11Device* device, int terrainWidth, int terr
 	this->terrainWidth = terrainWidth;
 	this->terrainHeight = terrainHeight; 
 	// Create the structure to hold the terrain data.
-	this->heightMap = new HeightMapType[this->terrainWidth * this->terrainHeight];
+	this->terrainArray = new HeightMapType[this->terrainWidth * this->terrainHeight];
 	this->startingHeightmap = new HeightMapType[this->terrainWidth * this->terrainHeight];
 	this->perinNoiseValues = new double[this->terrainWidth * this->terrainHeight];
 	this->diamondSquarePoints;;
-	if (!this->heightMap)
+	if (!this->terrainArray)
 	{
 		return false;
 	}
@@ -82,9 +82,9 @@ bool Terrain::InitializeTerrain(ID3D11Device* device, int terrainWidth, int terr
 			 
 			double pelinNoise = SimplexNoise::noise(j, i, perlinNoiseFrequancy);
 			perinNoiseValues[index] = pelinNoise;
-			this->heightMap[index].x = (float)i;
-			this->heightMap[index].y = (float)height;
-			this->heightMap[index].z = (float)j;
+			this->terrainArray[index].x = (float)i;
+			this->terrainArray[index].y = (float)height;
+			this->terrainArray[index].z = (float)j;
 			startingHeightmap[index].y = (float)height;
 			diamondSquarePoints[index] = 0;
 
@@ -121,17 +121,17 @@ bool Terrain::CalculateNormals()
 			index3 = ((j + 1) * terrainHeight) + i;
 
 			// Get three vertices from the face.
-			vertex1[0] = heightMap[index1].x;
-			vertex1[1] = heightMap[index1].y;
-			vertex1[2] = heightMap[index1].z;
+			vertex1[0] = terrainArray[index1].x;
+			vertex1[1] = terrainArray[index1].y;
+			vertex1[2] = terrainArray[index1].z;
 
-			vertex2[0] = heightMap[index2].x;
-			vertex2[1] = heightMap[index2].y;
-			vertex2[2] = heightMap[index2].z;
+			vertex2[0] = terrainArray[index2].x;
+			vertex2[1] = terrainArray[index2].y;
+			vertex2[2] = terrainArray[index2].z;
 
-			vertex3[0] = heightMap[index3].x;
-			vertex3[1] = heightMap[index3].y;
-			vertex3[2] = heightMap[index3].z;
+			vertex3[0] = terrainArray[index3].x;
+			vertex3[1] = terrainArray[index3].y;
+			vertex3[2] = terrainArray[index3].z;
 
 			// Calculate the two vectors for this face.
 			vector1[0] = vertex1[0] - vertex3[0];
@@ -220,9 +220,9 @@ bool Terrain::CalculateNormals()
 			index = (j * terrainHeight) + i;
 
 			// Normalize the final shared normal for this vertex and store it in the height map array.
-			heightMap[index].nx = (sum[0] / length);
-			heightMap[index].ny = (sum[1] / length);
-			heightMap[index].nz = (sum[2] / length);
+			terrainArray[index].nx = (sum[0] / length);
+			terrainArray[index].ny = (sum[1] / length);
+			terrainArray[index].nz = (sum[2] / length);
 		}
 	}
 
@@ -237,31 +237,31 @@ bool Terrain::CalculateNormals()
 bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* sound)
 {
 
-	if (diamondSquareNeedRegenerated)
+	if (generateDiamondSquareTerrain)
 	{	
-		diamondSquareNeedRegenerated = false;
+		generateDiamondSquareTerrain = false;
 		GenerateDimondSquare();
 		terrainNeedReGeneration = true;
  		
 	}
 
-	if (faultLineDisplacementRegenerated)
+	if (generateFaultLinelineDisplacement)
 	{
-		faultLineDisplacementRegenerated = false;
+		generateFaultLinelineDisplacement = false;
 		GenerateFaultLineDisplacement();
 		terrainNeedReGeneration = true;
 
 	}
-	if (simplexNoiseRegenerated)
+	if (generateSimplexNoiseTerrain)
 	{		
-		simplexNoiseRegenerated = false;
+		generateSimplexNoiseTerrain = false;
 
 		GenerateSimplexNoiseNoise();
 		terrainNeedReGeneration = true;
 	}
-	if (fbmregenereed)
+	if (genereateFractionalBrownainNoise)
 	{
-		fbmregenereed = false;
+		genereateFractionalBrownainNoise = false;
 		GenerateFBmNoise();
 		terrainNeedReGeneration = true;
 
@@ -346,15 +346,15 @@ void Terrain::InitBuffers(ID3D11Device* device)
 
 														   // Bottom left.
 			// Upper right.
-			vertices[index].position = XMFLOAT3(heightMap[index4].x, heightMap[index4].y, heightMap[index4].z);
-			vertices[index].normal = XMFLOAT3(heightMap[index4].nx, heightMap[index4].ny, heightMap[index4].nz);
+			vertices[index].position = XMFLOAT3(terrainArray[index4].x, terrainArray[index4].y, terrainArray[index4].z);
+			vertices[index].normal = XMFLOAT3(terrainArray[index4].nx, terrainArray[index4].ny, terrainArray[index4].nz);
 			vertices[index].texture = XMFLOAT2(u + increment, v + increment);
 			indices[index] = index;
 			index++;
 			
 			//bottom left
-			vertices[index].position = XMFLOAT3(heightMap[index1].x, heightMap[index1].y, heightMap[index1].z);
-			vertices[index].normal = XMFLOAT3(heightMap[index1].nx, heightMap[index1].ny, heightMap[index1].nz);	
+			vertices[index].position = XMFLOAT3(terrainArray[index1].x, terrainArray[index1].y, terrainArray[index1].z);
+			vertices[index].normal = XMFLOAT3(terrainArray[index1].nx, terrainArray[index1].ny, terrainArray[index1].nz);	
 			vertices[index].texture = XMFLOAT2(u  , v );
 			indices[index] = index;
 			index++;
@@ -362,32 +362,32 @@ void Terrain::InitBuffers(ID3D11Device* device)
 		
 
 			// Bottom right.
-			vertices[index].position = XMFLOAT3(heightMap[index2].x, heightMap[index2].y, heightMap[index2].z);
-			vertices[index].normal = XMFLOAT3(heightMap[index2].nx, heightMap[index2].ny, heightMap[index2].nz);
+			vertices[index].position = XMFLOAT3(terrainArray[index2].x, terrainArray[index2].y, terrainArray[index2].z);
+			vertices[index].normal = XMFLOAT3(terrainArray[index2].nx, terrainArray[index2].ny, terrainArray[index2].nz);
 			vertices[index].texture = XMFLOAT2(u + increment , v );
 			indices[index] = index;
 			index++;
 			
 
 			// Upper right.
-			vertices[index].position = XMFLOAT3(heightMap[index4].x, heightMap[index4].y, heightMap[index4].z);
-			vertices[index].normal = XMFLOAT3(heightMap[index4].nx, heightMap[index4].ny, heightMap[index4].nz);
+			vertices[index].position = XMFLOAT3(terrainArray[index4].x, terrainArray[index4].y, terrainArray[index4].z);
+			vertices[index].normal = XMFLOAT3(terrainArray[index4].nx, terrainArray[index4].ny, terrainArray[index4].nz);
 			vertices[index].texture = XMFLOAT2(u + increment, v + increment);
 			indices[index] = index;
 			index++;
 
 
 			// Upper left.
-			vertices[index].position = XMFLOAT3(heightMap[index3].x, heightMap[index3].y, heightMap[index3].z);
-			vertices[index].normal = XMFLOAT3(heightMap[index3].nx, heightMap[index3].ny, heightMap[index3].nz);
+			vertices[index].position = XMFLOAT3(terrainArray[index3].x, terrainArray[index3].y, terrainArray[index3].z);
+			vertices[index].normal = XMFLOAT3(terrainArray[index3].nx, terrainArray[index3].ny, terrainArray[index3].nz);
 			vertices[index].texture = XMFLOAT2(u , v + increment);
 			indices[index] = index;
 			index++;
 
 	
 			// Bottom left.
-			vertices[index].position = XMFLOAT3(heightMap[index1].x, heightMap[index1].y, heightMap[index1].z);
-			vertices[index].normal = XMFLOAT3(heightMap[index1].nx, heightMap[index1].ny, heightMap[index1].nz);
+			vertices[index].position = XMFLOAT3(terrainArray[index1].x, terrainArray[index1].y, terrainArray[index1].z);
+			vertices[index].normal = XMFLOAT3(terrainArray[index1].nx, terrainArray[index1].ny, terrainArray[index1].nz);
 			vertices[index].texture = XMFLOAT2(u , v );
 			indices[index] = index;
 			index++;
@@ -503,28 +503,28 @@ void Terrain::Settings(bool* is_open , TerrainGeneration generation)
 			{
 				GenerateSimplexNoiseNoise();
 				terrainNeedReGeneration = true;
-				simplexNoiseRegenerated = true;
+				generateSimplexNoiseTerrain = true;
 
 			}
 			if (ImGui::DragFloat("Smoothing Value ", &smoothingValue))
 			{
 				terrainNeedReGeneration = true;
 
-				simplexNoiseRegenerated = true;
+				generateSimplexNoiseTerrain = true;
 			}
 			if (ImGui::InputFloat("Perlin Noise Frequancy", &perlinNoiseFrequancy))
 			{
 
 				terrainNeedReGeneration = true;
 
-				simplexNoiseRegenerated = true;
+				generateSimplexNoiseTerrain = true;
 			}
 
 			if (ImGui::InputFloat("Perlin Noise Height Range", &perlinNoiseHeightRange))
 			{
 				terrainNeedReGeneration = true;
 
-				simplexNoiseRegenerated = true;
+				generateSimplexNoiseTerrain = true;
 			}
 
 			
@@ -540,7 +540,7 @@ void Terrain::Settings(bool* is_open , TerrainGeneration generation)
 			}			
 			if (ImGui::DragFloat("Smoothing Value ", &smoothingValue))
 			{
-				fbmregenereed = true;
+				genereateFractionalBrownainNoise = true;
 				terrainNeedReGeneration = true;
 			}
 	
@@ -549,7 +549,7 @@ void Terrain::Settings(bool* is_open , TerrainGeneration generation)
 		{
 			if (ImGui::Checkbox("Enable Smoothing", &enableSmoothing))
 			{
-				faultLineDisplacementRegenerated = true;
+				generateFaultLinelineDisplacement = true;
 				GenerateFaultLineDisplacement();
 			}
 			if (ImGui::DragFloat("Smoothing Value ", &smoothingValue))
@@ -635,9 +635,9 @@ float Terrain::getMaxHeight()
 		{
 			index = (this->terrainHeight * j) + i;
 		
-			if (heightMap[index].y > topHight)
+			if (terrainArray[index].y > topHight)
 			{
-				topHight = heightMap[index].y;
+				topHight = terrainArray[index].y;
 			}
 		}
 	}
@@ -660,14 +660,19 @@ float Terrain::getMinHight()
 		{
 			index = (this->terrainHeight * j) + i;
 
-			if (heightMap[index].y < minHight)
+			if (terrainArray[index].y < minHight)
 			{
-				minHight = heightMap[index].y;
+				minHight = terrainArray[index].y;
 			}
 		}
 	}
 
 	return minHight;
+}
+
+void Terrain::setRandomSeed(int * seed)
+{
+	randomSeed = seed;
 }
 
 bool Terrain::LoadHeightMap(char * filename)
@@ -735,8 +740,8 @@ bool Terrain::LoadHeightMap(char * filename)
 	}
 
 	// Create the structure to hold the height map data.
-	heightMap = new HeightMapType[terrainWidth * terrainHeight];
-	if (!heightMap)
+	terrainArray = new HeightMapType[terrainWidth * terrainHeight];
+	if (!terrainArray)
 	{
 		return false;
 	}
@@ -753,9 +758,9 @@ bool Terrain::LoadHeightMap(char * filename)
 
 			index = (terrainHeight * j) + i;
 
-			heightMap[index].x = (float)i;
-			heightMap[index].y = (float)height;
-			heightMap[index].z = (float)j;
+			terrainArray[index].x = (float)i;
+			terrainArray[index].y = (float)height;
+			terrainArray[index].z = (float)j;
 
 			k += 3;
 		}
@@ -793,7 +798,7 @@ void Terrain::NormalizeHeightMap()
 
 						int indexDF = (this->terrainHeight * aroundX) + aroundZ;
 
-						totalHeight += heightMap[indexDF].y;
+						totalHeight += terrainArray[indexDF].y;
 						countPoints++;
 
 					}
@@ -803,7 +808,7 @@ void Terrain::NormalizeHeightMap()
 
 				if (countPoints != 0 && totalHeight != 0)
 				{
-					heightMap[(terrainHeight * j) + i].y = totalHeight / (float)countPoints;
+					terrainArray[(terrainHeight * j) + i].y = totalHeight / (float)countPoints;
 
 				}
 
@@ -821,14 +826,14 @@ void Terrain::GenerateDimondSquare()
  
 		DiamondSquare::DiamondSquareAlgorithm(diamondSquarePoints, terrainWidth, terrainHeight, diamondSquareRange);
 
-		//heightMap = startingHeightmap;
+		//terrainArray = startingHeightmap;
 		int indexDF = 0;
 		for (int j = 0; j < terrainHeight; j++)
 		{
 			for (int i = 0; i < terrainWidth; i++)
 			{
 				int indexDF = (this->terrainHeight * j) + i;
-				this->heightMap[indexDF].y = diamondSquarePoints[indexDF] ;
+				this->terrainArray[indexDF].y = diamondSquarePoints[indexDF] ;
 			}
 		}
 		 
@@ -854,11 +859,11 @@ void Terrain::GenerateSimplexNoiseNoise()
 		{
 			index = (this->terrainHeight * j) + i;
 
-			this->heightMap[index].x = (float)i;
+			this->terrainArray[index].x = (float)i;
 
 			double pelinNoise;
 
-			//if (simplexNoiseRegenerated)
+			//if (generateSimplexNoiseTerrain)
 			//{
 			//	pelinNoise =;
 			//	perinNoiseValues[index] = pelinNoise;
@@ -871,14 +876,14 @@ void Terrain::GenerateSimplexNoiseNoise()
 
 		
 			
-			this->heightMap[index].y = (float)SimplexNoise::noise(j, i, perlinNoiseFrequancy) * perlinNoiseHeightRange;
+			this->terrainArray[index].y = (float)SimplexNoise::noise(j, i, perlinNoiseFrequancy) * perlinNoiseHeightRange;
 
 		
-			this->heightMap[index].z = (float)j;
+			this->terrainArray[index].z = (float)j;
 
 		}
 	}
-	simplexNoiseRegenerated = false;
+	generateSimplexNoiseTerrain = false;
  
 }
 
@@ -896,16 +901,16 @@ void Terrain::GenerateFaultLineDisplacement()
 		{
 			index = (this->terrainHeight * j) + i;
 
-			this->heightMap[index].x = (float)i;
+			this->terrainArray[index].x = (float)i;
 
 
-			this->heightMap[index].y = (float)FaultLineDisplacement(i, j);
+			this->terrainArray[index].y = (float)FaultLineDisplacement(i, j);
 
 
-			this->heightMap[index].z = (float)j;
+			this->terrainArray[index].z = (float)j;
 		}
 	}
-	faultLineDisplacementRegenerated = false;
+	generateFaultLinelineDisplacement = false;
 }
 
 void Terrain::GenerateCellularAutomata()
@@ -935,17 +940,17 @@ void Terrain::GenerateCellularAutomata()
 
 				}
 
-				float center = this->heightMap[(this->terrainHeight * j) + i].y;
+				float center = this->terrainArray[(this->terrainHeight * j) + i].y;
 
-				float right = this->heightMap[(this->terrainHeight * j + 1) + i].y;
-				float left = this->heightMap[(this->terrainHeight * j - 1) + i].y;
-				float above = this->heightMap[(this->terrainHeight * j) + i - 1].y;
-				float bellow = this->heightMap[(this->terrainHeight * j) + i + 1].y;
+				float right = this->terrainArray[(this->terrainHeight * j + 1) + i].y;
+				float left = this->terrainArray[(this->terrainHeight * j - 1) + i].y;
+				float above = this->terrainArray[(this->terrainHeight * j) + i - 1].y;
+				float bellow = this->terrainArray[(this->terrainHeight * j) + i + 1].y;
 
-				float bottomRight = this->heightMap[(this->terrainHeight * j - 1) + i - 1].y;
-				float bottomLeft = this->heightMap[(this->terrainHeight * j - 1) + i + 1].y;
-				float topRight = this->heightMap[(this->terrainHeight * j + 1) + i - 1 - 1].y;
-				float topLeft = this->heightMap[(this->terrainHeight * j + 1) + i + 1 + 1].y;
+				float bottomRight = this->terrainArray[(this->terrainHeight * j - 1) + i - 1].y;
+				float bottomLeft = this->terrainArray[(this->terrainHeight * j - 1) + i + 1].y;
+				float topRight = this->terrainArray[(this->terrainHeight * j + 1) + i - 1 - 1].y;
+				float topLeft = this->terrainArray[(this->terrainHeight * j + 1) + i + 1 + 1].y;
 				float neibours[8];
 				neibours[0] = right;
 				neibours[1] = left;
@@ -965,7 +970,7 @@ void Terrain::GenerateCellularAutomata()
 		{
 			for (int i = 0; i < this->terrainWidth; i++)
 			{
-				this->heightMap[(this->terrainHeight * j) + i].y = newValues[(this->terrainHeight * j) + i];
+				this->terrainArray[(this->terrainHeight * j) + i].y = newValues[(this->terrainHeight * j) + i];
 			}
 		}
 	}
@@ -978,7 +983,7 @@ void Terrain::GenereatParticleDeposition()
 	numberOfHills = 1;
 	std::vector<VectorType> hillPoints;
 
-	std::mt19937 gen(*seed );
+	std::mt19937 gen(*randomSeed );
 
 	std::uniform_real_distribution<> disPosX(0, terrainWidth);
 	std::uniform_real_distribution<> disPosZ(0, terrainHeight);
@@ -990,7 +995,7 @@ void Terrain::GenereatParticleDeposition()
 		{
 			index = (this->terrainHeight * j) + i;
 
-			this->heightMap[index].y = 0;
+			this->terrainArray[index].y = 0;
 		}
 	}
 
@@ -998,7 +1003,7 @@ void Terrain::GenereatParticleDeposition()
 	{
 
 
-		std::mt19937 gen(*seed + k); 
+		std::mt19937 gen(*randomSeed + k); 
 
 		std::uniform_real_distribution<> disChanceOfHill(0, 100);
 
@@ -1021,14 +1026,14 @@ void Terrain::GenereatParticleDeposition()
 				{
 					if (i == hill.x && hill.z == j)
 					{
-						this->heightMap[index].y++;
+						this->terrainArray[index].y++;
 					}
 				}
 
-				if (this->heightMap[index].y > 0)
+				if (this->terrainArray[index].y > 0)
 				{
 
-					std::mt19937 gen(*seed + i * j +k);
+					std::mt19937 gen(*randomSeed + i * j +k);
 
 					std::uniform_real_distribution<> disChanceOfRoll(0, 100);
 					int rollHit = disChanceOfRoll(gen);
@@ -1043,7 +1048,7 @@ void Terrain::GenereatParticleDeposition()
 						{
 							if (j < terrainHeight)
 							{
-								heightMap[(terrainHeight * j ) + i].y++;
+								terrainArray[(terrainHeight * j ) + i].y++;
 							}
 							break;
 						}
@@ -1051,7 +1056,7 @@ void Terrain::GenereatParticleDeposition()
 						{
 							if (j > 1)
 							{
-								heightMap[(terrainHeight * j) + i].y++;
+								terrainArray[(terrainHeight * j) + i].y++;
 							}
 							break;
 						}
@@ -1059,7 +1064,7 @@ void Terrain::GenereatParticleDeposition()
 						{
 							if (i > 1)
 							{
-								heightMap[(terrainHeight * j ) + i].y++;
+								terrainArray[(terrainHeight * j ) + i].y++;
 							}
 							break;
 						}
@@ -1067,7 +1072,7 @@ void Terrain::GenereatParticleDeposition()
 						{
 							if (i < terrainHeight)
 							{
-								heightMap[(terrainHeight * j ) + i].y++;
+								terrainArray[(terrainHeight * j ) + i].y++;
 							}
 							break;
 						}
@@ -1076,7 +1081,7 @@ void Terrain::GenereatParticleDeposition()
 						//{
 						//	if (j < terrainHeight && i >0)
 						//	{
-						//		heightMap[(terrainHeight * j + 2) + i -2].y++;
+						//		terrainArray[(terrainHeight * j + 2) + i -2].y++;
 						//	}
 						//	break;
 						//}
@@ -1084,7 +1089,7 @@ void Terrain::GenereatParticleDeposition()
 						//{
 						//	if (j > 1 && i >0)
 						//	{
-						//		heightMap[(terrainHeight * j - 2) + i -2].y++;
+						//		terrainArray[(terrainHeight * j - 2) + i -2].y++;
 						//	}
 						//	break;
 						//}
@@ -1092,7 +1097,7 @@ void Terrain::GenereatParticleDeposition()
 						//{
 						//	if (i > 1 && j >1)
 						//	{
-						//		heightMap[(terrainHeight * j-2) + i - 2].y++;
+						//		terrainArray[(terrainHeight * j-2) + i - 2].y++;
 						//	}
 						//	break;
 						//}
@@ -1100,7 +1105,7 @@ void Terrain::GenereatParticleDeposition()
 						//{
 						//	if (i < terrainHeight && j >1)
 						//	{
-						//		heightMap[(terrainHeight * j - 2) + i + 2].y++;
+						//		terrainArray[(terrainHeight * j - 2) + i + 2].y++;
 						//	}
 						//	break;
 						//}
@@ -1115,8 +1120,8 @@ void Terrain::GenereatParticleDeposition()
 					
 				}
 
-				this->heightMap[index].x = (float)i;
- 				this->heightMap[index].z = (float)j;
+				this->terrainArray[index].x = (float)i;
+ 				this->terrainArray[index].z = (float)j;
 
 
 			}

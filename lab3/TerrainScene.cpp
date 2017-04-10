@@ -168,7 +168,7 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	std::random_device rd;
 	seed = rd();
 
-	terrain->seed = &seed;
+	terrain->setRandomSeed( &seed);
 
 	terrainGeneration->enableGPUEffect = true;
 
@@ -208,7 +208,7 @@ void TerrainScene::Update(Timer * timer)
 	// If needing to genereat rnadom numbers 
 	if (regenerateFaultLines)
 	{
-		terrain->faultLineDisplacementRegenerated = true;
+		terrain->generateFaultLinelineDisplacement = true;
 
 		regenerateFaultLines = false;
 		for (int i = 0; i <  MAX_FAULTLINE_ITERATIONS; i++)
@@ -389,7 +389,7 @@ void TerrainScene::Update(Timer * timer)
 	else if (regenerateDiamondSquare)
 	{
 		regenerateDiamondSquare = false;
-		terrain->diamondSquareNeedRegenerated = true;
+		terrain->generateDiamondSquareTerrain = true;
 		std::mt19937 gen(seed);
 		std::uniform_real_distribution<> dis(0, 1);
 
@@ -402,7 +402,7 @@ void TerrainScene::Update(Timer * timer)
 	else if (regenerateSimplexNoise)
 	{
 		regenerateSimplexNoise = false;
-		terrain->simplexNoiseRegenerated = true;
+		terrain->generateSimplexNoise = true;
 
 	}
 	if (regenerateCellularAutomata)
@@ -671,7 +671,7 @@ void TerrainScene::TerrainSettings(bool * is_open)
 			}
 			case TerrainGeneration::FaultLineDisplacement:
 			{
-				terrain->faultLineDisplacementRegenerated = true;
+				terrain->generateFaultLinelineDisplacement = true;
 				terrainGeneration->enableGPUEffect = true;
 				regenerateFaultLines = true;
 

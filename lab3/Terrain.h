@@ -5,79 +5,83 @@
  #include <stdio.h>
 #include "ShaderBuffers.h"
 
+ 
 /*
-Terrain Mesh
-
-@Author Alan Yeats
-
-Creates a mesh that can be used to create prosedural terrain
+* Terrain Mesh
+*
+* @author      Alan Yeats
+*
+* Creates a mesh that can be used to create prosedural terrain
 */
 class Terrain :	public PlaneMesh
 {
 
-	struct waveSettings
-	{
-	public:
-		enum WaveType {
-			sin,
-			cos,
-			tan
-		};
- 		float period;
-		float amplitude;
 
-		WaveType waveType;
 
-		
-	};
-
-private:
-	struct HeightMapType
-	{
-		float x, y, z;
-		float nx, ny, nz;
-	};
-	 
-	struct VectorType
-	{
-		VectorType(float x, float y, float z)
-		{
-			this->x = x;
-			this->y = y;
-			this->z = z;
-
-		}
-		VectorType()
-		{
-			x = 0;
-			y = 0;
-			z = 0;
-		}
-		float x, y, z;
-	};
 public:
+	// TODO: delete
+	bool particleDepositionRegeneate;
+
+
 
 	Terrain(std::string name, ID3D11Device * device, ID3D11DeviceContext * deviceContext, WCHAR * textureFilename, int resolution = 100);
 	~Terrain();
-	bool CalculateNormals();
 	bool InitializeTerrain(ID3D11Device*, int terrainWidth, int terrainHeight);
  	bool GenerateHeightMap(ID3D11Device * device, bool keydown, class Sound * sound);
 	void InitBuffers(ID3D11Device * device);
 	XMMATRIX SendData(ID3D11DeviceContext* deviceContext);
 	void Settings(bool * is_open, TerrainGeneration generation);
 
-	bool diamondSquareNeedRegenerated;
-	bool simplexNoiseRegenerated;
-	bool faultLineDisplacementRegenerated;
-	bool fbmregenereed;;
-	bool cellularAutomataRegenerate;
-	bool particleDepositionRegeneate;
-	int* seed;
+	/*
+	Will generate a dimoand square terrain and set terrain to such
+ 	*/
+	bool generateDiamondSquareTerrain;
+	/*
+	Will generate a Simplex Noise terrain and set terrain to such
+	*/
+	bool generateSimplexNoise;
+
+	/*
+	Will generate a Fault line displaymentterrain and set terrain to such
+	*/
+	bool generateFaultLinelineDisplacement;
+	
+	/*
+	Will generate a Fractional Brownian Noise terrain and set terrain to such
+	*/
+	bool genereateFractionalBrownainNoise;
+ 
+
 	FaultLineDisplacementBufferType* faultLineSettings;
 
+	/*
+	Gets the maxium hight level of the terrain 
+	@return the max hight of the terrain
+	*/
 	float getMaxHeight();
+	/*
+	Gets the miniumum hight level of the terrain
+	@return the max hight of the terrain
+	*/
 	float getMinHight();
+
+	/*
+	Set Random Seed
+	Sets the pointer to the random seed to be used
+	*/
+	void setRandomSeed(int* seed);
 private:
+
+	/*
+	Caculates and sets normals for the terrain 
+	*/
+	bool CalculateNormals();
+
+	/*
+	Array that holds the terrain hight map
+	*/
+	HeightMapType* terrainArray;
+
 
 
 	bool LoadHeightMap(char*);
@@ -86,6 +90,9 @@ private:
 	bool enableSmoothing;
 
  
+	/*
+	Caculates and applies dimond square algorithum
+	*/
 	void GenerateDimondSquare();
 	void GenerateSimplexNoiseNoise();
  	void GenerateFBmNoise();
@@ -114,8 +121,12 @@ private:
  	bool terrainNeedReGeneration;
 	bool generateTerrain;
 	int terrainWidth, terrainHeight;
-	HeightMapType* heightMap;
 	
+
+	/*
+	Pointer to the seed for terrain generation
+	*/
+	int* randomSeed;
 
 
 	float FaultLineDisplacement(int x, int z);
