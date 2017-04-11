@@ -8,33 +8,23 @@
 Terrain::Terrain(std::string name, ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, int resolution)
 : PlaneMesh(name,device, deviceContext, textureFilename, resolution)
 {
-	generateTerrain = false;
-
 	terrainArray = nullptr;
+	
+	diamondSquareRange = 12;
 
-	xAxisWaveSettings.amplitude = 1;
-	yAxisWaveSettings.amplitude = 1;
-	zAxisWaveSettings.amplitude = 1;
-
-
-	xAxisWaveSettings.period = 1;
-	yAxisWaveSettings.period = 1;
-	zAxisWaveSettings.period = 1;
-
-
-	xAxisWaveSettings.waveType = waveSettings::WaveType::cos;
-	yAxisWaveSettings.waveType = waveSettings::WaveType::cos;
-	zAxisWaveSettings.waveType = waveSettings::WaveType::cos;
-
-
-	diamondSquareRange = 10;
-
-	smoothingValue = false;
+	smoothingValue = true;
  
-	perlinNoiseFrequancy = 1;
-	perlinNoiseHeightRange = 1;
+	doesTerrainNeedRegenerated = true;
 
+	perlinNoiseFrequancy = 1;
+	
+	perlinNoiseHeightRange = 1.5f;
+
+	perlinNoiseFrequancy = 1.0f;
+	  
 	smoothingValue = 1;
+
+	useMusicData = false;
 }
 
 
@@ -47,11 +37,12 @@ Terrain::~Terrain()
 		delete[] terrainArray;
 		terrainArray = nullptr;
 	}
-
-	if (startingHeightmap)
+	 
+ 
+	if (faultLineSettings)
 	{
-		delete[] startingHeightmap;
-		startingHeightmap = nullptr;
+		delete faultLineSettings;
+		faultLineSettings = nullptr;
 	}
 
 }
@@ -65,9 +56,7 @@ bool Terrain::InitializeTerrain(ID3D11Device* device, int terrainWidth, int terr
 	this->terrainHeight = terrainHeight; 
 	// Create the structure to hold the terrain data.
 	this->terrainArray = new HeightMapType[this->terrainWidth * this->terrainHeight];
-	this->startingHeightmap = new HeightMapType[this->terrainWidth * this->terrainHeight];
-	this->perinNoiseValues = new double[this->terrainWidth * this->terrainHeight];
-	this->diamondSquarePoints;;
+ 	this->diamondSquarePoints;;
 	if (!this->terrainArray)
 	{
 		return false;
@@ -79,13 +68,11 @@ bool Terrain::InitializeTerrain(ID3D11Device* device, int terrainWidth, int terr
 		for (int i = 0; i<this->terrainWidth; i++)
 		{
 			index = (this->terrainHeight * j) + i;
-			 
-			double pelinNoise = SimplexNoise::noise(j, i, perlinNoiseFrequancy);
-			perinNoiseValues[index] = pelinNoise;
+			  
 			this->terrainArray[index].x = (float)i;
 			this->terrainArray[index].y = (float)height;
 			this->terrainArray[index].z = (float)j;
-			startingHeightmap[index].y = (float)height;
+ 
 			diamondSquarePoints[index] = 0;
 
 		}
@@ -241,7 +228,7 @@ bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* soun
 	{	
 		generateDiamondSquareTerrain = false;
 		GenerateDimondSquare();
-		terrainNeedReGeneration = true;
+		doesTerrainNeedRegenerated = true;
  		
 	}
 
@@ -249,7 +236,7 @@ bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* soun
 	{
 		generateFaultLinelineDisplacement = false;
 		GenerateFaultLineDisplacement();
-		terrainNeedReGeneration = true;
+		doesTerrainNeedRegenerated = true;
 
 	}
 	if (generateSimplexNoiseTerrain)
@@ -257,37 +244,32 @@ bool Terrain::GenerateHeightMap(ID3D11Device * device, bool keydown, Sound* soun
 		generateSimplexNoiseTerrain = false;
 
 		GenerateSimplexNoiseNoise();
-		terrainNeedReGeneration = true;
+		doesTerrainNeedRegenerated = true;
 	}
 	if (genereateFractionalBrownainNoise)
 	{
 		genereateFractionalBrownainNoise = false;
 		GenerateFBmNoise();
-		terrainNeedReGeneration = true;
+		doesTerrainNeedRegenerated = true;
 
 	}
-	if (cellularAutomataRegenerate)
-	{
-		cellularAutomataRegenerate = false;
-		GenerateCellularAutomata();
-		terrainNeedReGeneration = true;
-	}
+ 
 
 	if (particleDepositionRegeneate)
 	{
 		particleDepositionRegeneate = false;
 		GenereatParticleDeposition();
-		terrainNeedReGeneration = true;
+		doesTerrainNeedRegenerated = true;
 
 	}
 
-	if (terrainNeedReGeneration )
+	if (doesTerrainNeedRegenerated )
 	{
-		terrainNeedReGeneration = false;
+		doesTerrainNeedRegenerated = false;
 
-		if (enableSmoothing)
+		if (isUsingSmoothing)
 		{
-			NormalizeHeightMap();
+			SmoothTerrain();
 		}
 		InitBuffers(device);
  
@@ -471,7 +453,7 @@ XMMATRIX Terrain::SendData(ID3D11DeviceContext * deviceContext)
 		XMMatrixRotationY(rotate.y) *  XMMatrixRotationZ(rotate.z);
 }
 
-void Terrain::Settings(bool* is_open , TerrainGeneration generation)
+void Terrain::GUISettings(bool* is_open , TerrainGeneration generation)
 {
 	if (*is_open == true)
 	{
@@ -479,50 +461,50 @@ void Terrain::Settings(bool* is_open , TerrainGeneration generation)
 		if (generation == TerrainGeneration::DiamondSquare)
 		{
 
-			if (ImGui::Checkbox("Enable Smoothing", &enableSmoothing))
+			if (ImGui::Checkbox("Enable Smoothing", &isUsingSmoothing))
 			{
-				terrainNeedReGeneration = true;
+				doesTerrainNeedRegenerated = true;
 				GenerateDimondSquare();
 			}
 			if (ImGui::DragFloat("Smoothing Value ", &smoothingValue))
 			{
-				terrainNeedReGeneration = true;
+				doesTerrainNeedRegenerated = true;
 
  			}
 
 			if (ImGui::InputInt("Range", &diamondSquareRange))
 			{
 				GenerateDimondSquare();
-				terrainNeedReGeneration = true;
+				doesTerrainNeedRegenerated = true;
 			}
 		}
 		else if (generation == TerrainGeneration::SimplexNoise)
 		{
 
-			if (ImGui::Checkbox("Enable Smoothing", &enableSmoothing))
+			if (ImGui::Checkbox("Enable Smoothing", &isUsingSmoothing))
 			{
 				GenerateSimplexNoiseNoise();
-				terrainNeedReGeneration = true;
+				doesTerrainNeedRegenerated = true;
 				generateSimplexNoiseTerrain = true;
 
 			}
 			if (ImGui::DragFloat("Smoothing Value ", &smoothingValue))
 			{
-				terrainNeedReGeneration = true;
+				doesTerrainNeedRegenerated = true;
 
 				generateSimplexNoiseTerrain = true;
 			}
 			if (ImGui::InputFloat("Perlin Noise Frequancy", &perlinNoiseFrequancy))
 			{
 
-				terrainNeedReGeneration = true;
+				doesTerrainNeedRegenerated = true;
 
 				generateSimplexNoiseTerrain = true;
 			}
 
 			if (ImGui::InputFloat("Perlin Noise Height Range", &perlinNoiseHeightRange))
 			{
-				terrainNeedReGeneration = true;
+				doesTerrainNeedRegenerated = true;
 
 				generateSimplexNoiseTerrain = true;
 			}
@@ -532,29 +514,29 @@ void Terrain::Settings(bool* is_open , TerrainGeneration generation)
 		else if (generation == TerrainGeneration::FractionalBrowningNoise)
 		{
 
-			if (ImGui::Checkbox("Enable Smoothing", &enableSmoothing))
+			if (ImGui::Checkbox("Enable Smoothing", &isUsingSmoothing))
 			{
 				GenerateFBmNoise();
-				terrainNeedReGeneration = true;
+				doesTerrainNeedRegenerated = true;
 
 			}			
 			if (ImGui::DragFloat("Smoothing Value ", &smoothingValue))
 			{
 				genereateFractionalBrownainNoise = true;
-				terrainNeedReGeneration = true;
+				doesTerrainNeedRegenerated = true;
 			}
 	
 		}
 		else if (generation == TerrainGeneration::FaultLineDisplacement)
 		{
-			if (ImGui::Checkbox("Enable Smoothing", &enableSmoothing))
+			if (ImGui::Checkbox("Enable Smoothing", &isUsingSmoothing))
 			{
 				generateFaultLinelineDisplacement = true;
 				GenerateFaultLineDisplacement();
 			}
 			if (ImGui::DragFloat("Smoothing Value ", &smoothingValue))
 			{
-				terrainNeedReGeneration = true;
+				doesTerrainNeedRegenerated = true;
 
  			}
 		}
@@ -599,7 +581,7 @@ void Terrain::Settings(bool* is_open , TerrainGeneration generation)
 			}
 
 			 
-				if (ImGui::Checkbox("Enable Smoothing", &enableSmoothing))
+				if (ImGui::Checkbox("Enable Smoothing", &isUsingSmoothing))
 				{
 					numberOfHills = 0;
  					particleDepositionRegeneate = true;
@@ -608,7 +590,7 @@ void Terrain::Settings(bool* is_open , TerrainGeneration generation)
 				if (ImGui::DragFloat("Smoothing Value ", &smoothingValue))
 				{
 					numberOfHills = 0;
- 					terrainNeedReGeneration = true;
+ 					doesTerrainNeedRegenerated = true;
 
 				}
 		}
@@ -674,106 +656,8 @@ void Terrain::setRandomSeed(int * seed)
 {
 	randomSeed = seed;
 }
-
-bool Terrain::LoadHeightMap(char * filename)
-{
-	FILE* filePtr;
-	int error;
-	unsigned int count;
-	BITMAPFILEHEADER bitmapFileHeader;
-	BITMAPINFOHEADER bitmapInfoHeader;
-	int imageSize, i, j, k, index;
-	unsigned char* bitmapImage;
-	unsigned char height;
-
-
-	// Open the height map file in binary.
-	error = fopen_s(&filePtr, filename, "rb");
-	if (error != 0)
-	{
-		return false;
-	}
-
-	// Read in the file header.
-	count = fread(&bitmapFileHeader, sizeof(BITMAPFILEHEADER), 1, filePtr);
-	if (count != 1)
-	{
-		return false;
-	}
-
-	// Read in the bitmap info header.
-	count = fread(&bitmapInfoHeader, sizeof(BITMAPINFOHEADER), 1, filePtr);
-	if (count != 1)
-	{
-		return false;
-	}
-
-	// Save the dimensions of the terrain.
-	terrainWidth = bitmapInfoHeader.biWidth;
-	terrainHeight = bitmapInfoHeader.biHeight;
-
-	// Calculate the size of the bitmap image data.
-	imageSize = terrainWidth * terrainHeight * 3;
-
-	// Allocate memory for the bitmap image data.
-	bitmapImage = new unsigned char[imageSize];
-	if (!bitmapImage)
-	{
-		return false;
-	}
-
-	// Move to the beginning of the bitmap data.
-	fseek(filePtr, bitmapFileHeader.bfOffBits, SEEK_SET);
-
-	// Read in the bitmap image data.
-	count = fread(bitmapImage, 1, imageSize, filePtr);
-	if (count != imageSize)
-	{
-		return false;
-	}
-
-	// Close the file.
-	error = fclose(filePtr);
-	if (error != 0)
-	{
-		return false;
-	}
-
-	// Create the structure to hold the height map data.
-	terrainArray = new HeightMapType[terrainWidth * terrainHeight];
-	if (!terrainArray)
-	{
-		return false;
-	}
-
-	// Initialize the position in the image data buffer.
-	k = 0;
-
-	// Read the image data into the height map.
-	for (j = 0; j<terrainHeight; j++)
-	{
-		for (i = 0; i<terrainWidth; i++)
-		{
-			height = bitmapImage[k];
-
-			index = (terrainHeight * j) + i;
-
-			terrainArray[index].x = (float)i;
-			terrainArray[index].y = (float)height;
-			terrainArray[index].z = (float)j;
-
-			k += 3;
-		}
-	}
-
-	// Release the bitmap image data.
-	delete[] bitmapImage;
-	bitmapImage = 0;
-
-	return true;
-}
-
-void Terrain::NormalizeHeightMap()
+ 
+void Terrain::SmoothTerrain()
 {
 	int i, j;
 
@@ -822,25 +706,19 @@ void Terrain::NormalizeHeightMap()
 void Terrain::GenerateDimondSquare()
 {
 
+	DiamondSquare::DiamondSquareAlgorithm(diamondSquarePoints, terrainWidth, terrainHeight, diamondSquareRange,*randomSeed);
 
- 
-		DiamondSquare::DiamondSquareAlgorithm(diamondSquarePoints, terrainWidth, terrainHeight, diamondSquareRange);
-
-		//terrainArray = startingHeightmap;
-		int indexDF = 0;
-		for (int j = 0; j < terrainHeight; j++)
+	//terrainArray = startingHeightmap;
+	int indexDF = 0;
+	for (int j = 0; j < terrainHeight; j++)
+	{
+		for (int i = 0; i < terrainWidth; i++)
 		{
-			for (int i = 0; i < terrainWidth; i++)
-			{
-				int indexDF = (this->terrainHeight * j) + i;
-				this->terrainArray[indexDF].y = diamondSquarePoints[indexDF] ;
-			}
+			int indexDF = (this->terrainHeight * j) + i;
+			this->terrainArray[indexDF].y = diamondSquarePoints[indexDF] ;
 		}
+	}
 		 
-		 
-
-
-
 	
 }
 
@@ -949,8 +827,8 @@ void Terrain::GenerateCellularAutomata()
 
 				float bottomRight = this->terrainArray[(this->terrainHeight * j - 1) + i - 1].y;
 				float bottomLeft = this->terrainArray[(this->terrainHeight * j - 1) + i + 1].y;
-				float topRight = this->terrainArray[(this->terrainHeight * j + 1) + i - 1 - 1].y;
-				float topLeft = this->terrainArray[(this->terrainHeight * j + 1) + i + 1 + 1].y;
+				float topRight = this->terrainArray[(this->terrainHeight * j + 1) + i - 1 ].y;
+				float topLeft = this->terrainArray[(this->terrainHeight * j + 1) + i + 1].y;
 				float neibours[8];
 				neibours[0] = right;
 				neibours[1] = left;
@@ -985,9 +863,13 @@ void Terrain::GenereatParticleDeposition()
 
 	std::mt19937 gen(*randomSeed );
 
-	std::uniform_real_distribution<> disPosX(0, terrainWidth);
+ 	std::uniform_real_distribution<> disPosX(0, terrainWidth);
 	std::uniform_real_distribution<> disPosZ(0, terrainHeight);
-	hillPoints.push_back(VectorType((int)disPosX(gen), 0, (int)disPosZ(gen)));
+ 	int randomX = disPosX(gen);
+	int randomY = disPosZ(gen);
+
+
+	hillPoints.push_back(VectorType((int)randomX, 0, (int)randomY));
 
 	for (int j = 0; j < this->terrainHeight; j++)
 	{
@@ -998,6 +880,10 @@ void Terrain::GenereatParticleDeposition()
 			this->terrainArray[index].y = 0;
 		}
 	}
+
+	index = (this->terrainHeight * randomX) + randomY;
+
+	this->terrainArray[index].y++;
 
 	for (int k= 0; k< particleDepositionIterations;k++)
 	{
@@ -1012,7 +898,14 @@ void Terrain::GenereatParticleDeposition()
 		{
 			numberOfHills++;
 
-			hillPoints.push_back(VectorType((int)disPosX(gen), 0,(int) disPosZ(gen)));
+			randomX = disPosX(gen);
+			randomY = disPosZ(gen);
+
+			hillPoints.push_back(VectorType((int)randomX, 0, (int)randomY)); 
+
+			index = (this->terrainHeight * randomX) + randomY;
+
+			this->terrainArray[index].y++;
 
 
 		}
@@ -1022,33 +915,27 @@ void Terrain::GenereatParticleDeposition()
 			{
 				index = (this->terrainHeight * j) + i;
 
-				for (VectorType hill : hillPoints)
-				{
-					if (i == hill.x && hill.z == j)
-					{
-						this->terrainArray[index].y++;
-					}
-				}
-
+			  
 				if (this->terrainArray[index].y > 0)
 				{
-
+ 					this->terrainArray[index].y++;
 					std::mt19937 gen(*randomSeed + i * j +k);
 
 					std::uniform_real_distribution<> disChanceOfRoll(0, 100);
 					int rollHit = disChanceOfRoll(gen);
 					if (chanceOfRoll > rollHit)
 					{
-						std::uniform_real_distribution<> disMoveDir(0, 4);
+						std::uniform_real_distribution<> disMoveDir(0, 3);
 
 						int moveDir = disMoveDir(gen);
-						switch (moveDir)
+
+						 switch (moveDir)
 						{
 						case 0:
 						{
 							if (j < terrainHeight)
 							{
-								terrainArray[(terrainHeight * j ) + i].y++;
+								terrainArray[(terrainHeight * (j + 1 )) + i].y++;
 							}
 							break;
 						}
@@ -1056,7 +943,7 @@ void Terrain::GenereatParticleDeposition()
 						{
 							if (j > 1)
 							{
-								terrainArray[(terrainHeight * j) + i].y++;
+								terrainArray[(terrainHeight * (j -1)) + i].y++;
 							}
 							break;
 						}
@@ -1064,7 +951,8 @@ void Terrain::GenereatParticleDeposition()
 						{
 							if (i > 1)
 							{
-								terrainArray[(terrainHeight * j ) + i].y++;
+								terrainArray[(terrainHeight * j) + i - 1].y++;
+ 								 
 							}
 							break;
 						}
@@ -1072,8 +960,8 @@ void Terrain::GenereatParticleDeposition()
 						{
 							if (i < terrainHeight)
 							{
-								terrainArray[(terrainHeight * j ) + i].y++;
-							}
+								terrainArray[(terrainHeight * j)+ i + 1].y++;
+ 							}
 							break;
 						}
 
@@ -1115,15 +1003,7 @@ void Terrain::GenereatParticleDeposition()
 					}
 					
 				}
-				else
-				{
-					
-				}
-
-				this->terrainArray[index].x = (float)i;
- 				this->terrainArray[index].z = (float)j;
-
-
+ 
 			}
 		}
 	}

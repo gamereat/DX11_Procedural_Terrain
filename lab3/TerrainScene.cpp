@@ -402,13 +402,13 @@ void TerrainScene::Update(Timer * timer)
 	else if (regenerateSimplexNoise)
 	{
 		regenerateSimplexNoise = false;
-		terrain->generateSimplexNoise = true;
+		terrain->generateSimplexNoiseTerrain = true;
 
 	}
 	if (regenerateCellularAutomata)
 	{
 		regenerateCellularAutomata = false;
-		terrain->cellularAutomataRegenerate = true;
+		terrain->generateSimplexNoiseTerrain = true;
 
 	}
 
@@ -778,7 +778,7 @@ void TerrainScene::TerrainSettings(bool * is_open)
 		if (!terrainGeneration->enableGPUEffect)
 		{
 			bool f = true;
-			terrain->Settings(&f, terrainGeneration->terrainGenerationType);
+			terrain->GUISettings(&f, terrainGeneration->terrainGenerationType);
 		}
 
 

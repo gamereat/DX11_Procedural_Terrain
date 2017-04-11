@@ -10,6 +10,8 @@ Used to hold buffer stucts used accross shader clasess
 
 */
 
+const int WIDTH_OF_TERRAIN = 129;
+const int HEIGHT_OF_TERRAIN = 129;
 
 const int NUM_LIGHTS = 4;
 
@@ -90,7 +92,8 @@ enum TerrainGeneration
 	FractionalBrowningNoise,
 	SimplexNoise,
 	DiamondSquare,
-	ParticleDeposition
+	ParticleDeposition
+
 
 };
 

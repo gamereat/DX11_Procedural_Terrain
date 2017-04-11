@@ -14,10 +14,7 @@
 * Creates a mesh that can be used to create prosedural terrain
 */
 class Terrain :	public PlaneMesh
-{
-
-
-
+{ 
 public:
 	// TODO: delete
 	bool particleDepositionRegeneate;
@@ -30,7 +27,15 @@ public:
  	bool GenerateHeightMap(ID3D11Device * device, bool keydown, class Sound * sound);
 	void InitBuffers(ID3D11Device * device);
 	XMMATRIX SendData(ID3D11DeviceContext* deviceContext);
-	void Settings(bool * is_open, TerrainGeneration generation);
+
+
+	/*
+	GUI settings 
+	@param  is_open			if the terrain is open
+	@param  generation		The generation type to use 
+
+	*/
+	void GUISettings(bool * is_open, TerrainGeneration generation);
 
 	/*
 	Will generate a dimoand square terrain and set terrain to such
@@ -39,7 +44,7 @@ public:
 	/*
 	Will generate a Simplex Noise terrain and set terrain to such
 	*/
-	bool generateSimplexNoise;
+	bool generateSimplexNoiseTerrain;
 
 	/*
 	Will generate a Fault line displaymentterrain and set terrain to such
@@ -51,7 +56,9 @@ public:
 	*/
 	bool genereateFractionalBrownainNoise;
  
-
+	/*
+	The fault line displacment settings to use 
+	*/
 	FaultLineDisplacementBufferType* faultLineSettings;
 
 	/*
@@ -77,60 +84,125 @@ private:
 	*/
 	bool CalculateNormals();
 
+
+	 
 	/*
-	Array that holds the terrain hight map
+	Will smooth the given terrain based off neibours 
 	*/
-	HeightMapType* terrainArray;
-
-
-
-	bool LoadHeightMap(char*);
-	void NormalizeHeightMap();
-	float smoothingValue;
-	bool enableSmoothing;
-
- 
+	void SmoothTerrain();
+	
 	/*
 	Caculates and applies dimond square algorithum
 	*/
 	void GenerateDimondSquare();
+	/*
+	Caculates and applies simplex noise
+	*/
 	void GenerateSimplexNoiseNoise();
- 	void GenerateFBmNoise();
+	/*
+	Caculate and applies frastical browning motion
+	*/
+	void GenerateFBmNoise();
+	/*
+	Caculates and applies fault line displaments
+	*/
 	void GenerateFaultLineDisplacement();
+	/*
+	TODO: needs replaced
+	*/
 	void GenerateCellularAutomata();
+	/*
+	TODO: needs updating
+	*/
 	void GenereatParticleDeposition();
 
-
-	int particleDepositionIterations;
-	int numberOfHills;	
+	/*
+	TODO: Needs updating
+	*/
 	float CellularAutomataRule(float neibours[8], float center);
+
+
+	/*
+	Will work out the fault line displacement value for a given value 
+	*/
+	float FaultLineDisplacement(int x, int z);
+
+
+	/*
+	The scale of the number of neibour around point should create smoothing from
+	*/
+	float smoothingValue;
+
+	/*
+	if smoothing is in use
+	*/
+	bool isUsingSmoothing;
+
+	/*
+	Array that holds the terrain hight map
+	*/
+	HeightMapType* terrainArray;
+	
+	/*
+	The number of iteration for particle displacment 
+	*/
+	int particleDepositionIterations;
+
+	/*
+	
+	*/
+	int numberOfHills;	
 	int cellularAutomationIterations;
 	int chanceOfNewHill;
 	float chanceOfRoll;
 
+	/*
+	The range used for diamond square
+	*/
 	int diamondSquareRange;
-	bool resetTerrain; 
+ 
+	/*
+	Resets the terriain
+	*/
+	bool resetTerrain;
 
-	double* perinNoiseValues;
+	/*
+	Frequance of perlin noise ( used for both x and z)
+	*/
 	float perlinNoiseFrequancy;
+	
+	/*
+	Frequance of perlin noise ( used for both x and z)
+	*/
 	float perlinNoiseHeightRange;
 
-	float diamondSquarePoints[129 * 129];
+	/*
+	The points used told temparly hold diamond square values before applying to terrain
+	*/
+	float diamondSquarePoints[WIDTH_OF_TERRAIN * HEIGHT_OF_TERRAIN];
 
+	/*
+	If terrain will be affect by built in audio
+	*/
 	bool useMusicData;
- 	bool terrainNeedReGeneration;
-	bool generateTerrain;
-	int terrainWidth, terrainHeight;
-	
 
+	/*
+	if the terrain needs to regenerated
+	*/
+ 	bool doesTerrainNeedRegenerated;
+	 
+	/*
+	The terrain width
+	*/
+	int terrainWidth;
+	/*
+	The terrain height
+	*/
+	int terrainHeight;
+	
 	/*
 	Pointer to the seed for terrain generation
 	*/
 	int* randomSeed;
-
-
-	float FaultLineDisplacement(int x, int z);
-	HeightMapType* startingHeightmap;
-	waveSettings xAxisWaveSettings, yAxisWaveSettings, zAxisWaveSettings;
+	  
 };
-

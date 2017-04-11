@@ -1,8 +1,15 @@
 #pragma once
 
-// Fratical brownian motion noise functions
-// Expanded from 
-//https://github.com/SRombauts/SimplexNoise
+
+/*
+* Fractional brownian motion
+*
+* @author   Alan Yeats
+*
+* Used to create diamond square noise 
+* exanded upon bellow link
+* @See https://github.com/SRombauts/SimplexNoise
+*/
 static class FractionalBrownianMotion
 {
 public:
@@ -34,9 +41,12 @@ public:
 	static float FBm(float x, float y, int octaves,float pelinFrequancy);
 private:
 	/*
-
+	The frequency of fbm
 	*/
 	static float frequency;  
+	/*
+	Current amplitude of the terrain
+	*/
 	static float amplitude;   
 	static float lacunarity;  
 	static float persistence; 
