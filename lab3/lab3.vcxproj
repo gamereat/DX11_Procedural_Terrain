@@ -101,6 +101,7 @@
     <ClCompile Include="..\ApplicationSettings.cpp" />
     <ClCompile Include="..\MiniIni\minIni.cpp" />
     <ClCompile Include="baseApp.cpp" />
+    <ClCompile Include="ChromaticAberrationsShader.cpp" />
     <ClCompile Include="ColourShader.cpp" />
     <ClCompile Include="DepthShader.cpp" />
     <ClCompile Include="DiamondSquare.cpp" />
@@ -111,6 +112,7 @@
     <ClCompile Include="LSystemScene.cpp" />
     <ClCompile Include="LSystemShader.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="PostProcessingChromaticAberration.cpp" />
     <ClCompile Include="SimplexNoise.cpp" />
     <ClCompile Include="PostProccessingDownScale.cpp" />
     <ClCompile Include="PostProccessingUpScale.cpp" />
@@ -130,6 +132,7 @@
     <ClInclude Include="..\MiniIni\minGlue.h" />
     <ClInclude Include="..\MiniIni\minIni.hpp" />
     <ClInclude Include="baseApp.h" />
+    <ClInclude Include="ChromaticAberrationsShader.h" />
     <ClInclude Include="ColourShader.h" />
     <ClInclude Include="DepthShader.h" />
     <ClInclude Include="DiamondSquare.h" />
@@ -139,6 +142,7 @@
     <ClInclude Include="LSystem.h" />
     <ClInclude Include="LSystemScene.h" />
     <ClInclude Include="LSystemShader.h" />
+    <ClInclude Include="PostProcessingChromaticAberration.h" />
     <ClInclude Include="SimplexNoise.h" />
     <ClInclude Include="PostProccessingDownScale.h" />
     <ClInclude Include="PostProccessingUpScale.h" />
@@ -155,6 +159,12 @@
     <ClInclude Include="WaterShader.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="shaders\ChromaticAberration_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\ChromaticAberration_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="shaders\colour_ps.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
@@ -207,6 +217,9 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="shaders\water_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="shaders\water_vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>

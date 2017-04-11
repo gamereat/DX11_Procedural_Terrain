@@ -149,7 +149,7 @@ void BaseApp::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHe
 
 	postPro.Init(m_Direct3D, hwnd, m_Timer);
 	// set starting scene to be terrain scene
-	currentScene = lSystemScene;
+	currentScene = terrainScene;
 
 	// set my lights up correcntly for current scene
 	currentScene->ResetLights(lights);

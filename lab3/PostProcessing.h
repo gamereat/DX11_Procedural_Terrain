@@ -1,12 +1,10 @@
 #pragma once
  
 #include "../DXFramework/OrthoMesh.h"
-
 #include "../DXFramework/baseapplication.h"
 #include "../DXFramework/RenderTexture.h"
 #include "TextureShader.h"
-
-
+#include "PostProcessingChromaticAberration.h"
 #include "PostProccessingDownScale.h"
 #include "PostProccessingUpScale.h"
 #include "../DXFramework/D3D.h"
@@ -69,7 +67,10 @@ private:
 	*/
 	PostProccessingUpScale* UpScale;
 	
-
+	/*
+	Chromo aberation prost procc effect
+	*/
+	PostProcessingChromaticAberration* chromoAberration;
 
 	/*
 	Orthomesh created after the image has been downscaled. Used for each post processsing effect

@@ -16,6 +16,27 @@ const int HEIGHT_OF_TERRAIN = 129;
 const int NUM_LIGHTS = 4;
 
 const int MAX_FAULTLINE_ITERATIONS = 2500;
+const int NUMBER_LSYSTEMS = 11;
+
+
+//http://algorithmicbotany.org/papers/abop/abop-ch1.pdf
+enum lSystemTypes
+{
+	DragonCurve,
+	KochCurve,
+	SierpinskisCarpet,
+	HeighwayDragon,
+	JoinedCrossCurves,
+	modifiedKoch1,
+	modifiedKoch2,
+	modifiedKoch3,
+	modifiedKoch4,
+	modifiedKoch5,
+	modifiedKoch6,
+};
+
+
+
 
 struct waveSettings
 {
@@ -80,7 +101,12 @@ struct FractionalBrowningNoiseBuffer
 	float fbnPersistence;
 	float fbnPelinNoiseFreqnacy;
 	float heightScale;
-	float fbnPadding;
+ 
+	bool useAbs;
+	XMFLOAT3 fbmPadding;
+
+	bool useRidged;
+
 
 };
 /*

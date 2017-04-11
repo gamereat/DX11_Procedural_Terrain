@@ -393,7 +393,9 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, con
 	fbnPtr->fbnFrequancy = fractionalBrowningNoiseSettings->fbnFrequancy;
 	fbnPtr->fbnLacunarity = fractionalBrowningNoiseSettings->fbnLacunarity;
 	fbnPtr->fbnOctaves= fractionalBrowningNoiseSettings->fbnOctaves;
-	fbnPtr->fbnPadding = 0;
+	fbnPtr->useAbs = fractionalBrowningNoiseSettings->useAbs;
+	fbnPtr->useRidged = fractionalBrowningNoiseSettings->useRidged;
+	fbnPtr->fbmPadding = XMFLOAT3(0, 0, 0);
 	fbnPtr->heightScale = fractionalBrowningNoiseSettings->heightScale;
 	fbnPtr->fbnPelinNoiseFreqnacy = fractionalBrowningNoiseSettings->fbnPelinNoiseFreqnacy;
 	fbnPtr->fbnPersistence  = fractionalBrowningNoiseSettings->fbnPersistence;

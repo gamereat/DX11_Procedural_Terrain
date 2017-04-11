@@ -12,7 +12,7 @@ Terrain::Terrain(std::string name, ID3D11Device* device, ID3D11DeviceContext* de
 	
 	diamondSquareRange = 12;
 
-	smoothingValue = true;
+	isUsingSmoothing = true;
  
 	doesTerrainNeedRegenerated = true;
 
@@ -739,21 +739,6 @@ void Terrain::GenerateSimplexNoiseNoise()
 
 			this->terrainArray[index].x = (float)i;
 
-			double pelinNoise;
-
-			//if (generateSimplexNoiseTerrain)
-			//{
-			//	pelinNoise =;
-			//	perinNoiseValues[index] = pelinNoise;
-
-			//}
-			//else
-			//{
-			//	pelinNoise = perinNoiseValues[index];
-			//}
-
-		
-			
 			this->terrainArray[index].y = (float)SimplexNoise::noise(j, i, perlinNoiseFrequancy) * perlinNoiseHeightRange;
 
 		
@@ -767,6 +752,30 @@ void Terrain::GenerateSimplexNoiseNoise()
 
 void Terrain::GenerateFBmNoise()
 {
+
+	int index = 0;
+
+	FractionalBrownianMotion::set_amplitude(fBMSettings->fbnAmplitude);
+	FractionalBrownianMotion::set_frequency(fBMSettings->fbnFrequancy);
+	FractionalBrownianMotion::set_lacunarity(fBMSettings->fbnLacunarity);
+	FractionalBrownianMotion::set_gain(fBMSettings->fbnPersistence);
+ 	// Initialise the data in the height map (flat).
+	for (int j = 0; j < this->terrainHeight; j++)
+	{
+		for (int i = 0; i < this->terrainWidth; i++)
+		{
+			index = (this->terrainHeight * j) + i;
+
+			this->terrainArray[index].x = (float)i;
+
+			this->terrainArray[index].y = (float)FractionalBrownianMotion::FBm(i, j,fBMSettings->fbnOctaves, fBMSettings->fbnPelinNoiseFreqnacy, fBMSettings->useAbs, fBMSettings->useRidged) * fBMSettings->heightScale;
+
+
+			this->terrainArray[index].z = (float)j;
+
+		}
+	}
+	generateSimplexNoiseTerrain = false;
 }
 
 void Terrain::GenerateFaultLineDisplacement()
@@ -791,73 +800,11 @@ void Terrain::GenerateFaultLineDisplacement()
 	generateFaultLinelineDisplacement = false;
 }
 
-void Terrain::GenerateCellularAutomata()
-{
-	int index;
-
-	// start by putting though random noise 
-	perlinNoiseHeightRange = 1;
-	perlinNoiseFrequancy = 1;
-	GenerateSimplexNoiseNoise();
-
-	float* newValues = new float[terrainHeight *  terrainWidth] ;
-	for (int k = 0; k < cellularAutomationIterations; k++)
-	{
-		for (int j = 0; j < this->terrainHeight; j++)
-		{
-			for (int i = 0; i < this->terrainWidth; i++)
-			{
-				index = (this->terrainHeight * j) + i;
-
-				// check if a edge 
-
-				if (i == 0 || i == this->terrainWidth  || j == 0 || j == this->terrainHeight )
-				{
-					newValues[(this->terrainHeight * j) + i] = 0;
-					continue;
-
-				}
-
-				float center = this->terrainArray[(this->terrainHeight * j) + i].y;
-
-				float right = this->terrainArray[(this->terrainHeight * j + 1) + i].y;
-				float left = this->terrainArray[(this->terrainHeight * j - 1) + i].y;
-				float above = this->terrainArray[(this->terrainHeight * j) + i - 1].y;
-				float bellow = this->terrainArray[(this->terrainHeight * j) + i + 1].y;
-
-				float bottomRight = this->terrainArray[(this->terrainHeight * j - 1) + i - 1].y;
-				float bottomLeft = this->terrainArray[(this->terrainHeight * j - 1) + i + 1].y;
-				float topRight = this->terrainArray[(this->terrainHeight * j + 1) + i - 1 ].y;
-				float topLeft = this->terrainArray[(this->terrainHeight * j + 1) + i + 1].y;
-				float neibours[8];
-				neibours[0] = right;
-				neibours[1] = left;
-				neibours[2] = above;
-				neibours[3] = bellow;
-				neibours[4] = bottomRight;
-				neibours[5] = bottomLeft;
-				neibours[6] = topRight;
-				neibours[7] = topLeft;
-				newValues[(this->terrainHeight * j) + i] = CellularAutomataRule(neibours, center);
-
-			}
-		}
-
-		// set new values
-		for (int j = 0; j < this->terrainHeight; j++)
-		{
-			for (int i = 0; i < this->terrainWidth; i++)
-			{
-				this->terrainArray[(this->terrainHeight * j) + i].y = newValues[(this->terrainHeight * j) + i];
-			}
-		}
-	}
-	delete[] newValues;
-}
 
 void Terrain::GenereatParticleDeposition()
 {
 	int index = 0;
+	int startingHieght = -5;
 	numberOfHills = 1;
 	std::vector<VectorType> hillPoints;
 
@@ -877,7 +824,7 @@ void Terrain::GenereatParticleDeposition()
 		{
 			index = (this->terrainHeight * j) + i;
 
-			this->terrainArray[index].y = 0;
+			this->terrainArray[index].y = startingHieght;
 		}
 	}
 
@@ -916,7 +863,7 @@ void Terrain::GenereatParticleDeposition()
 				index = (this->terrainHeight * j) + i;
 
 			  
-				if (this->terrainArray[index].y > 0)
+				if (this->terrainArray[index].y > startingHieght)
 				{
  					this->terrainArray[index].y++;
 					std::mt19937 gen(*randomSeed + i * j +k);
@@ -1009,39 +956,6 @@ void Terrain::GenereatParticleDeposition()
 	}
 }
 
-float Terrain::CellularAutomataRule(float neibours[8], float center)
-{
-	int numberOfNabHigher = 0;
-	int numberOfNabLower = 0;
-
-	for (int i = 0; i < 8; i++)
-	{
-		if (center > neibours[i])
-		{
-			numberOfNabLower++;
-		}
-		else if (center < neibours[i])
-		{
-			numberOfNabHigher++;
-		}
-	}
-
-
-	if (numberOfNabLower > 6 )
-	{
-		return center +1;
-
-	}
-	
-	if (numberOfNabLower < 1)
-	{
-		return center - 1;
-
-	}
-	return center;
-}
-
- 
 
 float Terrain::FaultLineDisplacement(int x, int z)
 {

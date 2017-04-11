@@ -91,8 +91,13 @@ cbuffer FractionalBrowningNoiseBuffer : register(cb5)
 	float fbnPersistence;
 	float fbnPelinNoiseFreqnacy;
 	float heightScale;
-	float fbnPadding;
-	
+	int useAbs;
+	  
+    float3 fbmPadding;
+
+    int useRidged;
+
+
  }
 
 
@@ -470,8 +475,21 @@ float FractionalBrownianMotion(float x, float y, int octaves, float frequency, f
  
 	for (int i = 0; i < octaves; i++) 
 	{
-		output += (amplitude * PelinNoise(x * frequency, y * frequency, pelinFrequancy));
-		denom += amplitude;
+        if (useAbs)
+        {
+            output += (amplitude * abs( PelinNoise(x * frequency, y * frequency, pelinFrequancy)));
+            
+        }
+        else if (useRidged)
+        {
+            output +=1 - (amplitude * abs(PelinNoise(x * frequency, y * frequency, pelinFrequancy)));
+            
+        }
+        else
+        {
+            output += (amplitude * PelinNoise(x * frequency, y * frequency, pelinFrequancy));
+        }
+        denom += amplitude;
 
 		frequency *= fbnLacunarity  ;
 		amplitude *= fbnPersistence;

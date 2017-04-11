@@ -3,7 +3,7 @@
 WaterShader::WaterShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, hwnd)
 {
 	// Load in shaders
-	InitShader(L"shaders/water_vs.hlsl",L"shaders/texture_ps.hlsl");
+	InitShader(L"shaders/water_vs.hlsl",L"shaders/water_ps.hlsl");
 
 }
 

@@ -106,6 +106,9 @@ private:
 
 	bool regenerateSimplexNoise;
 
+	bool regenerateFBM;
+
+
 	int seed;
 
 	bool waterMenuOpen;

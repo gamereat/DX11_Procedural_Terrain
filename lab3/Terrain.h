@@ -77,14 +77,15 @@ public:
 	Sets the pointer to the random seed to be used
 	*/
 	void setRandomSeed(int* seed);
+
+	FractionalBrowningNoiseBuffer* fBMSettings;
 private:
 
 	/*
 	Caculates and sets normals for the terrain 
 	*/
 	bool CalculateNormals();
-
-
+	
 	 
 	/*
 	Will smooth the given terrain based off neibours 
@@ -107,19 +108,12 @@ private:
 	Caculates and applies fault line displaments
 	*/
 	void GenerateFaultLineDisplacement();
+
 	/*
-	TODO: needs replaced
-	*/
-	void GenerateCellularAutomata();
-	/*
-	TODO: needs updating
+	Caculates and appliesparticles despisiton
 	*/
 	void GenereatParticleDeposition();
 
-	/*
-	TODO: Needs updating
-	*/
-	float CellularAutomataRule(float neibours[8], float center);
 
 
 	/*

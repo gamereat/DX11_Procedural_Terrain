@@ -170,10 +170,10 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 
 	terrain->setRandomSeed( &seed);
 
-	terrainGeneration->enableGPUEffect = true;
+	terrainGeneration->enableGPUEffect = false;
 
 	terrain->faultLineSettings = faultLineSettings;
-
+	terrain->fBMSettings = fbnSettings;
 
 	terrainTextureSettings->topHighPercentage = 75;
 
@@ -181,7 +181,7 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 
 
 	terrainTextureSettings->blendingPercentage = 5;
- }
+  }
 
 void TerrainScene::Update(Timer * timer)
 {
@@ -418,6 +418,12 @@ void TerrainScene::Update(Timer * timer)
 		terrain->particleDepositionRegeneate = true;
 
 	}
+
+	if (regenerateFBM)
+	{
+		regenerateFBM = false;
+		terrain->genereateFractionalBrownainNoise = true;
+	}
 }
 
 void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[])
@@ -449,13 +455,13 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 
 	}
 	// 
-	//// Send geometry data (from mesh)
+	// Send geometry data (from mesh)
 	worldMatrix = 	terrain->SendData(device->GetDeviceContext());
-	//// Set shader parameters (matrices and texture)
+	// Set shader parameters (matrices and texture)
 	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(),
 		terrainGeneration,faultLineSettings, terrainTextureSettings,fbnSettings, light, depthMaps,
 		lowTexture->GetTexture(), mediumTexture->GetTexture(), hightTexture->GetTexture(), underWaterTexture->GetTexture(), hitByWaterTexture->GetTexture());
-	//// Render object (combination of mesh geometry and shader process
+	// Render object (combination of mesh geometry and shader process
 	terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
 
 
@@ -611,11 +617,7 @@ void TerrainScene::TerrainSettings(bool * is_open)
 			ImGui::Text("WARNING: Results on GPU may not be identical to ones made of CPU");
 
 		}
-		else
-		{
-		//	terrainGeneration->enableGPUEffect = true;
-
-		}
+ 
 
 
 		/////////////////////////////////////////////////////////////////
@@ -646,58 +648,60 @@ void TerrainScene::TerrainSettings(bool * is_open)
 		{
 
 			terrainGeneration->terrainGenerationType = (TerrainGeneration)currnetGen;
+
+	switch (terrainGeneration->terrainGenerationType)
+	{
+	case TerrainGeneration::DiamondSquare:
+	{
+		terrainGeneration->enableGPUEffect = false;
+
+		regenerateDiamondSquare = true;
+		break;
+	}
+	case TerrainGeneration::SimplexNoise:
+	{
+		terrainGeneration->enableGPUEffect = false;
+
+		regenerateSimplexNoise = true;
+		break;
+	}
+	case TerrainGeneration::FractionalBrowningNoise:
+	{
+		terrainGeneration->enableGPUEffect = false;
+		regenerateFBM = true;
  
- 			switch (terrainGeneration->terrainGenerationType)
-			{
-			case TerrainGeneration::DiamondSquare:
-			{
-				terrainGeneration->enableGPUEffect = false;
 
-				regenerateDiamondSquare = true;
-				break;
-			}
-			case TerrainGeneration::SimplexNoise:
-			{
-				terrainGeneration->enableGPUEffect = false;
+		break;
+	}
+	case TerrainGeneration::FaultLineDisplacement:
+	{
+		terrain->generateFaultLinelineDisplacement = true;
+		terrainGeneration->enableGPUEffect = false;
+		regenerateFaultLines = true;
 
-				regenerateSimplexNoise = true;
-				break;
-			}
-			case TerrainGeneration::FractionalBrowningNoise:
-			{
-				terrainGeneration->enableGPUEffect = false;
-
-				break;
-			}
-			case TerrainGeneration::FaultLineDisplacement:
-			{
-				terrain->generateFaultLinelineDisplacement = true;
-				terrainGeneration->enableGPUEffect = true;
-				regenerateFaultLines = true;
-
-				break;
-			}
-			//case TerrainGeneration::CellularAutomata:
-			//{
-			//	terrain->cellularAutomataRegenerate = true;
-			//	terrainGeneration->enableGPUEffect = false;
-			//	regenerateFaultLines = true;
-			//	break;
-			//}
-			case TerrainGeneration::ParticleDeposition:
-			{
-				terrain->particleDepositionRegeneate = true;
-				terrainGeneration->enableGPUEffect = false;
-				regenerateParticleDeposition = true;
-				break;
-			}
-			default:
-				break;
-			}
+		break;
+	}
+	//case TerrainGeneration::CellularAutomata:
+	//{
+	//	terrain->cellularAutomataRegenerate = true;
+	//	terrainGeneration->enableGPUEffect = false;
+	//	regenerateFaultLines = true;
+	//	break;
+	//}
+	case TerrainGeneration::ParticleDeposition:
+	{
+		terrain->particleDepositionRegeneate = true;
+		terrainGeneration->enableGPUEffect = false;
+		regenerateParticleDeposition = true;
+		break;
+	}
+	default:
+		break;
+	}
 
 		}
-			
-	
+
+
 
 
 
@@ -712,7 +716,7 @@ void TerrainScene::TerrainSettings(bool * is_open)
 		if (terrainGeneration->terrainGenerationType == TerrainGeneration::FaultLineDisplacement)
 		{
 
-	
+
 
 			if (ImGui::SliderInt("Number of Iterations", &faultLineSettings->numberOfIterations, 0, MAX_FAULTLINE_ITERATIONS))
 			{
@@ -739,19 +743,59 @@ void TerrainScene::TerrainSettings(bool * is_open)
 				seed = rd();
 				regenerateFaultLines = true;
 			}
-			
+
 		}
-		
+
 		else if (terrainGeneration->terrainGenerationType == TerrainGeneration::FractionalBrowningNoise)
 		{
-				
-			ImGui::DragFloat("Fbn Octaves", &fbnSettings->fbnOctaves, 1, 1, 16);
-			ImGui::DragFloat("Fbn Amplitude", &fbnSettings->fbnAmplitude, 0.05f, 0.0f, 2);
-			ImGui::DragFloat("Fbn Lacunarity", &fbnSettings->fbnLacunarity, 0.05f, 0.0f, 2);
-			ImGui::DragFloat("Fbn Frequancy", &fbnSettings->fbnFrequancy, 0.05f, 0.0f, 15);
-			ImGui::DragFloat("Fbn Pelin Noise Freqancy", &fbnSettings->fbnPelinNoiseFreqnacy, 0.05f, 0.0f, 10);
-			ImGui::DragFloat("Fbn Persistence", &fbnSettings->fbnPersistence, 0.05f, 0.0f, 10);
-			ImGui::DragFloat("Fbn height Scale", &fbnSettings->heightScale,0.05f, 0.0f, 15);
+
+			if	(ImGui::DragFloat("Fbn Octaves", &fbnSettings->fbnOctaves, 1, 1, 16))
+			{
+				regenerateFBM = true;
+			}
+			if (ImGui::DragFloat("Fbn Amplitude", &fbnSettings->fbnAmplitude, 0.05f, 0.0f, 2))
+			{
+			regenerateFBM = true;
+			}
+			if (ImGui::DragFloat("Fbn Lacunarity", &fbnSettings->fbnLacunarity, 0.05f, 0.0f, 2))
+			{
+			regenerateFBM = true;
+			}
+			if (ImGui::DragFloat("Fbn Frequancy", &fbnSettings->fbnFrequancy, 0.05f, 0.0f, 15))
+			{
+			regenerateFBM = true;
+			}
+			if (ImGui::DragFloat("Fbn Pelin Noise Freqancy", &fbnSettings->fbnPelinNoiseFreqnacy, 0.05f, 0.0f, 10))
+			{
+			regenerateFBM = true;
+			}
+			if (ImGui::DragFloat("Fbn Persistence", &fbnSettings->fbnPersistence, 0.05f, 0.0f, 10))
+			{
+			regenerateFBM = true;
+			}
+			if (ImGui::DragFloat("Fbn height Scale", &fbnSettings->heightScale,0.05f, 0.0f, 15))
+			{
+			regenerateFBM = true;
+			}
+
+			if (!fbnSettings->useRidged)
+			{
+				if (ImGui::Checkbox("Use Billow", &fbnSettings->useAbs))
+				{
+					regenerateFBM = true;
+				}
+			}
+
+			if (!fbnSettings->useAbs)
+			{
+
+			
+				if (ImGui::Checkbox("Use Riggid", &fbnSettings->useRidged))
+				{
+					regenerateFBM = true;
+				}
+			}
+
  		}
 		else if (terrainGeneration->terrainGenerationType == TerrainGeneration::DiamondSquare)
 		{

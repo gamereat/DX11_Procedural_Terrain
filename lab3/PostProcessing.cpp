@@ -29,6 +29,12 @@ PostProcessing::~PostProcessing()
 		delete UpScale;
 		UpScale = nullptr;
 	}
+
+	if (chromoAberration)
+	{
+		delete chromoAberration;
+		chromoAberration = nullptr;
+	}
 }
 
 void PostProcessing::Init(D3D* directX3D, HWND hwnd, Timer* timer)
@@ -49,7 +55,7 @@ void PostProcessing::Init(D3D* directX3D, HWND hwnd, Timer* timer)
 	// Init all the post proccessing effects 
 
 	 
-
+	chromoAberration = new PostProcessingChromaticAberration(directX3D, hwnd, downScaleAmmount);
 	downScale = new PostProccessingDownScale(directX3D, hwnd, downScaleAmmount);
 
 	UpScale = new PostProccessingUpScale(directX3D, hwnd, upScaleAmmount);
@@ -70,6 +76,10 @@ RenderTexture* PostProcessing::ApplyPostProccessing(OrthoMesh*& orthNormalSized,
 	// Down scale the scene and keep track of the downscaled texture what is returned 
 	downScaleTexture = currentRenderTexture = downScale->Render(directX3D, camera, orthoMeshDownScaled, lastRenderTexture);
  
+
+	currentRenderTexture = chromoAberration->Render(directX3D, camera, orthoMeshDownScaled, downScaleTexture, timer->GetTotalTimePast());
+
+
  	// Upscale the scene again 
 	// Return the render texture so i can be rendered to the scene 
 	 return UpScale->Render(directX3D, camera, orthNormalSized, currentRenderTexture);
@@ -91,7 +101,10 @@ void PostProcessing::PostProccessingMenu()
 		{
 			isGeneralSetting = isGeneralSetting ? false : true;
 		}
-
+		if (ImGui::MenuItem("chromatic Aberration "))
+		{
+			chromoAberration->ToggleMenu();
+		}
 
 
 		ImGui::EndMenu();

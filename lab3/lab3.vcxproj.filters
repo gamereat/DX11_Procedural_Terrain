@@ -121,6 +121,12 @@
     <ClCompile Include="DiamondSquare.cpp">
       <Filter>Source Files\Noise</Filter>
     </ClCompile>
+    <ClCompile Include="ChromaticAberrationsShader.cpp">
+      <Filter>Source Files\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessingChromaticAberration.cpp">
+      <Filter>Source Files\Post Proccessing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\MiniIni\minGlue.h">
@@ -204,6 +210,12 @@
     <ClInclude Include="DepthShader.h">
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>
+    <ClInclude Include="ChromaticAberrationsShader.h">
+      <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcessingChromaticAberration.h">
+      <Filter>Header Files\Post proccssing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\colour_ps.hlsl">
@@ -252,6 +264,15 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\Lsystem_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\water_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\ChromaticAberration_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\ChromaticAberration_vs.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

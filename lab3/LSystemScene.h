@@ -14,44 +14,35 @@
 #include "TerrainShader.h"
  #include "LSystem.h"
 
-const int NUMBER_LSYSTEMS =11;
 
 
-//http://algorithmicbotany.org/papers/abop/abop-ch1.pdf
-enum lSystemTypes
-{
-	DragonCurve,
-	KochCurve,
-	SierpinskisCarpet,
-	HeighwayDragon,
-	JoinedCrossCurves,
-	modifiedKoch1,
-	modifiedKoch2,
-	modifiedKoch3,
-	modifiedKoch4,
-	modifiedKoch5,
-	modifiedKoch6,
-};
+
 /*
-L-System Scene
-@author Alan Yeats
-L-System scene used to display a L-system Represented on a dynamic texture on a plane
+* L-System Scene 
+*
+* @author      Alan Yeats
+*
+* L-System scene used to display a L-system Represented on a dynamic texture on a plane
 */
  class LSystemScene :	public Scene
-{const char* lSystemTypes_str[NUMBER_LSYSTEMS]
 {
-	"Dragon curve",
-	"Koch curve",
-	"Sierpinski's Carpet",
-	"Heighway Dragon",
-	"Joined Cross Curves",
-	"Modified Koch Curve 1",
-	"Modified Koch Curve 2",
-	"Modified Koch Curve 3",
-	"Modified Koch Curve 4",
-	"Modified Koch Curve 5",
-	"Modified Koch Curve 6",
- };
+
+	 const char* lSystemTypes_str[NUMBER_LSYSTEMS]
+	 {
+		 "Dragon curve",
+		 "Koch curve",
+		 "Sierpinski's Carpet",
+		 "Heighway Dragon",
+		 "Joined Cross Curves",
+		 "Modified Koch Curve 1",
+		 "Modified Koch Curve 2",
+		 "Modified Koch Curve 3",
+		 "Modified Koch Curve 4",
+		 "Modified Koch Curve 5",
+		 "Modified Koch Curve 6",
+	 };
+
+
 public:
 	LSystemScene(string sceneName);
 	~LSystemScene();
