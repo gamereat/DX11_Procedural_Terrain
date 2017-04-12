@@ -1,3 +1,4 @@
+#include "RenderTexture.h"
 // render texture
 // alternative render target
 #include "rendertexture.h"
@@ -171,6 +172,11 @@ void RenderTexture::ClearRenderTarget(ID3D11DeviceContext* deviceContext, float 
 ID3D11ShaderResourceView* RenderTexture::GetShaderResourceView()
 {
 	return m_shaderResourceView;
+}
+
+ID3D11Texture2D* RenderTexture::GetTexture()
+{
+	return m_renderTargetTexture;
 }
 
 XMMATRIX RenderTexture::GetProjectionMatrix()

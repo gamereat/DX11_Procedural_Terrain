@@ -8,6 +8,7 @@
 #include "PostProccessingDownScale.h"
 #include "PostProccessingUpScale.h"
 #include "../DXFramework/D3D.h"
+#include "PostProcessingGaussianBlur.h"
 
 /*
 	Adds any post processing effects to the scene 
@@ -57,6 +58,8 @@ private:
 	/////////////////////////////////////////////
 	
 	
+	PostProcessingGaussianBlur* gaussainBlur;
+
 	/*
 	Down scaling post processsing effect
 	*/

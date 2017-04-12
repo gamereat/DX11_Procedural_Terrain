@@ -1,5 +1,5 @@
 #include "baseApp.h"
-
+#include "../OpenVR/openvr.h"
 
 
 BaseApp::BaseApp()
@@ -19,6 +19,8 @@ BaseApp::BaseApp()
 	emptyScene = nullptr;
 	lSystemScene = nullptr;
 	terrainScene = nullptr;
+
+
 }
 
 
@@ -111,14 +113,14 @@ void BaseApp::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHe
  	
 	// Load in Scenes 
 	terrainScene = new TerrainScene("Terrain Scene");
-	terrainScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), sound);
+	terrainScene->Init(hwnd, direct3D->GetDevice(), direct3D->GetDeviceContext(), sound);
 
 	emptyScene = new EmptyScene("Empty Scene");
-	emptyScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), sound);
+	emptyScene->Init(hwnd, direct3D->GetDevice(), direct3D->GetDeviceContext(), sound);
 
 
 	lSystemScene = new LSystemScene("L-System Scene");
-	lSystemScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), sound);
+	lSystemScene->Init(hwnd, direct3D->GetDevice(), direct3D->GetDeviceContext(), sound);
 
 
 
@@ -133,26 +135,67 @@ void BaseApp::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHe
 		lights[i]->SetPosition(0, 0, -4);
 		lights[i]->SetRange(255);
 
-		depthTextures[i] = new RenderTexture(m_Direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
+		depthTextures[i] = new RenderTexture(direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
 	}
 
 	// Load in textures
-	orthoMeshNormalScaled = new OrthoMesh("Normal OrthoMesh",m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), screenWidth, screenHeight, 0, 0);
-	upScaleTexture = new  RenderTexture(m_Direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
-	sceneTexture = new  RenderTexture(m_Direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
+	orthoMeshNormalScaled = new OrthoMesh("Normal OrthoMesh",direct3D->GetDevice(), direct3D->GetDeviceContext(), screenWidth, screenHeight, 0, 0);
+	upScaleTexture = new  RenderTexture(direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
+	sceneTexture = new  RenderTexture(direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
 
 
 	// Load in shaders
-	textureShader = new TextureShader(m_Direct3D->GetDevice(), hwnd);
+	textureShader = new TextureShader(direct3D->GetDevice(), hwnd);
 
 
 
-	postPro.Init(m_Direct3D, hwnd, m_Timer);
+	postPro.Init(direct3D, hwnd, m_Timer);
 	// set starting scene to be terrain scene
 	currentScene = terrainScene;
 
 	// set my lights up correcntly for current scene
 	currentScene->ResetLights(lights);
+
+	// Loading the SteamVR Runtime
+	vr::EVRInitError eError = vr::VRInitError_None;
+
+	pHMD = vr::VR_Init(&eError, vr::VRApplication_Scene);
+
+	if (eError != vr::VRInitError_None)
+	{
+		pHMD = NULL;
+	}
+	uint32_t width = ApplicationSettings::screenWidth;
+	uint32_t hieght = ApplicationSettings::screenHeight;
+
+	pHMD->GetRecommendedRenderTargetSize(&width, &hieght);
+
+	ApplicationSettings::screenWidth = width;
+	ApplicationSettings::screenHeight = hieght;
+
+
+	leftEye = new RenderTexture(direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
+	rightEye = new RenderTexture(direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
+
+	//m_nRenderWidth /= 2;
+	//m_nRenderHeight /= 4;
+
+	//clientWidth = m_nRenderWidth;
+	//clientHeight = m_nRenderHeight;
+
+
+	  pRenderModels = (vr::IVRRenderModels *)vr::VR_GetGenericInterface(vr::IVRRenderModels_Version, &eError);
+	if (!pRenderModels)
+	{
+		pHMD = NULL;
+		vr::VR_Shutdown();
+
+	}
+
+	if (!vr::VRCompositor())
+	{
+ 
+	}
 }
 
 bool BaseApp::Frame()
@@ -180,28 +223,27 @@ bool BaseApp::Render()
 
 
 	// Render current scene  
-	currentScene->Render(sceneTexture, m_Direct3D, m_Camera, depthTextures, lights);
+	currentScene->Render(sceneTexture, direct3D, m_Camera, depthTextures, lights);
 
 
 
 	// disable wireframe mode for the post processing effects
-	if (m_Direct3D->getWireFrameMode())
+	if (direct3D->getWireFrameMode())
 	{
-		m_Direct3D->TurnOffWireframe();
+		direct3D->TurnOffWireframe();
 	}
 
 	// Apply any post processing effecst 
-	upScaleTexture = postPro.ApplyPostProccessing(orthoMeshNormalScaled, sceneTexture, m_Direct3D, m_Camera);
+	upScaleTexture = postPro.ApplyPostProccessing(orthoMeshNormalScaled, sceneTexture, direct3D, m_Camera);
 
 	// Render the scene to the screen
 	RenderToScreen();
 
-
-
+ 
 	// disable wireframe mode for the post processing effects
-	if (m_Direct3D->getWireFrameMode())
+	if (direct3D->getWireFrameMode())
 	{
-		m_Direct3D->TurnOnWireframe();
+		direct3D->TurnOnWireframe();
 	}
 
 	return true;
@@ -212,38 +254,94 @@ void BaseApp::RenderToScreen()
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrix, orthoMartix;
 
 	//// Clear the scene. (default blue colour)
-	m_Direct3D->BeginScene(0.39f, 0.58f, 0.92f, 1.0f);
+	direct3D->BeginScene(0.39f, 0.58f, 0.92f, 1.0f);
 
 	//// Generate the view matrix based on the camera's position.
 	m_Camera->Update();
 
 	// Reset the world martix back to starting point
-	m_Direct3D->GetWorldMatrix(worldMatrix);
+	direct3D->GetWorldMatrix(worldMatrix);
 
 
 	// To render ortho mesh
 	// Turn off the Z buffer to begin all 2D rendering.
-	m_Direct3D->TurnZBufferOff();
+	direct3D->TurnZBufferOff();
 
-	m_Direct3D->GetOrthoMatrix(orthoMartix);// ortho matrix for 2D rendering
+	direct3D->GetOrthoMatrix(orthoMartix);// ortho matrix for 2D rendering
 	m_Camera->GetBaseViewMatrix(baseViewMatrix);
 
-	orthoMeshNormalScaled->SendData(m_Direct3D->GetDeviceContext());
+	orthoMeshNormalScaled->SendData(direct3D->GetDeviceContext());
 
 
 
-	textureShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, baseViewMatrix, orthoMartix, upScaleTexture->GetShaderResourceView());
-	textureShader->Render(m_Direct3D->GetDeviceContext(), orthoMeshNormalScaled->GetIndexCount());
+	textureShader->SetShaderParameters(direct3D->GetDeviceContext(), worldMatrix, baseViewMatrix, orthoMartix, upScaleTexture->GetShaderResourceView());
+	textureShader->Render(direct3D->GetDeviceContext(), orthoMeshNormalScaled->GetIndexCount());
 
 
-	m_Direct3D->TurnZBufferOn();
+	vr::Texture_t leftEyeTexture = { upScaleTexture->GetTexture(), vr::API_DirectX, vr::ColorSpace_Auto };
+	vr::EVRCompositorError error1 =	vr::VRCompositor()->Submit(vr::Eye_Left, &leftEyeTexture);
+	vr::EVRCompositorError error2 =	vr::VRCompositor()->Submit(vr::Eye_Right, &leftEyeTexture);
+	
+	
+	UpdateHMDMatrixPose();
+	
+	direct3D->TurnZBufferOn();
 
 	// Present the rendered scene to the screen.
-	m_Direct3D->EndScene();
+	direct3D->EndScene();
 
 
 }
+void  BaseApp::UpdateHMDMatrixPose()
+{
+	if (!pHMD)
+		return;
 
+	vr::VRCompositor()->WaitGetPoses(rTrackedDevicePose, vr::k_unMaxTrackedDeviceCount, NULL, 0);
+
+	iValidPoseCount = 0;
+	strPoseClasses = "";
+	for (int nDevice = 0; nDevice < vr::k_unMaxTrackedDeviceCount; ++nDevice)
+	{
+		if (rTrackedDevicePose[nDevice].bPoseIsValid)
+		{
+			iValidPoseCount++;
+			rmat4DevicePose[nDevice] = ConvertSteamVRMatrixToXMMartix(rTrackedDevicePose[nDevice].mDeviceToAbsoluteTracking);
+			if (rDevClassChar[nDevice] == 0)
+			{
+				switch (pHMD->GetTrackedDeviceClass(nDevice))
+				{
+				case vr::TrackedDeviceClass_Controller:        rDevClassChar[nDevice] = 'C'; break;
+				case vr::TrackedDeviceClass_HMD:               rDevClassChar[nDevice] = 'H'; break;
+				case vr::TrackedDeviceClass_Invalid:           rDevClassChar[nDevice] = 'I'; break;
+				case vr::TrackedDeviceClass_Other:             rDevClassChar[nDevice] = 'O'; break;
+				case vr::TrackedDeviceClass_TrackingReference: rDevClassChar[nDevice] = 'T'; break;
+				default:                                       rDevClassChar[nDevice] = '?'; break;
+				}
+			}
+			strPoseClasses += rDevClassChar[nDevice];
+		}
+	}
+
+	if (rTrackedDevicePose[vr::k_unTrackedDeviceIndex_Hmd].bPoseIsValid)
+	{
+		mat4HMDPose = XMMatrixInverse( nullptr,rmat4DevicePose[vr::k_unTrackedDeviceIndex_Hmd]);
+	}
+	else
+	{
+	}
+}
+
+XMMATRIX BaseApp::ConvertSteamVRMatrixToXMMartix(const vr::HmdMatrix34_t &matPose)
+{
+	XMMATRIX matrixObj(
+		matPose.m[0][0], matPose.m[1][0], matPose.m[2][0], 0.0,
+		matPose.m[0][1], matPose.m[1][1], matPose.m[2][1], 0.0,
+		matPose.m[0][2], matPose.m[1][2], matPose.m[2][2], 0.0,
+		matPose.m[0][3], matPose.m[1][3], matPose.m[2][3], 1.0f
+	);
+	return matrixObj;
+}
 
 
 void BaseApp::CreateMainMenuBar()

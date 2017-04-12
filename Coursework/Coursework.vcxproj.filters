@@ -41,6 +41,9 @@
     <Filter Include="Settings">
       <UniqueIdentifier>{57a4d3a4-d96e-49e2-85ec-8d2e492ea793}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Open VR">
+      <UniqueIdentifier>{2cb8f7e4-ed03-4ff5-bcaa-b0a5b3387f7d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -126,6 +129,15 @@
     </ClCompile>
     <ClCompile Include="PostProcessingChromaticAberration.cpp">
       <Filter>Source Files\Post Proccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessingGaussianBlur.cpp">
+      <Filter>Source Files\Post Proccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="HorizontalBlurShader.cpp">
+      <Filter>Source Files\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="VerticalBlurShader.cpp">
+      <Filter>Source Files\Shaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -216,6 +228,18 @@
     <ClInclude Include="PostProcessingChromaticAberration.h">
       <Filter>Header Files\Post proccssing</Filter>
     </ClInclude>
+    <ClInclude Include="PostProcessingGaussianBlur.h">
+      <Filter>Header Files\Post proccssing</Filter>
+    </ClInclude>
+    <ClInclude Include="HorizontalBlurShader.h">
+      <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="VerticalBlurShader.h">
+      <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\OpenVR\openvr.h">
+      <Filter>Header Files\Open VR</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\colour_ps.hlsl">
@@ -230,12 +254,6 @@
     <FxCompile Include="shaders\texture_vs.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\distanceBasedTesselation_ds.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\distanceBasedTesselation_hs.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="shaders\noise_vs.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
@@ -243,9 +261,6 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\Terrain_vs.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\distanceBasedTesselation_vs.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\FaultLineDisplacement_vs.hlsl">
@@ -273,6 +288,18 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\ChromaticAberration_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\horizontalBlur_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\horizontalBlur_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\verticalBlur_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\verticalBlur_vs.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

@@ -12,7 +12,7 @@
 #include "ShaderBuffers.h"
 #include "Sound.h"
 #include "TextureShader.h"
-
+#include "../OpenVR/openvr.h"
 /*
 */
 
@@ -58,6 +58,21 @@ protected:
 	
 private:
 	
+	vr::IVRSystem *pHMD;
+	vr::IVRRenderModels * pRenderModels;
+
+	vr::TrackedDevicePose_t rTrackedDevicePose[vr::k_unMaxTrackedDeviceCount];
+	char rDevClassChar[vr::k_unMaxTrackedDeviceCount];   // for each device, a character representing its class
+	XMMATRIX rmat4DevicePose[vr::k_unMaxTrackedDeviceCount];
+	XMMATRIX mat4HMDPose;
+	int iValidPoseCount;
+	std::string strPoseClasses;                            // what classes we saw poses for this frame
+
+	RenderTexture leftEye;
+	RenderTexture rightEye;
+
+
+
 	/*
 	L-System Scene used to show a 2D l-system on a dynamic texture
 	*/
@@ -81,6 +96,8 @@ private:
 	Render to the screen
 	*/
 	void RenderToScreen();
+
+	void UpdateHMDMatrixPose();
 	
 	/*
 	Lights used within the world all usable at any point
@@ -121,5 +138,8 @@ private:
 	Sound system used across the application
 	*/
 	Sound* sound;
+	
+	XMMATRIX ConvertSteamVRMatrixToXMMartix(const vr::HmdMatrix34_t & matPose);
+
 };
 

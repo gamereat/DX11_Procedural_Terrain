@@ -61,7 +61,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;DXFramework.lib;dxgi.lib;D3DCompiler.lib;bass.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;DXFramework.lib;dxgi.lib;D3DCompiler.lib;bass.lib;openvr_api.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)/Debug</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
@@ -107,12 +107,14 @@
     <ClCompile Include="DiamondSquare.cpp" />
     <ClCompile Include="EmptyScene.cpp" />
     <ClCompile Include="FractionalBrownianMotion.cpp" />
+    <ClCompile Include="HorizontalBlurShader.cpp" />
     <ClCompile Include="LineMesh.cpp" />
     <ClCompile Include="LSystem.cpp" />
     <ClCompile Include="LSystemScene.cpp" />
     <ClCompile Include="LSystemShader.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="PostProcessingChromaticAberration.cpp" />
+    <ClCompile Include="PostProcessingGaussianBlur.cpp" />
     <ClCompile Include="SimplexNoise.cpp" />
     <ClCompile Include="PostProccessingDownScale.cpp" />
     <ClCompile Include="PostProccessingUpScale.cpp" />
@@ -125,12 +127,14 @@
     <ClCompile Include="TerrainScene.cpp" />
     <ClCompile Include="TerrainShader.cpp" />
     <ClCompile Include="TextureShader.cpp" />
+    <ClCompile Include="VerticalBlurShader.cpp" />
     <ClCompile Include="WaterShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ApplicationSettings.h" />
     <ClInclude Include="..\MiniIni\minGlue.h" />
     <ClInclude Include="..\MiniIni\minIni.hpp" />
+    <ClInclude Include="..\OpenVR\openvr.h" />
     <ClInclude Include="baseApp.h" />
     <ClInclude Include="ChromaticAberrationsShader.h" />
     <ClInclude Include="ColourShader.h" />
@@ -138,11 +142,13 @@
     <ClInclude Include="DiamondSquare.h" />
     <ClInclude Include="EmptyScene.h" />
     <ClInclude Include="FractionalBrownianMotion.h" />
+    <ClInclude Include="HorizontalBlurShader.h" />
     <ClInclude Include="LineMesh.h" />
     <ClInclude Include="LSystem.h" />
     <ClInclude Include="LSystemScene.h" />
     <ClInclude Include="LSystemShader.h" />
     <ClInclude Include="PostProcessingChromaticAberration.h" />
+    <ClInclude Include="PostProcessingGaussianBlur.h" />
     <ClInclude Include="SimplexNoise.h" />
     <ClInclude Include="PostProccessingDownScale.h" />
     <ClInclude Include="PostProccessingUpScale.h" />
@@ -156,6 +162,7 @@
     <ClInclude Include="TerrainScene.h" />
     <ClInclude Include="TerrainShader.h" />
     <ClInclude Include="TextureShader.h" />
+    <ClInclude Include="VerticalBlurShader.h" />
     <ClInclude Include="WaterShader.h" />
   </ItemGroup>
   <ItemGroup>
@@ -181,16 +188,13 @@
     <FxCompile Include="shaders\depth_vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
     </FxCompile>
-    <FxCompile Include="shaders\distanceBasedTesselation_ds.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Domain</ShaderType>
-    </FxCompile>
-    <FxCompile Include="shaders\distanceBasedTesselation_hs.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Hull</ShaderType>
-    </FxCompile>
-    <FxCompile Include="shaders\distanceBasedTesselation_vs.hlsl">
+    <FxCompile Include="shaders\FaultLineDisplacement_vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
     </FxCompile>
-    <FxCompile Include="shaders\FaultLineDisplacement_vs.hlsl">
+    <FxCompile Include="shaders\horizontalBlur_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\horizontalBlur_vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="shaders\Lsystem_ps.hlsl">
@@ -217,6 +221,12 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="shaders\verticalBlur_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\verticalBlur_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="shaders\water_ps.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

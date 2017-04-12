@@ -135,8 +135,8 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	terrainGeneration = new TerrainGenerationBufferType();
 	diamondSquareSettings = new DimondSquareBuffer();
 	fbnSettings = new FractionalBrowningNoiseBuffer();
-	lowTexture = new Texture(device, deviceContext, L"../res/rock.png");
-	mediumTexture = new Texture(device, deviceContext, L"../res/moss.png");
+	lowTexture = new Texture(device, deviceContext, L"../res/grassTex.png");
+	mediumTexture = new Texture(device, deviceContext, L"../res/rock.png");
 	hightTexture = new Texture(device, deviceContext, L"../res/snow.png");
 	underWaterTexture = new Texture(device, deviceContext, L"../res/Sand2_S.jpg");
 	hitByWaterTexture = new Texture(device, deviceContext, L"../res/Sand4_S.jpg");
@@ -177,7 +177,7 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 
 	terrainTextureSettings->topHighPercentage = 75;
 
-	terrainTextureSettings->midHighPercentage = 40;
+	terrainTextureSettings->midHighPercentage = 25;
 
 
 	terrainTextureSettings->blendingPercentage = 5;
@@ -628,11 +628,40 @@ void TerrainScene::TerrainSettings(bool * is_open)
 		ImGui::Text("Seed used to generate any pure random numbers (NOTE: Using Mersenne Twister 19937 generator)");
 		if (ImGui::InputInt("Terrain Seed", &seed))
 		{
-			regenerateDiamondSquare = true;
-			regenerateFaultLines = true;
+			switch (terrainGeneration->terrainGenerationType)
+			{
+			case TerrainGeneration::DiamondSquare:
+			{
+				regenerateDiamondSquare = true;
+				break;
+			}
+			case TerrainGeneration::SimplexNoise:
+			{
+				regenerateSimplexNoise = true;
+				break;
+			}
+			case TerrainGeneration::FractionalBrowningNoise:
+			{
+				regenerateFBM = true;
+				break;
+			}
+			case TerrainGeneration::FaultLineDisplacement:
+			{
+				terrain->generateFaultLinelineDisplacement = true;
+				regenerateFaultLines = true;
 
-			regenerateSimplexNoise = true;
+				break;
+			}
 
+			case TerrainGeneration::ParticleDeposition:
+			{
+				terrain->particleDepositionRegeneate = true;
+				regenerateParticleDeposition = true;
+				break;
+			}
+			default:
+				break;
+			}
 		}
  
 
@@ -649,55 +678,55 @@ void TerrainScene::TerrainSettings(bool * is_open)
 
 			terrainGeneration->terrainGenerationType = (TerrainGeneration)currnetGen;
 
-	switch (terrainGeneration->terrainGenerationType)
-	{
-	case TerrainGeneration::DiamondSquare:
-	{
-		terrainGeneration->enableGPUEffect = false;
+		switch (terrainGeneration->terrainGenerationType)
+		{
+		case TerrainGeneration::DiamondSquare:
+		{
+			terrainGeneration->enableGPUEffect = false;
 
-		regenerateDiamondSquare = true;
-		break;
-	}
-	case TerrainGeneration::SimplexNoise:
-	{
-		terrainGeneration->enableGPUEffect = false;
+			regenerateDiamondSquare = true;
+			break;
+		}
+		case TerrainGeneration::SimplexNoise:
+		{
+			terrainGeneration->enableGPUEffect = false;
 
-		regenerateSimplexNoise = true;
-		break;
-	}
-	case TerrainGeneration::FractionalBrowningNoise:
-	{
-		terrainGeneration->enableGPUEffect = false;
-		regenerateFBM = true;
+			regenerateSimplexNoise = true;
+			break;
+		}
+		case TerrainGeneration::FractionalBrowningNoise:
+		{
+			terrainGeneration->enableGPUEffect = false;
+			regenerateFBM = true;
  
 
-		break;
-	}
-	case TerrainGeneration::FaultLineDisplacement:
-	{
-		terrain->generateFaultLinelineDisplacement = true;
-		terrainGeneration->enableGPUEffect = false;
-		regenerateFaultLines = true;
+			break;
+		}
+		case TerrainGeneration::FaultLineDisplacement:
+		{
+			terrain->generateFaultLinelineDisplacement = true;
+			terrainGeneration->enableGPUEffect = false;
+			regenerateFaultLines = true;
 
-		break;
-	}
-	//case TerrainGeneration::CellularAutomata:
-	//{
-	//	terrain->cellularAutomataRegenerate = true;
-	//	terrainGeneration->enableGPUEffect = false;
-	//	regenerateFaultLines = true;
-	//	break;
-	//}
-	case TerrainGeneration::ParticleDeposition:
-	{
-		terrain->particleDepositionRegeneate = true;
-		terrainGeneration->enableGPUEffect = false;
-		regenerateParticleDeposition = true;
-		break;
-	}
-	default:
-		break;
-	}
+			break;
+		}
+		//case TerrainGeneration::CellularAutomata:
+		//{
+		//	terrain->cellularAutomataRegenerate = true;
+		//	terrainGeneration->enableGPUEffect = false;
+		//	regenerateFaultLines = true;
+		//	break;
+		//}
+		case TerrainGeneration::ParticleDeposition:
+		{
+			terrain->particleDepositionRegeneate = true;
+			terrainGeneration->enableGPUEffect = false;
+			regenerateParticleDeposition = true;
+			break;
+		}
+		default:
+			break;
+		}
 
 		}
 

@@ -26,12 +26,15 @@ public:
 	void ClearRenderTarget(ID3D11DeviceContext* deviceContext, float red, float green, float blue, float alpha);
 	ID3D11ShaderResourceView* GetShaderResourceView();
 
+	ID3D11Texture2D* GetTexture();
+
+
+
 	XMMATRIX GetProjectionMatrix();
 	XMMATRIX GetOrthoMatrix();
 
 	int GetTextureWidth();
 	int GetTextureHeight();
-
 private:
 	int m_textureWidth, m_textureHeight;
 	ID3D11Texture2D* m_renderTargetTexture;

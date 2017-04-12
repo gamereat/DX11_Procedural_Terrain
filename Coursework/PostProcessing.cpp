@@ -1,7 +1,5 @@
 #include "PostProcessing.h"
 
-
-
 PostProcessing::PostProcessing()
 {
 
@@ -54,7 +52,7 @@ void PostProcessing::Init(D3D* directX3D, HWND hwnd, Timer* timer)
 
 	// Init all the post proccessing effects 
 
-	 
+	gaussainBlur = new PostProcessingGaussianBlur(directX3D, hwnd, downScaleAmmount);
 	chromoAberration = new PostProcessingChromaticAberration(directX3D, hwnd, downScaleAmmount);
 	downScale = new PostProccessingDownScale(directX3D, hwnd, downScaleAmmount);
 
@@ -78,7 +76,8 @@ RenderTexture* PostProcessing::ApplyPostProccessing(OrthoMesh*& orthNormalSized,
  
 
 	currentRenderTexture = chromoAberration->Render(directX3D, camera, orthoMeshDownScaled, downScaleTexture, timer->GetTotalTimePast());
-
+	
+	currentRenderTexture = gaussainBlur->Render(directX3D, camera, orthoMeshDownScaled, currentRenderTexture);
 
  	// Upscale the scene again 
 	// Return the render texture so i can be rendered to the scene 
@@ -106,7 +105,10 @@ void PostProcessing::PostProccessingMenu()
 			chromoAberration->ToggleMenu();
 		}
 
-
+		if (ImGui::MenuItem("Guasaiun blur"))
+		{
+			gaussainBlur->ToggleMenu();
+		}
 		ImGui::EndMenu();
 
 	}
