@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{74795CF5-98FD-4A39-A250-6706E921892C}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>E01_ColourShader</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>CourseWork</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)/Base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-D_SCL_SECURE_NO_WARNINGS %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;DXFramework.lib;dxgi.lib;D3DCompiler.lib;bass.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)/Debug</AdditionalLibraryDirectories>
+    </Link>
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>E:\Source\Repos\persodral\Base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DXFramework\DXFramework.vcxproj">
+      <Project>{e887c38b-1273-433a-9dac-a153da5cf145}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\MiniIni\MiniIni.vcxproj">
+      <Project>{aecea20b-dfbe-4fcb-bd9a-0598cc2cc563}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\ApplicationSettings.cpp" />
+    <ClCompile Include="..\MiniIni\minIni.cpp" />
+    <ClCompile Include="baseApp.cpp" />
+    <ClCompile Include="ChromaticAberrationsShader.cpp" />
+    <ClCompile Include="ColourShader.cpp" />
+    <ClCompile Include="DepthShader.cpp" />
+    <ClCompile Include="DiamondSquare.cpp" />
+    <ClCompile Include="EmptyScene.cpp" />
+    <ClCompile Include="FractionalBrownianMotion.cpp" />
+    <ClCompile Include="LineMesh.cpp" />
+    <ClCompile Include="LSystem.cpp" />
+    <ClCompile Include="LSystemScene.cpp" />
+    <ClCompile Include="LSystemShader.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="PostProcessingChromaticAberration.cpp" />
+    <ClCompile Include="SimplexNoise.cpp" />
+    <ClCompile Include="PostProccessingDownScale.cpp" />
+    <ClCompile Include="PostProccessingUpScale.cpp" />
+    <ClCompile Include="PostProcessing.cpp" />
+    <ClCompile Include="PostProcessingBase.cpp" />
+    <ClCompile Include="RoadScene.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="TerrainScene.cpp" />
+    <ClCompile Include="TerrainShader.cpp" />
+    <ClCompile Include="TextureShader.cpp" />
+    <ClCompile Include="WaterShader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\ApplicationSettings.h" />
+    <ClInclude Include="..\MiniIni\minGlue.h" />
+    <ClInclude Include="..\MiniIni\minIni.hpp" />
+    <ClInclude Include="baseApp.h" />
+    <ClInclude Include="ChromaticAberrationsShader.h" />
+    <ClInclude Include="ColourShader.h" />
+    <ClInclude Include="DepthShader.h" />
+    <ClInclude Include="DiamondSquare.h" />
+    <ClInclude Include="EmptyScene.h" />
+    <ClInclude Include="FractionalBrownianMotion.h" />
+    <ClInclude Include="LineMesh.h" />
+    <ClInclude Include="LSystem.h" />
+    <ClInclude Include="LSystemScene.h" />
+    <ClInclude Include="LSystemShader.h" />
+    <ClInclude Include="PostProcessingChromaticAberration.h" />
+    <ClInclude Include="SimplexNoise.h" />
+    <ClInclude Include="PostProccessingDownScale.h" />
+    <ClInclude Include="PostProccessingUpScale.h" />
+    <ClInclude Include="PostProcessing.h" />
+    <ClInclude Include="PostProcessingBase.h" />
+    <ClInclude Include="RoadScene.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="ShaderBuffers.h" />
+    <ClInclude Include="Sound.h" />
+    <ClInclude Include="Terrain.h" />
+    <ClInclude Include="TerrainScene.h" />
+    <ClInclude Include="TerrainShader.h" />
+    <ClInclude Include="TextureShader.h" />
+    <ClInclude Include="WaterShader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shaders\ChromaticAberration_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\ChromaticAberration_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\colour_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="shaders\colour_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="shaders\depth_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\depth_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\distanceBasedTesselation_ds.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Domain</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\distanceBasedTesselation_hs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Hull</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\distanceBasedTesselation_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\FaultLineDisplacement_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\Lsystem_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\Lsystem_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\noise_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\Terrain_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\Terrain_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\texture_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="shaders\texture_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="shaders\water_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\water_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Settings-Files\Graphics.ini" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
