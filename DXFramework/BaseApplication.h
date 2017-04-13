@@ -43,7 +43,7 @@ protected:
 	int deltax, deltay;	// for mouse movement
 	POINT cursor;
 	Input* m_Input;
-	D3D* m_Direct3D;
+	D3D* direct3D;
 	Camera* m_Camera;
 	Timer* m_Timer;
 	

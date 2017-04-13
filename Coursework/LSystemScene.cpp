@@ -276,6 +276,10 @@ void LSystemScene::SceneInformationPopUp(bool * is_open)
 
 }
 
+void LSystemScene::Render(RenderTexture * leftEyeTexture, RenderTexture * rightEyeTexture, D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[], vr::EVREye)
+{
+}
+
 void LSystemScene::LSystemMenu(bool * is_open)
 {
 

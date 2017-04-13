@@ -102,6 +102,7 @@ public:
   	*/
 	virtual void SceneInformationPopUp(bool* is_open);
 	 
+	virtual void Render(RenderTexture* leftEyeTexture, RenderTexture* rightEyeTexture, D3D* device, Camera* camera, RenderTexture *depthMap[], Light* light[], vr::EVREye);
 
 private:
 

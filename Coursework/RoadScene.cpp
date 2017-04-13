@@ -122,3 +122,7 @@ void RoadScene::GenerateDepthPass(D3D * device, Camera * camera, RenderTexture *
 void RoadScene::SceneInformationPopUp(bool * is_open)
 {
 }
+
+void RoadScene::Render(RenderTexture * leftEyeTexture, RenderTexture * rightEyeTexture, D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[], vr::EVREye)
+{
+}

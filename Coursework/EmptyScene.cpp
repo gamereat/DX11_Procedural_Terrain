@@ -85,3 +85,7 @@ void EmptyScene::GenerateDepthPass(D3D * device, Camera * camera, RenderTexture 
 void EmptyScene::SceneInformationPopUp(bool * is_open)
 {
 }
+
+void EmptyScene::Render(RenderTexture * leftEyeTexture, RenderTexture * rightEyeTexture, D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[], vr::EVREye)
+{
+}

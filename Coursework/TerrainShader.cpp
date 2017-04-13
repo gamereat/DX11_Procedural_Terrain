@@ -108,7 +108,7 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	matrixBufferDesc.StructureByteStride = 0;
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	m_device->CreateBuffer(&matrixBufferDesc, NULL, &matrixBuffer);
+	device->CreateBuffer(&matrixBufferDesc, NULL, &matrixBuffer);
 
 	// Create a texture sampler state description.
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -126,14 +126,14 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	// Create the texture sampler state.
-	m_device->CreateSamplerState(&samplerDesc, &sampleState);
+	device->CreateSamplerState(&samplerDesc, &sampleState);
 
 	// Required a CLAMPED sampler for sampling the depth map
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 	// Create the texture sampler state.
-	m_device->CreateSamplerState(&samplerDesc, &sampleStateClamp);
+	device->CreateSamplerState(&samplerDesc, &sampleStateClamp);
 
 
 
@@ -146,7 +146,7 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	faultLineBufferDesc.StructureByteStride = 0;
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	m_device->CreateBuffer(&faultLineBufferDesc, NULL, &faultLineBuffer);
+	device->CreateBuffer(&faultLineBufferDesc, NULL, &faultLineBuffer);
 
 
 	// Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
@@ -158,7 +158,7 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	terrainBufferDesc.StructureByteStride = 0;
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	m_device->CreateBuffer(&terrainBufferDesc, NULL, &terrainGenerationBuffer);
+	device->CreateBuffer(&terrainBufferDesc, NULL, &terrainGenerationBuffer);
 
 	
 	// Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
@@ -170,7 +170,7 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	terrainTexturingBufferDesc.StructureByteStride = 0;
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	m_device->CreateBuffer(&terrainTexturingBufferDesc, NULL, &terrainTexturingBuffer);
+	device->CreateBuffer(&terrainTexturingBufferDesc, NULL, &terrainTexturingBuffer);
 
 	// Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
 	fractalBrowningNoiseDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -181,7 +181,7 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	fractalBrowningNoiseDesc.StructureByteStride = 0;
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	m_device->CreateBuffer(&fractalBrowningNoiseDesc, NULL, &fractionalBrowningNoiseBuffer);
+	device->CreateBuffer(&fractalBrowningNoiseDesc, NULL, &fractionalBrowningNoiseBuffer);
 
 
 	// Setup light buffer
@@ -195,7 +195,7 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	lightBufferDesc.StructureByteStride = 0;
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	m_device->CreateBuffer(&lightBufferDesc, NULL, &lightBuffer);
+	device->CreateBuffer(&lightBufferDesc, NULL, &lightBuffer);
 
 	// Setup the description of the camera dynamic constant buffer that is in the vertex shader.
 	secondaryLightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -206,7 +206,7 @@ void TerrainShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	secondaryLightBufferDesc.StructureByteStride = 0;
 
 	// Create the camera constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	m_device->CreateBuffer(&secondaryLightBufferDesc, NULL, &secondaryLightBuffer);
+	device->CreateBuffer(&secondaryLightBufferDesc, NULL, &secondaryLightBuffer);
 
 
 }

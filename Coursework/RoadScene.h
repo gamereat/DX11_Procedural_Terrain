@@ -86,6 +86,7 @@ public:
 	Scene information pop up will tell the user about the current scene
 	*/
 	virtual void SceneInformationPopUp(bool* is_open);
+	virtual void Render(RenderTexture* leftEyeTexture, RenderTexture* rightEyeTexture, D3D* device, Camera* camera, RenderTexture *depthMap[], Light* light[], vr::EVREye);
 
 private:
 	LineMesh* lineMesh;

@@ -47,7 +47,7 @@ void DepthShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 	matrixBufferDesc.StructureByteStride = 0;
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	m_device->CreateBuffer(&matrixBufferDesc, NULL, &matrixBuffer);
+	device->CreateBuffer(&matrixBufferDesc, NULL, &matrixBuffer);
 
 }
 

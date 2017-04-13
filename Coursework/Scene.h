@@ -5,6 +5,7 @@
 #include "../DXFramework/Camera.h"
 #include "../DXFramework/Timer.h"
 #include "Sound.h"
+#include "../OpenVR/openvr.h"
 /*
 A base scene interface to allow for different scene to be loaded
 */
@@ -44,7 +45,10 @@ public:
 	@param depthmap			The Render textures to be used for depths maps from the given lights 
 	@param lights			The lights within the scene 
 	*/
-	virtual void Render(RenderTexture* renderTexture, D3D* device, Camera* camera, RenderTexture *depthMap[], Light* light[]) = 0;
+	virtual void Render(RenderTexture* renderTexture, D3D* device, Camera* camera, RenderTexture *depthMap[], Light* light[] ) = 0;
+
+	virtual void Render(RenderTexture* leftEyeTexture, RenderTexture* rightEyeTexture, D3D* device, Camera* camera, RenderTexture *depthMap[], Light* light[], vr::EVREye) = 0;
+
 
 
 	/*

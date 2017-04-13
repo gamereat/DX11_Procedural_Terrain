@@ -2,7 +2,7 @@
 #include "../imgui/imgui.h"
 #include "../ApplicationSettings.h"
 #include <random>
-
+#include "VRD3D.h"
 #include  <algorithm>
 TerrainScene::TerrainScene(string sceneName)
 	: Scene(sceneName)
@@ -931,6 +931,95 @@ void TerrainScene::WaterSettings(bool * is_open)
 		
 		ImGui::End();
 	};
+}
+
+void TerrainScene::Render(RenderTexture * leftEyeTexture, RenderTexture * rightEyeTexture, D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[], vr::EVREye eye)
+{
+
+ 
+	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrixs;
+
+		// Set the render target to be the render to texture.
+		leftEyeTexture->SetRenderTarget(device->GetDeviceContext());
+
+		// Clear the render to texture.
+		leftEyeTexture->ClearRenderTarget(device->GetDeviceContext(), 0.0f, 0.0f, 1.0f, 1.0f);
+
+		 
+	//device->GetProjectionMatrix(projectionMatrix);
+
+	VRD3D* vrD3d = (VRD3D*)device;
+	projectionMatrix = vrD3d->GetCurrentViewProjectionMatrix(vr::Eye_Left);
+
+	ID3D11ShaderResourceView* depthMaps[NUM_LIGHTS];
+
+	for (int i = 0; i < NUM_LIGHTS; i++)
+	{
+
+		depthMaps[i] = depthMap[i]->GetShaderResourceView();
+
+	}
+	// 
+	// Send geometry data (from mesh)
+	worldMatrix = terrain->SendData(device->GetDeviceContext());
+	// Set shader parameters (matrices and texture)
+	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(),
+		terrainGeneration, faultLineSettings, terrainTextureSettings, fbnSettings, light, depthMaps,
+		lowTexture->GetTexture(), mediumTexture->GetTexture(), hightTexture->GetTexture(), underWaterTexture->GetTexture(), hitByWaterTexture->GetTexture());
+	// Render object (combination of mesh geometry and shader process
+	terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
+
+
+
+	worldMatrix = waterMesh->SendData(device->GetDeviceContext());
+
+	waveShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, waterMesh->GetTexture(), waveInfo);
+
+	waveShader->Render(device->GetDeviceContext(), waterMesh->GetIndexCount());
+
+
+
+
+ 
+	// Set the render target to be the render to texture.
+	rightEyeTexture->SetRenderTarget(device->GetDeviceContext());
+
+	// Clear the render to texture.
+	rightEyeTexture->ClearRenderTarget(device->GetDeviceContext(), 0.0f, 0.0f, 1.0f, 1.0f);
+	 
+	//device->GetProjectionMatrix(projectionMatrix);
+
+	 
+	projectionMatrix = vrD3d->GetCurrentViewProjectionMatrix(vr::Eye_Right);
+
+ 
+	for (int i = 0; i < NUM_LIGHTS; i++)
+	{
+
+		depthMaps[i] = depthMap[i]->GetShaderResourceView();
+
+	}
+	// 
+	// Send geometry data (from mesh)
+	worldMatrix = terrain->SendData(device->GetDeviceContext());
+	// Set shader parameters (matrices and texture)
+	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(),
+		terrainGeneration, faultLineSettings, terrainTextureSettings, fbnSettings, light, depthMaps,
+		lowTexture->GetTexture(), mediumTexture->GetTexture(), hightTexture->GetTexture(), underWaterTexture->GetTexture(), hitByWaterTexture->GetTexture());
+	// Render object (combination of mesh geometry and shader process
+	terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
+
+
+
+	worldMatrix = waterMesh->SendData(device->GetDeviceContext());
+
+	waveShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, waterMesh->GetTexture(), waveInfo);
+
+	waveShader->Render(device->GetDeviceContext(), waterMesh->GetIndexCount());
+
+	device->SetBackBufferRenderTarget();
+
+
 }
 
  

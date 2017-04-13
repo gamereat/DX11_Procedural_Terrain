@@ -145,13 +145,13 @@ D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscre
 	featureLevel = D3D_FEATURE_LEVEL_11_0;
 
 	// Create the swap chain, Direct3D device, and Direct3D device context.
-	D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, NULL, &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain, &m_device, NULL, &m_deviceContext);
+	D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, NULL, &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain, &device, NULL, &m_deviceContext);
 		
 	// Get the pointer to the back buffer.
 	m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBufferPtr);
 	
 	// Create the render target view with the back buffer pointer.
-	m_device->CreateRenderTargetView(backBufferPtr, NULL, &m_renderTargetView);
+	device->CreateRenderTargetView(backBufferPtr, NULL, &m_renderTargetView);
 	
 	// Release pointer to the back buffer as we no longer need it.
 	backBufferPtr->Release();
@@ -179,7 +179,7 @@ D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscre
 	
  
 	// Create the texture for the depth buffer using the filled out description.
-	m_device->CreateTexture2D(&depthBufferDesc, NULL, &m_depthStencilBuffer);
+	device->CreateTexture2D(&depthBufferDesc, NULL, &m_depthStencilBuffer);
 	
 	// Initialize the description of the stencil state.
 	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
@@ -206,7 +206,7 @@ D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscre
 	depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
 	// Create the depth stencil state.
-	m_device->CreateDepthStencilState(&depthStencilDesc, &m_depthStencilState);
+	device->CreateDepthStencilState(&depthStencilDesc, &m_depthStencilState);
 	
 	// Set the depth stencil state.
 	m_deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
@@ -220,7 +220,7 @@ D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscre
 	depthStencilViewDesc.Texture2D.MipSlice = 0;
 
 	// Create the depth stencil view.
-	m_device->CreateDepthStencilView(m_depthStencilBuffer, &depthStencilViewDesc, &m_depthStencilView);
+	device->CreateDepthStencilView(m_depthStencilBuffer, &depthStencilViewDesc, &m_depthStencilView);
 	
 	// Bind the render target view and depth stencil buffer to the output render pipeline.
 	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
@@ -238,14 +238,14 @@ D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscre
 	rasterDesc.SlopeScaledDepthBias = 0.0f;
 
 	// Create the rasterizer state from the description we just filled out.
-	m_device->CreateRasterizerState(&rasterDesc, &m_rasterState);
+	device->CreateRasterizerState(&rasterDesc, &m_rasterState);
 	
 	// Now set the rasterizer state.
 	m_deviceContext->RSSetState(m_rasterState);
 
 	//create raster state with wireframe enabled
 	rasterDesc.FillMode = D3D11_FILL_WIREFRAME;
-	m_device->CreateRasterizerState(&rasterDesc, &m_rasterStateWF);
+	device->CreateRasterizerState(&rasterDesc, &m_rasterStateWF);
 
 	// Setup the viewport for rendering.
 	viewport.Width = (float)screenWidth;
@@ -293,7 +293,7 @@ D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscre
 	depthDisabledStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
 	// Create the state using the device.
-	m_device->CreateDepthStencilState(&depthDisabledStencilDesc, &m_depthDisabledStencilState);
+	device->CreateDepthStencilState(&depthDisabledStencilDesc, &m_depthDisabledStencilState);
 	
 	// Clear the blend state description.
 	ZeroMemory(&blendStateDescription, sizeof(D3D11_BLEND_DESC));
@@ -309,13 +309,13 @@ D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscre
 	blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
 
 	// Create the blend state using the description.
-	m_device->CreateBlendState(&blendStateDescription, &m_alphaEnableBlendingState);
+	device->CreateBlendState(&blendStateDescription, &m_alphaEnableBlendingState);
 	
 	// Modify the description to create an alpha disabled blend state description.
 	blendStateDescription.RenderTarget[0].BlendEnable = FALSE;
 
 	// Create the second blend state using the description.
-	m_device->CreateBlendState(&blendStateDescription, &m_alphaDisableBlendingState);
+	device->CreateBlendState(&blendStateDescription, &m_alphaDisableBlendingState);
 
 
 
@@ -384,10 +384,10 @@ D3D::~D3D()
 		m_deviceContext = 0;
 	}
 
-	if (m_device)
+	if (device)
 	{
-		m_device->Release();
-		m_device = 0;
+		device->Release();
+		device = 0;
 	}
 
 	if (m_swapChain)
@@ -447,7 +447,7 @@ void D3D::EndScene()
 
 ID3D11Device* D3D::GetDevice()
 {
-	return m_device;
+	return device;
 }
 
 

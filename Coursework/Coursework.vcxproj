@@ -128,6 +128,7 @@
     <ClCompile Include="TerrainShader.cpp" />
     <ClCompile Include="TextureShader.cpp" />
     <ClCompile Include="VerticalBlurShader.cpp" />
+    <ClCompile Include="VRD3D.cpp" />
     <ClCompile Include="WaterShader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +164,7 @@
     <ClInclude Include="TerrainShader.h" />
     <ClInclude Include="TextureShader.h" />
     <ClInclude Include="VerticalBlurShader.h" />
+    <ClInclude Include="VRD3D.h" />
     <ClInclude Include="WaterShader.h" />
   </ItemGroup>
   <ItemGroup>

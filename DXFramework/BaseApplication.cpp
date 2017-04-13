@@ -1,6 +1,7 @@
 // BaseApplication.cpp
 // Base application functionality for inheritnace.
 #include "BaseApplication.h"
+#include "../Coursework/VRD3D.h"
 	
 bool	BaseApplication::directxSetting = false;
 bool	BaseApplication::imguiMetrics = false;
@@ -33,10 +34,10 @@ BaseApplication::~BaseApplication()
 	}
 
 	// Release the Direct3D object.
-	if (m_Direct3D)
+	if (direct3D)
 	{
-		delete m_Direct3D;
-		m_Direct3D = 0;
+		delete direct3D;
+		direct3D = 0;
 	}
 }
 
@@ -48,9 +49,11 @@ void BaseApplication::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int 
 	sHeight = screenHeight;
 
 	// Create the Direct3D object.
-	m_Direct3D = new D3D(screenWidth, screenHeight, isVsyncEnabled, hwnd, isFullScreen, screenDepth, sceenNear);
+	//direct3D = new D3D(screenWidth, screenHeight, isVsyncEnabled, hwnd, isFullScreen, screenDepth, sceenNear);
+
+	direct3D = new VRD3D(screenWidth, screenHeight, isVsyncEnabled, hwnd, isFullScreen, screenDepth, sceenNear, true);
 	// Initialize the Direct3D object.
-	if (!m_Direct3D)
+	if (!direct3D)
 	{
 		MessageBox(hwnd, L"Could not initialize DirectX 11.", L"Error", MB_OK);
 		exit(EXIT_FAILURE);
@@ -65,7 +68,7 @@ void BaseApplication::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int 
 	// Create the timer object.
 	m_Timer = new Timer();
 
-	ImGui_ImplDX11_Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext());
+	ImGui_ImplDX11_Init(hwnd, direct3D->GetDevice(), direct3D->GetDeviceContext());
 	ImGui_ImplDX11_NewFrame();
 
 }
@@ -237,7 +240,7 @@ void BaseApplication::OpenSubMenus()
 {
 
 
-	m_Direct3D->DirectXSettingsMenu(&directxSetting);
+	direct3D->DirectXSettingsMenu(&directxSetting);
 
 	if (imguiMetrics)
 	{

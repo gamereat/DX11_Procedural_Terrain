@@ -67,7 +67,7 @@ void WaterShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 	matrixBufferDesc.StructureByteStride = 0;
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	m_device->CreateBuffer(&matrixBufferDesc, NULL, &matrixBuffer);
+	device->CreateBuffer(&matrixBufferDesc, NULL, &matrixBuffer);
 
 	// Create a texture sampler state description.
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -85,7 +85,7 @@ void WaterShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	// Create the texture sampler state.
-	m_device->CreateSamplerState(&samplerDesc, &sampleState);
+	device->CreateSamplerState(&samplerDesc, &sampleState);
 
 	
 
@@ -96,7 +96,7 @@ void WaterShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 	planetDesc.MiscFlags = 0;
 	planetDesc.StructureByteStride = 0;
 
-	m_device->CreateBuffer(&planetDesc, NULL, &waterBuffer);
+	device->CreateBuffer(&planetDesc, NULL, &waterBuffer);
 
 
 	// Create the texture sampler state. 
@@ -109,7 +109,7 @@ void WaterShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 	// Create the texture sampler state.
-	m_device->CreateSamplerState(&samplerDesc, &sampleStateClamp);
+	device->CreateSamplerState(&samplerDesc, &sampleStateClamp);
 
 
 }

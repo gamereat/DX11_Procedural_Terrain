@@ -4,7 +4,7 @@
 
 BaseShader::BaseShader(ID3D11Device* device, HWND hwnd)
 {
-	m_device = device;
+	this->device = device;
 	m_hwnd = hwnd;
 }
 
@@ -80,7 +80,7 @@ void BaseShader::loadVertexShader(WCHAR* filename)
 	}
 
 	// Create the vertex shader from the buffer.
-	result = m_device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
+	result = device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
 	if (FAILED(result))
 	{
 		//return false;
@@ -116,7 +116,7 @@ void BaseShader::loadVertexShader(WCHAR* filename)
 	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
 	// Create the vertex input layout.
-	result = m_device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(),
+	result = device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(),
 		&layout);
 	if (FAILED(result))
 	{
@@ -153,7 +153,7 @@ void BaseShader::loadPixelShader(WCHAR* filename)
 	}
 
 	// Create the pixel shader from the buffer.
-	result = m_device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
+	result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
 	
 	pixelShaderBuffer->Release();
 	pixelShaderBuffer = 0;
@@ -189,7 +189,7 @@ void BaseShader::loadVertexShader(WCHAR * filename, const  char* functionEntyPoi
 	}
 
 	// Create the vertex shader from the buffer.
-	result = m_device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
+	result = device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
 	if (FAILED(result))
 	{
 		//return false;
@@ -225,7 +225,7 @@ void BaseShader::loadVertexShader(WCHAR * filename, const  char* functionEntyPoi
 	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
 	// Create the vertex input layout.
-	result = m_device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(),
+	result = device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(),
 		&layout);
 	if (FAILED(result))
 	{
@@ -262,7 +262,7 @@ void BaseShader::loadHullShader(WCHAR * filename, const  char* functionEntyPoint
 	}
 
 	// Create the hull shader from the buffer.
-	result = m_device->CreateHullShader(hullShaderBuffer->GetBufferPointer(), hullShaderBuffer->GetBufferSize(), NULL, &m_hullShader);
+	result = device->CreateHullShader(hullShaderBuffer->GetBufferPointer(), hullShaderBuffer->GetBufferSize(), NULL, &m_hullShader);
 
 	hullShaderBuffer->Release();
 	hullShaderBuffer = 0;
@@ -293,7 +293,7 @@ void BaseShader::loadDomainShader(WCHAR * filename, const  char* functionEntyPoi
 	}
 
 	// Create the domain shader from the buffer.
-	result = m_device->CreateDomainShader(domainShaderBuffer->GetBufferPointer(), domainShaderBuffer->GetBufferSize(), NULL, &m_domainShader);
+	result = device->CreateDomainShader(domainShaderBuffer->GetBufferPointer(), domainShaderBuffer->GetBufferSize(), NULL, &m_domainShader);
 
 	domainShaderBuffer->Release();
 	domainShaderBuffer = 0;
@@ -324,7 +324,7 @@ void BaseShader::loadGeometryShader(WCHAR * filename, const  char* functionEntyP
 	}
 
 	// Create the domain shader from the buffer.
-	m_device->CreateGeometryShader(geometryShaderBuffer->GetBufferPointer(), geometryShaderBuffer->GetBufferSize(), NULL, &m_geometryShader);
+	device->CreateGeometryShader(geometryShaderBuffer->GetBufferPointer(), geometryShaderBuffer->GetBufferSize(), NULL, &m_geometryShader);
 
 	geometryShaderBuffer->Release();
 	geometryShaderBuffer = 0;
@@ -355,7 +355,7 @@ void BaseShader::loadPixelShader(WCHAR * filename, const  char* functionEntyPoin
 	}
 
 	// Create the pixel shader from the buffer.
-	result = m_device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
+	result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
 
 	pixelShaderBuffer->Release();
 	pixelShaderBuffer = 0;
@@ -386,7 +386,7 @@ void BaseShader::loadHullShader(WCHAR* filename)
 	}
 
 	// Create the hull shader from the buffer.
-	result = m_device->CreateHullShader(hullShaderBuffer->GetBufferPointer(), hullShaderBuffer->GetBufferSize(), NULL, &m_hullShader);
+	result = device->CreateHullShader(hullShaderBuffer->GetBufferPointer(), hullShaderBuffer->GetBufferSize(), NULL, &m_hullShader);
 	
 	hullShaderBuffer->Release();
 	hullShaderBuffer = 0;
@@ -417,7 +417,7 @@ void BaseShader::loadDomainShader(WCHAR* filename)
 	}
 
 	// Create the domain shader from the buffer.
-	result = m_device->CreateDomainShader(domainShaderBuffer->GetBufferPointer(), domainShaderBuffer->GetBufferSize(), NULL, &m_domainShader);
+	result = device->CreateDomainShader(domainShaderBuffer->GetBufferPointer(), domainShaderBuffer->GetBufferSize(), NULL, &m_domainShader);
 	
 	domainShaderBuffer->Release();
 	domainShaderBuffer = 0;
@@ -448,7 +448,7 @@ void BaseShader::loadGeometryShader(WCHAR* filename)
 	}
 
 	// Create the domain shader from the buffer.
-	m_device->CreateGeometryShader(geometryShaderBuffer->GetBufferPointer(), geometryShaderBuffer->GetBufferSize(), NULL, &m_geometryShader);
+	device->CreateGeometryShader(geometryShaderBuffer->GetBufferPointer(), geometryShaderBuffer->GetBufferSize(), NULL, &m_geometryShader);
 
 	geometryShaderBuffer->Release();
 	geometryShaderBuffer = 0;
