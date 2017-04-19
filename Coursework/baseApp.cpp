@@ -190,7 +190,7 @@ bool BaseApp::Render()
 	// Render current scene  
 	currentScene->Render(vrDevice->leftEye, vrDevice->rightEye, direct3D, m_Camera, depthTextures, lights, vr::Eye_Left);
 
- 
+	
 
 	// disable wireframe mode for the post processing effects
 	if (direct3D->getWireFrameMode())
@@ -307,5 +307,7 @@ void BaseApp::CreateMainMenuBar()
 	}
 
 }
+
+ 
 
 

@@ -57,6 +57,8 @@ protected:
 	*/
 	void CreateMainMenuBar();
 	
+
+	void RenderToSceenVR(vr::Hmd_Eye nEye);
 private:
 	
 	VRD3D* vrDevice;

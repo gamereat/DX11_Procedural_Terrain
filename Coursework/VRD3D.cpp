@@ -130,7 +130,6 @@ XMMATRIX VRD3D::GetCurrentViewProjectionMatrix(vr::Hmd_Eye nEye)
 
 void VRD3D::RenderToVR()
 {
-	m_swapChain->Present(0, 0);
 
 
 	vr::Texture_t leftEyeTexture = { leftEye->GetTexture(), vr::API_DirectX, vr::ColorSpace_Auto };

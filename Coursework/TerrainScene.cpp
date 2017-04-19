@@ -961,7 +961,7 @@ void TerrainScene::Render(RenderTexture * leftEyeTexture, RenderTexture * rightE
 	}
 	// 
 	// Send geometry data (from mesh)
-	worldMatrix = terrain->SendData(device->GetDeviceContext());
+	//worldMatrix = terrain->SendData(device->GetDeviceContext());
 	// Set shader parameters (matrices and texture)
 	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(),
 		terrainGeneration, faultLineSettings, terrainTextureSettings, fbnSettings, light, depthMaps,
@@ -971,11 +971,11 @@ void TerrainScene::Render(RenderTexture * leftEyeTexture, RenderTexture * rightE
 
 
 
-	worldMatrix = waterMesh->SendData(device->GetDeviceContext());
+	//worldMatrix = waterMesh->SendData(device->GetDeviceContext());
 
-	waveShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, waterMesh->GetTexture(), waveInfo);
+	//waveShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, waterMesh->GetTexture(), waveInfo);
 
-	waveShader->Render(device->GetDeviceContext(), waterMesh->GetIndexCount());
+	//waveShader->Render(device->GetDeviceContext(), waterMesh->GetIndexCount());
 
 
 
@@ -1001,7 +1001,7 @@ void TerrainScene::Render(RenderTexture * leftEyeTexture, RenderTexture * rightE
 	}
 	// 
 	// Send geometry data (from mesh)
-	worldMatrix = terrain->SendData(device->GetDeviceContext());
+	//worldMatrix = terrain->SendData(device->GetDeviceContext());
 	// Set shader parameters (matrices and texture)
 	terrainShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrain->GetTexture(),
 		terrainGeneration, faultLineSettings, terrainTextureSettings, fbnSettings, light, depthMaps,
@@ -1011,11 +1011,11 @@ void TerrainScene::Render(RenderTexture * leftEyeTexture, RenderTexture * rightE
 
 
 
-	worldMatrix = waterMesh->SendData(device->GetDeviceContext());
+//	worldMatrix = waterMesh->SendData(device->GetDeviceContext());
 
-	waveShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, waterMesh->GetTexture(), waveInfo);
+//	waveShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, waterMesh->GetTexture(), waveInfo);
 
-	waveShader->Render(device->GetDeviceContext(), waterMesh->GetIndexCount());
+//	waveShader->Render(device->GetDeviceContext(), waterMesh->GetIndexCount());
 
 	device->SetBackBufferRenderTarget();
 
