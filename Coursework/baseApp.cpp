@@ -105,12 +105,12 @@ void BaseApp::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHe
 {
 	// Call super init function (required!)
 	BaseApplication::init(hinstance, hwnd, screenWidth, screenHeight, in);
- 
+
 	// Init sound information 
 	sound = new Sound();
-	sound->Init(L"../res/DiscoMedusae.mp3");
-	sound->setPause(true);
- 	
+	//sound->Init(L"../res/DiscoMedusae.mp3");
+	//sound->setPause(true);
+
 	// Load in Scenes 
 	terrainScene = new TerrainScene("Terrain Scene");
 	terrainScene->Init(hwnd, direct3D->GetDevice(), direct3D->GetDeviceContext(), sound);
@@ -139,7 +139,7 @@ void BaseApp::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHe
 	}
 
 	// Load in textures
-	orthoMeshNormalScaled = new OrthoMesh("Normal OrthoMesh",direct3D->GetDevice(), direct3D->GetDeviceContext(), screenWidth, screenHeight, 0, 0);
+	orthoMeshNormalScaled = new OrthoMesh("Normal OrthoMesh", direct3D->GetDevice(), direct3D->GetDeviceContext(), screenWidth, screenHeight, 0, 0);
 	upScaleTexture = new  RenderTexture(direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
 	sceneTexture = new  RenderTexture(direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
 
@@ -156,46 +156,6 @@ void BaseApp::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHe
 	// set my lights up correcntly for current scene
 	currentScene->ResetLights(lights);
 
-	// Loading the SteamVR Runtime
-	vr::EVRInitError eError = vr::VRInitError_None;
-
-	pHMD = vr::VR_Init(&eError, vr::VRApplication_Scene);
-
-	if (eError != vr::VRInitError_None)
-	{
-		pHMD = NULL;
-	}
-	uint32_t width = ApplicationSettings::screenWidth;
-	uint32_t hieght = ApplicationSettings::screenHeight;
-
-	pHMD->GetRecommendedRenderTargetSize(&width, &hieght);
-
-	ApplicationSettings::screenWidth = width;
-	ApplicationSettings::screenHeight = hieght;
-
-
-	leftEye = new RenderTexture(direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
-	rightEye = new RenderTexture(direct3D->GetDevice(), screenWidth, screenHeight, sceenNear, screenDepth);
-
-	//m_nRenderWidth /= 2;
-	//m_nRenderHeight /= 4;
-
-	//clientWidth = m_nRenderWidth;
-	//clientHeight = m_nRenderHeight;
-
-
-	  pRenderModels = (vr::IVRRenderModels *)vr::VR_GetGenericInterface(vr::IVRRenderModels_Version, &eError);
-	if (!pRenderModels)
-	{
-		pHMD = NULL;
-		vr::VR_Shutdown();
-
-	}
-
-	if (!vr::VRCompositor())
-	{
- 
-	}
 }
 
 bool BaseApp::Frame()
@@ -278,69 +238,13 @@ void BaseApp::RenderToScreen()
 	textureShader->Render(direct3D->GetDeviceContext(), orthoMeshNormalScaled->GetIndexCount());
 
 
-	vr::Texture_t leftEyeTexture = { upScaleTexture->GetTexture(), vr::API_DirectX, vr::ColorSpace_Auto };
-	vr::EVRCompositorError error1 =	vr::VRCompositor()->Submit(vr::Eye_Left, &leftEyeTexture);
-	vr::EVRCompositorError error2 =	vr::VRCompositor()->Submit(vr::Eye_Right, &leftEyeTexture);
-	
-	
-	UpdateHMDMatrixPose();
-	
+
 	direct3D->TurnZBufferOn();
 
 	// Present the rendered scene to the screen.
 	direct3D->EndScene();
 
 
-}
-void  BaseApp::UpdateHMDMatrixPose()
-{
-	if (!pHMD)
-		return;
-
-	vr::VRCompositor()->WaitGetPoses(rTrackedDevicePose, vr::k_unMaxTrackedDeviceCount, NULL, 0);
-
-	iValidPoseCount = 0;
-	strPoseClasses = "";
-	for (int nDevice = 0; nDevice < vr::k_unMaxTrackedDeviceCount; ++nDevice)
-	{
-		if (rTrackedDevicePose[nDevice].bPoseIsValid)
-		{
-			iValidPoseCount++;
-			rmat4DevicePose[nDevice] = ConvertSteamVRMatrixToXMMartix(rTrackedDevicePose[nDevice].mDeviceToAbsoluteTracking);
-			if (rDevClassChar[nDevice] == 0)
-			{
-				switch (pHMD->GetTrackedDeviceClass(nDevice))
-				{
-				case vr::TrackedDeviceClass_Controller:        rDevClassChar[nDevice] = 'C'; break;
-				case vr::TrackedDeviceClass_HMD:               rDevClassChar[nDevice] = 'H'; break;
-				case vr::TrackedDeviceClass_Invalid:           rDevClassChar[nDevice] = 'I'; break;
-				case vr::TrackedDeviceClass_Other:             rDevClassChar[nDevice] = 'O'; break;
-				case vr::TrackedDeviceClass_TrackingReference: rDevClassChar[nDevice] = 'T'; break;
-				default:                                       rDevClassChar[nDevice] = '?'; break;
-				}
-			}
-			strPoseClasses += rDevClassChar[nDevice];
-		}
-	}
-
-	if (rTrackedDevicePose[vr::k_unTrackedDeviceIndex_Hmd].bPoseIsValid)
-	{
-		mat4HMDPose = XMMatrixInverse( nullptr,rmat4DevicePose[vr::k_unTrackedDeviceIndex_Hmd]);
-	}
-	else
-	{
-	}
-}
-
-XMMATRIX BaseApp::ConvertSteamVRMatrixToXMMartix(const vr::HmdMatrix34_t &matPose)
-{
-	XMMATRIX matrixObj(
-		matPose.m[0][0], matPose.m[1][0], matPose.m[2][0], 0.0,
-		matPose.m[0][1], matPose.m[1][1], matPose.m[2][1], 0.0,
-		matPose.m[0][2], matPose.m[1][2], matPose.m[2][2], 0.0,
-		matPose.m[0][3], matPose.m[1][3], matPose.m[2][3], 1.0f
-	);
-	return matrixObj;
 }
 
 
