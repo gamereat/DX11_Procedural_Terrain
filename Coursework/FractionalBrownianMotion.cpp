@@ -17,7 +17,8 @@ FractionalBrownianMotion::~FractionalBrownianMotion()
 {
 }
 
-float FractionalBrownianMotion::FBm(float x, float y, int octaves, float pelinFrequancy, bool useAbs,bool useRidged)
+
+float FractionalBrownianMotion::FBm(float x, float y, int octaves, float pelinFrequancy, bool useAbs,bool useRidged,float seed)
 {
 	float output = 0.f;
 	float denom = 0.f;
@@ -29,17 +30,17 @@ float FractionalBrownianMotion::FBm(float x, float y, int octaves, float pelinFr
 
 		if (useAbs)
 		{
-			output += (amplitude * abs( SimplexNoise::noise(x * frequency, y * frequency, pelinFrequancy)));
+			output += (amplitude * abs( SimplexNoise::noise(x * frequency, y * frequency, seed,pelinFrequancy)));
 
 		}
 		else if (useRidged)
 		{
-			output += 1- (amplitude * abs(SimplexNoise::noise(x * frequency, y * frequency, pelinFrequancy)));
+			output += 1- (amplitude * abs(SimplexNoise::noise(x * frequency, y * frequency, seed, pelinFrequancy)));
 
 		}
 		else
 		{
-			output += (amplitude * SimplexNoise::noise(x * frequency, y * frequency, pelinFrequancy));
+			output += (amplitude * SimplexNoise::noise(x * frequency, y * frequency, seed, pelinFrequancy));
 		}
 		denom += amplitude;
 

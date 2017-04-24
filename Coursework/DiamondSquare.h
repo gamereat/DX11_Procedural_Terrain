@@ -40,7 +40,7 @@ private :
 	@param seed				The seed for the given terrain
 
 	*/
- 	static void Diamonds(float * heightMap, int sideLength, int halfSide,float range, int fullHight, int seed);
+ 	static void Square(float * heightMap, int sideLength, int halfSide,float range, int fullHight, int seed);
 
 
 
@@ -55,7 +55,7 @@ private :
 	@param seed				The seed for the given terrain
 
 	*/
-	static void Squares(float * heightMap, int sideLength, int halfSide, float range, int fullHight, int seed);
+	static void Diamond(float * heightMap, int sideLength, int halfSide, float range, int fullHight, int seed);
 
 
 

@@ -88,11 +88,9 @@ bool Terrain::CalculateNormals()
 {
 	int i, j, index1, index2, index3, index, count;
 	float vertex1[3], vertex2[3], vertex3[3], vector1[3], vector2[3], sum[3], length;
-	VectorType* normals;
+	VectorType* normals = new VectorType[(terrainHeight - 1) * (terrainWidth - 1)];
 
-
-	// Create a temporary array to hold the un-normalized normal vectors.
-	normals = new VectorType[(terrainHeight - 1) * (terrainWidth - 1)];
+ 
 	if (!normals)
 	{
 		return false;
@@ -739,7 +737,7 @@ void Terrain::GenerateSimplexNoiseNoise()
 
 			this->terrainArray[index].x = (float)i;
 
-			this->terrainArray[index].y = (float)SimplexNoise::noise(j, i, perlinNoiseFrequancy) * perlinNoiseHeightRange;
+			this->terrainArray[index].y = (float)SimplexNoise::noise(j  , i,  perlinNoiseFrequancy) * perlinNoiseHeightRange;
 
 		
 			this->terrainArray[index].z = (float)j;
@@ -768,7 +766,7 @@ void Terrain::GenerateFBmNoise()
 
 			this->terrainArray[index].x = (float)i;
 
-			this->terrainArray[index].y = (float)FractionalBrownianMotion::FBm(i, j,fBMSettings->fbnOctaves, fBMSettings->fbnPelinNoiseFreqnacy, fBMSettings->useAbs, fBMSettings->useRidged) * fBMSettings->heightScale;
+			this->terrainArray[index].y = (float)FractionalBrownianMotion::FBm(i, j,fBMSettings->fbnOctaves, fBMSettings->fbnPelinNoiseFreqnacy, fBMSettings->useAbs, fBMSettings->useRidged, *randomSeed) * fBMSettings->heightScale;
 
 
 			this->terrainArray[index].z = (float)j;

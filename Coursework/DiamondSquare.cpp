@@ -17,15 +17,18 @@ void DiamondSquare::DiamondSquareAlgorithm(float * heightMap, float width, float
 	for (int sideLength = width - 1; sideLength >= 2; sideLength /= 2)
 	{
 		int halfSide = sideLength / 2;
-		// Complete square part then dimaond 
-		Squares(heightMap, sideLength, halfSide, range, height, seed);
-		Diamonds(heightMap, sideLength, halfSide, range, height, seed);
+		// Complete diamond part then square 
+		Diamond(heightMap, sideLength, halfSide, range, height, seed);
+		Square(heightMap, sideLength, halfSide, range, height, seed);
 		
 		// half the range for next iteration
 		range /= 2;
 	}
- }
-void DiamondSquare::Diamonds(float * heightMap, int sideLength, int halfSide, float range, int fullHight, int seed)
+ 
+}
+
+
+void DiamondSquare::Square(float * heightMap, int sideLength, int halfSide, float range, int fullHight, int seed)
 {
 
 
@@ -65,7 +68,7 @@ void DiamondSquare::Diamonds(float * heightMap, int sideLength, int halfSide, fl
 }
 
  
-void DiamondSquare::Squares(float * heightMap, int sideLength, int halfSide, float range, int fullHight, int seed)
+void DiamondSquare::Diamond(float * heightMap, int sideLength, int halfSide, float range, int fullHight, int seed)
 {
 
 

@@ -149,13 +149,13 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 
 	diamondSquareSettings->widthOfGrid = 129;
 	diamondSquareSettings->heightOfGrid = 129;
- 	fbnSettings->fbnAmplitude = 1.0f;
-	fbnSettings->fbnFrequancy = 8.2f;
-	fbnSettings->fbnLacunarity = 0.5f;
-	fbnSettings->fbnPersistence = 3.64f;
 	fbnSettings->fbnOctaves = 8;
-	fbnSettings->heightScale = 6.5;
-	fbnSettings->fbnPelinNoiseFreqnacy  = .9f;
+ 	fbnSettings->fbnAmplitude = 1.0f;
+	fbnSettings->fbnLacunarity = 0.5f;
+	fbnSettings->fbnFrequancy = 8.2f;
+	fbnSettings->fbnPelinNoiseFreqnacy = 0.55f;
+	fbnSettings->fbnPersistence = 6.99f;
+	fbnSettings->heightScale = 10.1f;
 
 	waveInfo = new WavetBufferType();
 	waveInfo->amplutude = 0.2;
@@ -175,12 +175,12 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	terrain->faultLineSettings = faultLineSettings;
 	terrain->fBMSettings = fbnSettings;
 
-	terrainTextureSettings->topHighPercentage = 75;
+	terrainTextureSettings->topHighPercentage = 90;
 
 	terrainTextureSettings->midHighPercentage = 25;
 
 
-	terrainTextureSettings->blendingPercentage = 5;
+	terrainTextureSettings->blendingPercentage = 15;
   }
 
 void TerrainScene::Update(Timer * timer)
@@ -465,12 +465,12 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 	terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
 
 
-
 	worldMatrix = waterMesh->SendData(device->GetDeviceContext());
 
 	waveShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, waterMesh->GetTexture(), waveInfo);
 
 	waveShader->Render(device->GetDeviceContext(), waterMesh->GetIndexCount());
+
 
 	device->SetBackBufferRenderTarget();
 
@@ -824,7 +824,12 @@ void TerrainScene::TerrainSettings(bool * is_open)
 					regenerateFBM = true;
 				}
 			}
-
+			if (ImGui::Button("Regeneraete FBM "))
+			{
+				std::random_device rd;
+				seed = rd();
+				regenerateFBM = true;
+			}
  		}
 		else if (terrainGeneration->terrainGenerationType == TerrainGeneration::DiamondSquare)
 		{

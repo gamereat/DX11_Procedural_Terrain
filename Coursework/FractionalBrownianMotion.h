@@ -17,6 +17,7 @@ public:
 	~FractionalBrownianMotion();
 
 
+
 	static inline void set_frequency(float freq) { frequency = freq; };
 	static inline void set_amplitude(float amp) { amplitude = amp; };
 	static inline void set_lacunarity(float  newLacunarity) { lacunarity = newLacunarity; };
@@ -38,10 +39,11 @@ public:
 	@param pelinFrequancy	the frequancy values used for perlin noise function
 	@param useAbs			if terrain should use ABS
 	@param useRidged		if terrain should use 1-ABS
+	@param seed				seed of terrain
 	@returns noise values between -1 and 1
 
 	*/
-	static float FBm(float x, float y, int octaves,float pelinFrequancy, bool useAbs = false, bool useRidged = false);
+	static float FBm(float x, float y, int octaves, float pelinFrequancy, bool useAbs, bool useRidged, float seed);
 private:
 	/*
 	The frequency of fbm
