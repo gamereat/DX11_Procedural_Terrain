@@ -2,6 +2,11 @@
 #include "PostProcessingBase.h"
 #include "ChromaticAberrationsShader.h"
 
+
+/*
+Adds a varrible chromatic aberration effect accross the screen
+
+*/
 class PostProcessingChromaticAberration :
 	public PostProcessingBase
 {

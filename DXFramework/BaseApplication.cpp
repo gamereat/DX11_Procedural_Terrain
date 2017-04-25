@@ -82,7 +82,6 @@ bool BaseApplication::Frame()
 		return false;
 	}
 
-	ImGui::ShowTestWindow();
 	if (ImGui::BeginMainMenuBar())
 	{
 

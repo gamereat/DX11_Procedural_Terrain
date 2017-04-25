@@ -493,10 +493,10 @@ void TerrainScene::MenuOptions()
 			waterMenuOpen = waterMenuOpen ? false : true;
 
 		}
-		if (ImGui::MenuItem("Sound Details"))
+	/*	if (ImGui::MenuItem("Sound Details"))
 		{
 			soundOptions = soundOptions ? false : true;
-		}
+		}*/
 		if (ImGui::BeginMenu("Objects"))
 		{
 			if (ImGui::MenuItem(terrain->getName().c_str()))
@@ -754,12 +754,6 @@ void TerrainScene::TerrainSettings(bool * is_open)
 			}
 
 			if (ImGui::SliderFloat("Displacement Value ", &faultLineSettings->startingDisplacement, 0, 5))
-			{
-				regenerateFaultLines = true;
-
-			}
-
-			if (ImGui::SliderFloat("Minimum displacement value ", &faultLineSettings->minimumDisplacement, 0, faultLineSettings->startingDisplacement))
 			{
 				regenerateFaultLines = true;
 

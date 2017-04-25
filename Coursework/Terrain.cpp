@@ -910,38 +910,38 @@ void Terrain::GenereatParticleDeposition()
 							break;
 						}
 
-						//case 4:
-						//{
-						//	if (j < terrainHeight && i >0)
-						//	{
-						//		terrainArray[(terrainHeight * j + 2) + i -2].y++;
-						//	}
-						//	break;
-						//}
-						//case 5:
-						//{
-						//	if (j > 1 && i >0)
-						//	{
-						//		terrainArray[(terrainHeight * j - 2) + i -2].y++;
-						//	}
-						//	break;
-						//}
-						//case 6:
-						//{
-						//	if (i > 1 && j >1)
-						//	{
-						//		terrainArray[(terrainHeight * j-2) + i - 2].y++;
-						//	}
-						//	break;
-						//}
-						//case 7:
-						//{
-						//	if (i < terrainHeight && j >1)
-						//	{
-						//		terrainArray[(terrainHeight * j - 2) + i + 2].y++;
-						//	}
-						//	break;
-						//}
+						case 4:
+						{
+							if (j < terrainHeight && i >0)
+							{
+								terrainArray[(terrainHeight * j + 1) + i +1].y++;
+							}
+							break;
+						}
+						case 5:
+						{
+							if (j > 1 && i >0)
+							{
+								terrainArray[(terrainHeight * j - 1) + i -1].y++;
+							}
+							break;
+						}
+						case 6:
+						{
+							if (i > 1 && j >1)
+							{
+								terrainArray[(terrainHeight * j -1) + i +1].y++;
+							}
+							break;
+						}
+						case 7:
+						{
+							if (i < terrainHeight && j >1)
+							{
+								terrainArray[(terrainHeight * j +1) + i -1].y++;
+							}
+							break;
+						}
 						}
 
  

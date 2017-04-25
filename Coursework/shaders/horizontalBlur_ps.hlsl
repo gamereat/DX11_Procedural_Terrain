@@ -53,7 +53,7 @@ float4 main(InputType input) : SV_TARGET
 	int textPos = 0;
  	for (int i = -input.neightRange; i < input.neightRange + 1; i++)
 	{
-		colour += shaderTexture.Sample(SampleType, input.textCordsPos[textPos]) * weight[input.neightRange  -((int)(5 + input.neightRange)/2)];
+		//colour += shaderTexture.Sample(SampleType, input.textCordsPos[textPos]) * weight[input.neightRange  -((int)(5 + input.neightRange)/2)];
 		 
 
 

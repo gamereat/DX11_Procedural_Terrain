@@ -105,7 +105,10 @@ public:
 
 private:
 
-
+	/*
+	
+	@param is_open
+	*/
 	void LSystemMenu(bool* is_open);
 
 	lSystemTypes currentLSystem;
