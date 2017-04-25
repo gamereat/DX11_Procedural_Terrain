@@ -68,10 +68,7 @@ void LSystemScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 	cube = new CubeMesh("Dynamic Cube texture", device, deviceContext, L"../res/bunny.png", 100);
 
 	// Create L-System rules 
-	std::unordered_map<char, std::string> drangonCurveRules{
-		{ 'X',"X+YF+" },
-		{ 'Y',"-FX-Y" },
-	};
+
 
 	std::unordered_map<char, std::string> kochCurveRules{
 		{ 'F',"F+F-F-F+F" },
@@ -125,7 +122,10 @@ void LSystemScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 		{ 'F',"F-F+F-F-F" },
 
 	};
-
+	std::unordered_map<char, std::string> drangonCurveRules{
+		{ 'X',"X+YF+" },
+		{ 'Y',"-FX-Y" },
+	};
 	// init L-System
 	lSystem[currentLSystem] = new LSystem(device,14,3, drangonCurveRules,"FX");
 	lSystem[currentLSystem + 1] = new LSystem(device, 5, 4, kochCurveRules, "F", XMINT2(10, 350));
@@ -299,7 +299,7 @@ void LSystemScene::LSystemMenu(bool * is_open)
 
 
 
-		if (ImGui::Combo("Terrain Generation Type", &currentLS, lSystemTypes_str, IM_ARRAYSIZE(lSystemTypes_str)))
+		if (ImGui::Combo("L-System Type", &currentLS, lSystemTypes_str, IM_ARRAYSIZE(lSystemTypes_str)))
 		{
 			currentLSystem = (lSystemTypes)currentLS;
 			lSystem[currentLSystem]->textureNeedingUpdated = true;

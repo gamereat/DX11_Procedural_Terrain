@@ -28,11 +28,12 @@ public:
 	@param projectionMatrix projection Matrix for current Scene
 	@param texture			Texture for the water
 	@param waveInfo			Wave data to be sent to shader
+	@param waveAlphaBend	alpha belding to be used on wave
 	
 	*/
  	void SetShaderParameters(ID3D11DeviceContext * deviceContext,
 		const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix,
-		const XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * texture ,WavetBufferType* waveInfo);
+		const XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * texture ,WavetBufferType* waveInfo, float waveAlphaBend);
  
 	/*
 	@param deviceContext	Device context for directx window
@@ -78,6 +79,10 @@ private:
 	*/
 	ID3D11Buffer* waterBuffer;
 
+	/*
+	Buffer for water texture setting to send to GPU
+	*/
+	ID3D11Buffer* waterTextureBuffer;
 
 };
 

@@ -165,78 +165,13 @@ void LSystem::updateNetwork(std::string product )
 
 						}
 					}
-					//int index = newpoints[i].x * SIZE_OF_NETWORK + newpoints[i].y  +1  ;
-					//nextBuf[index] = 0.0f;
-					//index++;
-					//nextBuf[index] = 0.0f;
-					//index++;
-
-					//nextBuf[index] = 0.0f;
-					//index++;
+ 
 
 
 				}
 				points.insert(points.end(), newpoints.begin(), newpoints.end());
-				//points.push_back(newPoint);
-				currentPos = newPoint;
+ 				currentPos = newPoint;
 			}
-//
-//			if (currentDirection == 0)
-//			{
-//				std::vector<XMINT2> newpoints = BresenhamAlgorithm(currentPos, XMINT2(currentPos.x,currentPos.y +4));
-//
-//
-//				points.insert(points.end(), newpoints.begin(), newpoints.end());
-//				currentPos.y += 4;
-//
-//			//	points.push_back(XMINT2(startPointX, startPointY++));
-//			//	points.push_back(XMINT2(startPointX, startPointY++));
-//
-//			//	points.push_back(XMINT2(startPointX, startPointY++));
-//			//	points.push_back(XMINT2(startPointX, startPointY++));
-//			}
-//			else if (currentDirection == 1)
-//			{
-//				std::vector<XMINT2> newpoints = BresenhamAlgorithm(currentPos, XMINT2(currentPos.x -4, currentPos.y ));
-//
-//
-//				points.insert(points.end(), newpoints.begin(), newpoints.end());
-//				currentPos.x -= 4;
-//
-//				//points.push_back(XMINT2(startPointX--, startPointY));
-//				//points.push_back(XMINT2(startPointX--, startPointY));
-//				//points.push_back(XMINT2(startPointX--, startPointY));
-//				//points.push_back(XMINT2(startPointX--, startPointY));
-//			}
-//			else if (currentDirection == 2)
-//			{
-//
-//				std::vector<XMINT2> newpoints = BresenhamAlgorithm(currentPos, XMINT2(currentPos.x, currentPos.y - 4));
-//
-//
-//				points.insert(points.end(), newpoints.begin(), newpoints.end());
-//				currentPos.y -= 4;
-//
-//				//points.push_back(XMINT2(startPointX, startPointY--));
-//				//points.push_back(XMINT2(startPointX, startPointY--));
-//				//points.push_back(XMINT2(startPointX, startPointY--));
-//				//points.push_back(XMINT2(startPointX, startPointY--));
-//			}
-//			else if (currentDirection == 3)
-//			{
-//				std::vector<XMINT2> newpoints = BresenhamAlgorithm(currentPos, XMINT2(currentPos.x +4, currentPos.y ));
-//
-//
-//				points.insert(points.end(), newpoints.begin(), newpoints.end());
-//				currentPos.x += 4;
-///*
-//				points.push_back(XMINT2(startPointX++, startPointY));
-//				points.push_back(XMINT2(startPointX++, startPointY));
-//				points.push_back(XMINT2(startPointX++, startPointY));
-//				points.push_back(XMINT2(startPointX++, startPointY));*/
-//			}
-////
-		 
 
 		}
 		if (currentDirection == 4)
@@ -320,19 +255,10 @@ void LSystem::GenterateUpdateTexture(ID3D11Device *myDevice)
 		for (int j = 0; j < height; j++)
 		{
 
-			//int index = i + SIZE_OF_NETWORK * (j + SIZE_OF_NETWORK * k);
+ 
+		   float colour = 1.0f;
 
-			//
-			   float colour = 1.0f;
-
-
-	/*		for (auto pt : points)
-			{
-				if (pt.x == i && pt.y == j)
-				{
-					colour = 0.0f;
-				}
-		}*/
+ 
 			buf[index] = nextBuf[index];;
 			index++;
 			buf[index] = nextBuf[index];;;
@@ -341,21 +267,6 @@ void LSystem::GenterateUpdateTexture(ID3D11Device *myDevice)
 			buf[index] = nextBuf[index];;;
 			index++;
 
-				//buf[index] = nextBuf[index];
-
-				//for (auto pt : points)
-				//{
-				//	if (pt.x == i && pt.y == j)
-				//	{
-				//		colour = 0.0f;
-				//	}
-				//}
-
- 
-		//		
- 		//		buf[index + (1*SIZE_OF_NETWORK)] = nextBuf[index + (1 * SIZE_OF_NETWORK)];
- 		//		buf[index + (2 * SIZE_OF_NETWORK)] = nextBuf[index + (2 * SIZE_OF_NETWORK)];
- 			
  
 		}
  	}
@@ -481,141 +392,5 @@ std::vector<XMINT2> LSystem::BresenhamAlgorithm(XMINT2 startPos, XMINT2 endPos)
 		}
 
 	}
-
-
-
-
-	//----------------
-	//const bool steep = (fabs(endPos.y - startPos.y) > fabs(endPos.x - startPos.x));
-	//if (steep)
-	//{
-	//	std::swap(startPos.x, startPos.y);
-	//	std::swap(endPos.x, endPos.y);
-	//}
-
-	//if (startPos.x > endPos.x)
-	//{
-	//	std::swap(startPos.x, endPos.x);
-	//	std::swap(startPos.y, endPos.y);
-	//}
-
-	//const float dx = endPos.x - startPos.x;
-	//const float dy = fabs(endPos.y - startPos.y);
-
-	//float error = dx / 2.0f;
-	//const int ystep = (startPos.y < endPos.y) ? 1 : -1;
-	//int y = (int)startPos.y;
-
-	//const int maxX = (int)endPos.x;
-
-	//for (int x = (int)startPos.x; x<maxX; x++)
-	//{
-	//	if (steep)
-	//	{
-	//		newPoints.push_back(XMINT2(x, y));
-
- //		}
-	//	else
-	//	{
-	//		newPoints.push_back(XMINT2(x, y));
-
- //		}
-
-	//	error -= dy;
-	//	if (error < 0)
-	//	{
-	//		y += ystep;
-	//		error += dx;
-	//	}
-	//}
-	////	------------------
-
-
- //
-
-//-----
-
-	//int x, y, dx, dy, dx1, dy1, px, py, xe, ye, i;
-	//dx = endPos.x - startPos.x;
-	//dy = endPos.y - startPos.y;
-	//dx1 = fabs(dx);
-	//dy1 = fabs(dy);
-	//px = 2 * dy1 - dx1;
-	//py = 2 * dx1 - dy1;
-	//if (dy1 <= dx1)
-	//{
-	//	if (dx >= 0)
-	//	{
-	//		x = startPos.x;
-	//		y = startPos.y;
-	//		xe = endPos.x;
-	//	}
-	//	else
-	//	{
-	//		x = endPos.x;
-	//		y = endPos.y;
-	//		xe = startPos.x;
-	//	}
-	//	newPoints.push_back(XMINT2(x, y));
-	//	for (i = 0; x<xe; i++)
-	//	{
-	//		x = x + 1;
-	//		if (px<0)
-	//		{
-	//			px = px + 2 * dy1;
-	//		}
-	//		else
-	//		{
-	//			if ((dx<0 && dy<0) || (dx>0 && dy>0))
-	//			{
-	//				y = y + 1;
-	//			}
-	//			else
-	//			{
-	//				y = y - 1;
-	//			}
-	//			px = px + 2 * (dy1 - dx1);
-	//		}
-	//		newPoints.push_back(XMINT2(x, y));
-	//	}
-	//}
-	//else
-	//{
-	//	if (dy >= 0)
-	//	{
-	//		x = startPos.x;
-	//		y = startPos.y;
-	//		ye = endPos.y;
-	//	}
-	//	else
-	//	{
-	//		x = endPos.x;
-	//		y = endPos.y;
-	//		ye = startPos.y;
-	//	}
-	//	newPoints.push_back(XMINT2(x, y));
-	//	for (i = 0; y < ye; i++)
-	//	{
-	//		y = y + 1;
-	//		if (py <= 0)
-	//		{
-	//			py = py + 2 * dx1;
-	//		}
-	//		else
-	//		{
-	//			if ((dx < 0 && dy < 0) || (dx > 0 && dy > 0))
-	//			{
-	//				x = x + 1;
-	//			}
-	//			else
-	//			{
-	//				x = x - 1;
-	//			}
-	//			py = py + 2 * (dx1 - dy1);
-	//		}
-	//		newPoints.push_back(XMINT2(x, y));
-	//	}
-	//}
-	//
 	return newPoints;
 }

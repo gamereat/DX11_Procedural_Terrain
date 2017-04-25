@@ -19,6 +19,8 @@ const int MAX_FAULTLINE_ITERATIONS = 2500;
 const int NUMBER_LSYSTEMS = 11;
 
 
+
+
 //http://algorithmicbotany.org/papers/abop/abop-ch1.pdf
 enum lSystemTypes
 {
@@ -36,6 +38,11 @@ enum lSystemTypes
 };
 
 
+struct WaveTextureBuffer
+{
+	float alphaValue;
+	XMFLOAT3 padding;
+};
 
 
 struct waveSettings

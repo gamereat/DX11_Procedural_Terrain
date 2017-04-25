@@ -354,6 +354,11 @@ float4 main(InputType input) : SV_TARGET
 
     float heightPercentage = ((input.position3D.y - minHightOfTerrain) / (maxHightOfHill - minHightOfTerrain)) * 100;
 
+
+    
+
+
+
     if (heightPercentage + blendingPercentage > topHighPercentage)
     {
         if (heightPercentage > topHighPercentage)
@@ -422,54 +427,13 @@ float4 main(InputType input) : SV_TARGET
         }
    
     }
-    else
-    {
-  //     
 
-   
-        float heightPercentage = ((input.position3D.y) / (maxHightOfHill)) * 100;
-        
- 
-
-     //   float slope = 1.0f - input.normal.y;
-  
-     //   float blendAmount = 0;
-     //// Determine which texture to use based on height.
-     //   if (slope > 0.2)
-     //   {
-     //       blendAmount = slope / 0.2f;
-     //       textureColor = lerp(lowTexColour, medTexColour, blendAmount);
-     //      // textureColor = highTexColour;
-
-     //   }
-     //   //else
-     //   //{
-     //   //    textureColor = lowTexColour;
-            
-     //   //}
- 	
-     //   if ((slope < 0.7) && (slope >= 0.2f))
-     //   {
-     //       blendAmount = (slope - 0.2f) * (1.0f / (0.7f - 0.2f));
-     //       textureColor = lerp(medTexColour, highTexColour, blendAmount);
-     //   }
-
-     //   if (slope >= 0.7)
-     //   {
-     //       textureColor = highTexColour;
-     //   }
-
-
-    }
-
-  //  float heightPercentage = ((input.position3D.y) / (maxHightOfHill)) * 100;
 
 
 
 	// Combine the light and texture color.
     color = color * textureColor;
-
-
+     
 
     if (enableLighting==1)
     {

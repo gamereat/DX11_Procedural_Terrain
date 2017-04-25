@@ -174,7 +174,7 @@ OutputType main(InputType input)
             case 0:
 	    {	
                     input.position.y = FaultLineDisplacement(input.position.x, input.position.z);
-                    output.normal = CaculateNormalMapFaultLineDisplacement(input.position.xyz);
+
                     break;
                 }
 	    // FractionalBrowningNoise

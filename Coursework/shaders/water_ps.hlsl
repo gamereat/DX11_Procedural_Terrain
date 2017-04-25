@@ -5,6 +5,11 @@
 Texture2D texture0 : register(t0);
 SamplerState Sampler0 : register(s0);
 
+cbuffer LightBuffer : register(cb0)
+{
+    float alphaBlendValue;
+    float3 padding;
+}
 struct InputType
 {
     float4 position : SV_POSITION;
@@ -22,6 +27,6 @@ float4 main(InputType input) : SV_TARGET
     // Sample the pixel color from the texture using the sampler at this texture coordinate location.
     textureColor = texture0.Sample(Sampler0, input.tex);
 
-    textureColor.a = 0.1f;
+    textureColor.a = alphaBlendValue;
     return textureColor;
 }

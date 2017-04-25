@@ -196,5 +196,10 @@ private:
 	Terrain mesh
 	*/
 	Terrain* terrain;
+
+	/*
+	What level of alpha water should be at 
+	*/
+	float waterAlphaValue;
 };
 

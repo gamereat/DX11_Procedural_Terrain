@@ -181,6 +181,9 @@ void TerrainScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * 
 
 
 	terrainTextureSettings->blendingPercentage = 15;
+
+
+	waterAlphaValue = 0.8f;
   }
 
 void TerrainScene::Update(Timer * timer)
@@ -454,7 +457,10 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 		depthMaps[i] = depthMap[i]->GetShaderResourceView();
 
 	}
-	// 
+
+
+
+
 	// Send geometry data (from mesh)
 	worldMatrix = 	terrain->SendData(device->GetDeviceContext());
 	// Set shader parameters (matrices and texture)
@@ -465,12 +471,16 @@ void TerrainScene::Render(RenderTexture * renderTexture, D3D * device, Camera * 
 	terrainShader->Render(device->GetDeviceContext(), terrain->GetIndexCount());
 
 
+	device->TurnOnAlphaBlending();	
+
+
 	worldMatrix = waterMesh->SendData(device->GetDeviceContext());
 
-	waveShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, waterMesh->GetTexture(), waveInfo);
+	waveShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, waterMesh->GetTexture(), waveInfo, waterAlphaValue);
 
 	waveShader->Render(device->GetDeviceContext(), waterMesh->GetIndexCount());
-
+	device->TurnOffAlphaBlending();
+	
 
 	device->SetBackBufferRenderTarget();
 
@@ -747,7 +757,7 @@ void TerrainScene::TerrainSettings(bool * is_open)
 
 
 
-			if (ImGui::SliderInt("Number of Iterations", &faultLineSettings->numberOfIterations, 0, MAX_FAULTLINE_ITERATIONS))
+			if (ImGui::SliderInt("Number of Iterations", &faultLineSettings->numberOfIterations, 2, MAX_FAULTLINE_ITERATIONS))
 			{
 				regenerateFaultLines = true;
 
@@ -862,7 +872,10 @@ void TerrainScene::TerrainSettings(bool * is_open)
 			ImGui::Separator();
 
 
+
 			ImGui::Text("Terrain Texture Settings");
+
+			ImGui::DragFloat("Water Alpha Blending Values", &waterAlphaValue, 0.1f, 0.0f, 1.0f);
 
 			ImGui::Text("How many times the texture will repeat");
 			if (ImGui::DragInt("TerrainTexturing", &terrainTextureSettings->textureTiling))

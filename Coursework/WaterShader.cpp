@@ -43,6 +43,12 @@ WaterShader::~WaterShader()
 		layout = nullptr;
 	}
 
+	if (waterTextureBuffer)
+	{
+		waterTextureBuffer->Release();
+		waterTextureBuffer = nullptr;
+	}
+
 	//Release base shader components
 	BaseShader::~BaseShader();
 }
@@ -52,7 +58,8 @@ void WaterShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 {
 	D3D11_BUFFER_DESC matrixBufferDesc;
 	D3D11_SAMPLER_DESC samplerDesc;
-	D3D11_BUFFER_DESC planetDesc;	 
+	D3D11_BUFFER_DESC waveDesc;
+	D3D11_BUFFER_DESC waveTexDesc;
 
 	// Load (+ compile) shader files
 	loadVertexShader(vsFilename);
@@ -89,16 +96,25 @@ void WaterShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 
 	
 
-	planetDesc.Usage = D3D11_USAGE_DYNAMIC;
-	planetDesc.ByteWidth = sizeof(WavetBufferType);
-	planetDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	planetDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	planetDesc.MiscFlags = 0;
-	planetDesc.StructureByteStride = 0;
+	waveDesc.Usage = D3D11_USAGE_DYNAMIC;
+	waveDesc.ByteWidth = sizeof(WavetBufferType);
+	waveDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	waveDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	waveDesc.MiscFlags = 0;
+	waveDesc.StructureByteStride = 0;
 
-	m_device->CreateBuffer(&planetDesc, NULL, &waterBuffer);
+	m_device->CreateBuffer(&waveDesc, NULL, &waterBuffer);
 
 
+	waveTexDesc.Usage = D3D11_USAGE_DYNAMIC;
+	waveTexDesc.ByteWidth = sizeof(WavetBufferType);
+	waveTexDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	waveTexDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	waveTexDesc.MiscFlags = 0;
+	waveTexDesc.StructureByteStride = 0;
+
+	m_device->CreateBuffer(&waveTexDesc, NULL, &waterTextureBuffer);
+	
 	// Create the texture sampler state. 
 
 	 
@@ -130,12 +146,13 @@ void WaterShader::InitShader(WCHAR* vsFilename, WCHAR* hsFilename, WCHAR* dsFile
 
 void WaterShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, 
 	const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * texture, 
-	WavetBufferType * waveInfo)
+	WavetBufferType * waveInfo, float waveAlphaBend)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	MatrixBufferType* dataPtr;
 	WavetBufferType* waterPtr;
+	WaveTextureBuffer* waveTexPtr;
 	unsigned int bufferNumber;
 	XMMATRIX tworld, tview, tproj;
 
@@ -187,6 +204,21 @@ void WaterShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const
 	//	 Now set the constant buffer in the vertex shader with the updated values.
 	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &waterBuffer);
 	
+
+	deviceContext->Map(waterTextureBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	waveTexPtr = (WaveTextureBuffer*)mappedResource.pData;
+
+
+	waveTexPtr->alphaValue = waveAlphaBend;
+	waveTexPtr->padding = XMFLOAT3(0, 0, 0);
+	//	 Unlock the constant buffer.
+	deviceContext->Unmap(waterTextureBuffer, 0);
+
+	//	 Set the position of the constant buffer in the vertex shader.
+	bufferNumber = 1;
+
+	//	 Now set the constant buffer in the vertex shader with the updated values.
+	deviceContext->PSSetConstantBuffers(0, 1, &waterTextureBuffer);
 	// Set shader texture resource in the pixel shader.
 	deviceContext->PSSetShaderResources(0, 1, &texture);
 
