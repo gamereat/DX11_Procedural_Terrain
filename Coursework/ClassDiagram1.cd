@@ -1,0 +1,1040 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ApplicationSettings" Collapsed="true">
+    <Position X="19.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAhACAAAAACAAAAAAAAAAAAgBAACQIAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\ApplicationSettings.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BaseApp" Collapsed="true">
+    <Position X="21.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIABAAQAAAEgAAAAAAACYCAIFAAIAABgKAAAAQAE=</HashCode>
+      <FileName>baseApp.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LineMesh" Collapsed="true">
+    <Position X="25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAABEAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>LineMesh.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LSystem" Collapsed="true">
+    <Position X="26.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEKAAogAAgAgAgAQAgAAEAEEAwAEAAAAACBAAII=</HashCode>
+      <FileName>LSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sound" Collapsed="true">
+    <Position X="21.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAgAAIIAAAAAAAAEAAAAAAAgIAJAACAAAABAA=</HashCode>
+      <FileName>Sound.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Terrain" Collapsed="true">
+    <Position X="23.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EETgFKAkQJAAAGggAAAABAgNAAACAojCIEQAEgIgYII=</HashCode>
+      <FileName>Terrain.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChromaticAberrationsShader" Collapsed="true">
+    <Position X="23.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgIAAAAAAAAAgAAAAAAAEAAAAAABAAAABAAAAAAgAA=</HashCode>
+      <FileName>ChromaticAberrationsShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ColourShader" Collapsed="true">
+    <Position X="25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIgAAAAAEAAAAAAAAAEAAAAAAAAAAAAAABAAAAAAgAA=</HashCode>
+      <FileName>ColourShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DepthShader" Collapsed="true">
+    <Position X="28.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AJgAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>DepthShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HorizontalBlurShader" Collapsed="true">
+    <Position X="19.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgIAAIAAAAAAAAAAAAAgEAAAAAAAAAAABAEAAAAgAA=</HashCode>
+      <FileName>HorizontalBlurShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LSystemShader" Collapsed="true">
+    <Position X="28.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIgAAAQAAAAAAAAAAAAAAAAAAAAAAAAAABAIQAAAgAA=</HashCode>
+      <FileName>LSystemShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TerrainShader" Collapsed="true">
+    <Position X="25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIgAAAQACAAAAQAABAAAAAAAAQAIEAAAABABAAAIgAA=</HashCode>
+      <FileName>TerrainShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TextureShader" Collapsed="true">
+    <Position X="26.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIgAAAQAACAAAAAAAAAAAAAAAAgAAAAAABAAAAAAgAA=</HashCode>
+      <FileName>TextureShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VerticalBlurShader" Collapsed="true">
+    <Position X="28.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgIAAAAAAAAAAQAAAAAgEAAAAAAAAAAQBAAAAAAgAA=</HashCode>
+      <FileName>VerticalBlurShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WaterShader" Collapsed="true">
+    <Position X="30.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIgABAQAAAAAAAgAAAAAAAAAAAACAAAAAJAAAAAIgAA=</HashCode>
+      <FileName>WaterShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LSystemScene">
+    <Position X="1.25" Y="9.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>ACUAoEAAAIIGAQAIAAABQAAAAAAAgAIAABACACABCAA=</HashCode>
+      <FileName>LSystemScene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene">
+    <Position X="3.75" Y="4.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AQQAAAAAICAGAAAAgAABAAAAQAAEAAIAABACAAAAAgA=</HashCode>
+      <FileName>Scene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TerrainScene">
+    <Position X="5" Y="9.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAUAIQiAAKAuQSAAAMwRKAAQgBAAGAIAIBASgABMhBA=</HashCode>
+      <FileName>TerrainScene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DiamondSquare" Collapsed="true">
+    <Position X="30.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAADAAAAAIAAAAAAAAAAAAAAgAAAAAgAAAAAAA=</HashCode>
+      <FileName>DiamondSquare.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FractionalBrownianMotion" Collapsed="true">
+    <Position X="32" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAggAAiEAECAAAAAiAARAAAAUAAAQ=</HashCode>
+      <FileName>FractionalBrownianMotion.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimplexNoise" Collapsed="true">
+    <Position X="19.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAYAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>SimplexNoise.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PostProcessingChromaticAberration" Collapsed="true">
+    <Position X="0.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAABAIAAABAAAAgAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>PostProcessingChromaticAberration.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PostProcessingGaussianBlur" Collapsed="true">
+    <Position X="2.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAQEAAAEIAAAAAAAgABAAAAAAAAACAAABQCCAAgAIA=</HashCode>
+      <FileName>PostProcessingGaussianBlur.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PostProccessingDownScale" Collapsed="true">
+    <Position X="5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAIAAAAAAAAAAAAAABAAAAAAAAAgAAABAAAAAAAAA=</HashCode>
+      <FileName>PostProccessingDownScale.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PostProccessingUpScale" Collapsed="true">
+    <Position X="7.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAJAAAAAAAABAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>PostProccessingUpScale.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PostProcessing" Collapsed="true">
+    <Position X="32" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAGAAQgQAEAAACAACiIAAAACAAAAAAg=</HashCode>
+      <FileName>PostProcessing.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PostProcessingBase" Collapsed="true">
+    <Position X="3.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQEAAAAhAAIAAAEAAEAAABAAAAgCAAA=</HashCode>
+      <FileName>PostProcessingBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="minIni" Collapsed="true">
+    <Position X="30.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACACAAAAACAAAAAAAAAgAQAAAAAAAAAAIAkEACIAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\MiniIni\minIni.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="vr::IVRSystem" Collapsed="true">
+    <Position X="23.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>wAAAAAAgABgABgACIAAAAhEmABMAECsjxOCARGABEAU=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="vr::IVRApplications" Collapsed="true">
+    <Position X="21.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIABQACCAQAAAwAAQAgAAjAAQAAAIEAAIASAUA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="vr::IVRSettings" Collapsed="true">
+    <Position X="21.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAgAACAAAgCBAEAgBAAAAAAAAAgQAAEAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="vr::IVRChaperone" Collapsed="true">
+    <Position X="23.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAACAAAAAJgAAAAEIAAAAAAAAAAE=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="vr::IVRChaperoneSetup" Collapsed="true">
+    <Position X="25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CBAEgAAAAAAAAICEAAgQAAIKEAgEMAAAAAAAAAgAgAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="vr::IVRCompositor" Collapsed="true">
+    <Position X="26.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAACAAADCIQIAQAIBAACAAEAAAECqOAAIQAIAgg=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="vr::IVRNotifications" Collapsed="true">
+    <Position X="30.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="vr::IVROverlay" Collapsed="true">
+    <Position X="32" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>A5VgAIBoBgAiIVsgQQAcGgIZwABtABhAsESAJEEAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="vr::IVRRenderModels" Collapsed="true">
+    <Position X="19.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAggQAAAACAAAAAQBAAAJAAAAAAAAAAAACREBAAIAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="vr::IVRExtendedDisplay" Collapsed="true">
+    <Position X="28.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAIAAAAAAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="vr::COpenVRContext" Collapsed="true">
+    <Position X="26.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>wAAAEAAAAAoAAAAAIAQAAEAAMAAABQQIASAAEABACUA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="WaveTextureBuffer" Collapsed="true">
+    <Position X="19.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACABA=</HashCode>
+      <FileName>ShaderBuffers.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="waveSettings" Collapsed="true">
+    <Position X="30.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEAAAAAAAAEAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>ShaderBuffers.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="HeightMapType" Collapsed="true">
+    <Position X="32" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAQABgAQAAABA=</HashCode>
+      <FileName>ShaderBuffers.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="VectorType" Collapsed="true">
+    <Position X="23.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgARAAAAA=</HashCode>
+      <FileName>ShaderBuffers.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DimondSquareBuffer" Collapsed="true">
+    <Position X="25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>wAAAAAAIAAAAAAAAAAAAAAQQAAAAABAAAAAAAAACAAA=</HashCode>
+      <FileName>ShaderBuffers.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="FractionalBrowningNoiseBuffer" Collapsed="true">
+    <Position X="30.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACQAAAAgAAIAAAAAAAABAAAAABAAAAAAgQAACAAI=</HashCode>
+      <FileName>ShaderBuffers.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="TerrainGenerationBufferType" Collapsed="true">
+    <Position X="28.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAICAAA=</HashCode>
+      <FileName>ShaderBuffers.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="TerrainSettingTextureType" Collapsed="true">
+    <Position X="30.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAECAAgAAgAAAQAAAAAAAAAAAAAAIAABgACEEA=</HashCode>
+      <FileName>ShaderBuffers.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="FaultLineDisplacementBufferType" Collapsed="true">
+    <Position X="28.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAACAAABAAAAAAAAAAAAAAAEAAAAAAAAAAAIDAAA=</HashCode>
+      <FileName>ShaderBuffers.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="TessellationBufferType" Collapsed="true">
+    <Position X="32" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAABAEAAAAAAAAQAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>ShaderBuffers.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="WavetBufferType" Collapsed="true">
+    <Position X="32" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAEAAABAAAAAAAAAAAAAAAAACAQAAAAAAAAACAAA=</HashCode>
+      <FileName>ShaderBuffers.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="MatrixBufferType2" Collapsed="true">
+    <Position X="28.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAEAAAAABAAAAAAAAAAIAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>ShaderBuffers.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CammeraBufferType" Collapsed="true">
+    <Position X="19.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAACAAA=</HashCode>
+      <FileName>ShaderBuffers.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="LightBufferType" Collapsed="true">
+    <Position X="25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAgAAAAAAAAAAAAICAUAAAAEAAABQBAAAAAAAA=</HashCode>
+      <FileName>ShaderBuffers.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="LightBufferType2" Collapsed="true">
+    <Position X="26.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ShaderBuffers.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SoundAttribute" Collapsed="true">
+    <Position X="26.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAEAAAAAAAAAAAAAAAAAAAA4AAACAAAACAAA=</HashCode>
+      <FileName>Sound.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::HmdMatrix34_t" Collapsed="true">
+    <Position X="23.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::HmdMatrix44_t" Collapsed="true">
+    <Position X="25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::HmdVector3_t" Collapsed="true">
+    <Position X="19.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::HmdVector4_t" Collapsed="true">
+    <Position X="23.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::HmdVector3d_t" Collapsed="true">
+    <Position X="21.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::HmdVector2_t" Collapsed="true">
+    <Position X="32" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::HmdQuaternion_t" Collapsed="true">
+    <Position X="28.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAhgAQAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::HmdColor_t" Collapsed="true">
+    <Position X="21.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAQABAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::HmdQuad_t" Collapsed="true">
+    <Position X="26.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::HmdRect2_t" Collapsed="true">
+    <Position X="30.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::DistortionCoordinates_t" Collapsed="true">
+    <Position X="26.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAAAAAAAAAAAAAAAAgAAAAAgAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::Texture_t" Collapsed="true">
+    <Position X="19.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::TrackedDevicePose_t" Collapsed="true">
+    <Position X="21.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABQAAAAAAAAAAAAAAAAAAAAAABAAABAEAAAAgAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VRTextureBounds_t" Collapsed="true">
+    <Position X="28.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQBAAAAAAAAAAAAAAAAAAAAAAAAIACAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VREvent_Controller_t" Collapsed="true">
+    <Position X="28.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VREvent_Mouse_t" Collapsed="true">
+    <Position X="19.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VREvent_Scroll_t" Collapsed="true">
+    <Position X="30.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAABAAAAAI=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VREvent_TouchPadMove_t" Collapsed="true">
+    <Position X="23.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAgABAAAAAAIAAAAEAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VREvent_Notification_t" Collapsed="true">
+    <Position X="21.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VREvent_Process_t" Collapsed="true">
+    <Position X="26.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAIAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VREvent_Overlay_t" Collapsed="true">
+    <Position X="23.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VREvent_Status_t" Collapsed="true">
+    <Position X="19.75" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VREvent_Keyboard_t" Collapsed="true">
+    <Position X="32" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VREvent_Ipd_t" Collapsed="true">
+    <Position X="30.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VREvent_Chaperone_t" Collapsed="true">
+    <Position X="26.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VREvent_Reserved_t" Collapsed="true">
+    <Position X="28.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VREvent_PerformanceTest_t" Collapsed="true">
+    <Position X="25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VREvent_SeatedZeroPoseReset_t" Collapsed="true">
+    <Position X="32" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VREvent_t" Collapsed="true">
+    <Position X="21.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAAAAAAQACAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::HiddenAreaMesh_t" Collapsed="true">
+    <Position X="19.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAEAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VRControllerAxis_t" Collapsed="true">
+    <Position X="25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::Compositor_OverlaySettings" Collapsed="true">
+    <Position X="23.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAIBIAAAAACAkDEAAgAAAAQAAIAAQA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::Compositor_FrameTiming" Collapsed="true">
+    <Position X="21.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgBAAQAAAAAAAIFhAhQAAQAACEBAAAAEAABgIAAAQgA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::NotificationBitmap_t" Collapsed="true">
+    <Position X="30.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAQAAAAAAAAAAAAAgAAAAAIAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VROverlayIntersectionParams_t" Collapsed="true">
+    <Position X="25" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAEAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::VROverlayIntersectionResults_t" Collapsed="true">
+    <Position X="26.75" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAEAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::RenderModel_ComponentState_t" Collapsed="true">
+    <Position X="32" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAACAAAABAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::RenderModel_Vertex_t" Collapsed="true">
+    <Position X="25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAABAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::RenderModel_TextureMap_t" Collapsed="true">
+    <Position X="23.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAABAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::RenderModel_t" Collapsed="true">
+    <Position X="21.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAgABAAAEAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vr::RenderModel_ControllerMode_State_t" Collapsed="true">
+    <Position X="19.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="LShapedConstant" Collapsed="true">
+    <Position X="26.75" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>LSystem.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="vr::glSharedTextureHandle_t" Collapsed="true">
+    <Position X="21.5" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="vr::glInt_t" Collapsed="true">
+    <Position X="19.75" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="vr::glUInt_t" Collapsed="true">
+    <Position X="23.25" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="vr::TrackedDeviceIndex_t" Collapsed="true">
+    <Position X="30.25" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="vr::VREvent_Data_t" Collapsed="true">
+    <Position X="19.75" Y="17" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="vr::VROverlayHandle_t" Collapsed="true">
+    <Position X="23.25" Y="17" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="vr::VRNotificationId" Collapsed="true">
+    <Position X="21.5" Y="17" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="vr::VRComponentProperties" Collapsed="true">
+    <Position X="32" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="vr::TextureID_t" Collapsed="true">
+    <Position X="28.5" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="vr::Hmd_Eye" Collapsed="true">
+    <Position X="9.25" Y="20.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="vr::GraphicsAPIConvention" Collapsed="true">
+    <Position X="17.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="vr::ColorSpace" Collapsed="true">
+    <Position X="5.25" Y="20.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="vr::HmdTrackingResult" Collapsed="true">
+    <Position X="1.25" Y="20.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="vr::TrackedDeviceClass" Collapsed="true">
+    <Position X="16.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="vr::TrackingUniverseOrigin" Collapsed="true">
+    <Position X="15.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="vr::TrackedDeviceProperty" Collapsed="true">
+    <Position X="13.25" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="vr::VROverlayError" Collapsed="true">
+    <Position X="11.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="INI_CALLBACK" Collapsed="true">
+    <Position X="25" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\MiniIni\minIni.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="lSystemTypes" Collapsed="true">
+    <Position X="32" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAgAAAAAAAAAAAAQAAAAnAMAABACAAAAAAA=</HashCode>
+      <FileName>ShaderBuffers.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TerrainGeneration" Collapsed="true">
+    <Position X="21.5" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAACAAAAAAAAAAAAQAAAAAAAAAQAAAAAAAAAAE=</HashCode>
+      <FileName>ShaderBuffers.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="quote_option" Collapsed="true">
+    <Position X="19.75" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAgAgAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\MiniIni\minIni.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EGraphicsAPIConvention" Collapsed="true">
+    <Position X="17.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAIAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::ETrackedDeviceClass" Collapsed="true">
+    <Position X="16.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAEAAAAAABAAAAAAACIAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::ETrackedControllerRole" Collapsed="true">
+    <Position X="32" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAABBAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::ETrackingUniverseOrigin" Collapsed="true">
+    <Position X="15.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAIAAACQAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EVREventType" Collapsed="true">
+    <Position X="19.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CCIAgFCYEWBBBgFDAQEJET4AAxQRCNARQlBJUQEVFxE=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EDeviceActivityLevel" Collapsed="true">
+    <Position X="25" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAIAAAAAAAAEIAAAAAAABAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EVRButtonId" Collapsed="true">
+    <Position X="26.75" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAEQAAAQggAgAAAAAAAhAAAAQCgAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EVRMouseButton" Collapsed="true">
+    <Position X="21.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAQAAAAIAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EVRControllerAxisType" Collapsed="true">
+    <Position X="30.25" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAACAAABAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EVRControllerEventOutputType" Collapsed="true">
+    <Position X="32" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EVROverlayError" Collapsed="true">
+    <Position X="11.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAACAAAAAAAgAAAAQUgCBQAEUAAQEAAQACAAAAAACg=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EVRApplicationType" Collapsed="true">
+    <Position X="25" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAMAEQAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EVRNotificationError" Collapsed="true">
+    <Position X="23.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAACAAEAAAEgAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EVRApplicationError" Collapsed="true">
+    <Position X="19.75" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQARAICAAAAAIQAAAAQCAEAAAAQABgIAAAAAAAIAAYA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EVRApplicationProperty" Collapsed="true">
+    <Position X="21.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAIAACAAAAAAAEBAQAAAAAAAAAgAAEIACAACA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EVRApplicationTransitionState" Collapsed="true">
+    <Position X="23.25" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAACAAAAAAAIAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EVRSettingsError" Collapsed="true">
+    <Position X="30.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAAAAABAAQAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::ChaperoneCalibrationState" Collapsed="true">
+    <Position X="19.75" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABgCAAAAAAAACAEAAAACAABACAAAACAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EChaperoneConfigFile" Collapsed="true">
+    <Position X="21.5" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EChaperoneImportFlags" Collapsed="true">
+    <Position X="23.25" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EVRNotificationType" Collapsed="true">
+    <Position X="26.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAABAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EVRNotificationStyle" Collapsed="true">
+    <Position X="25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAACAAAAIAgIAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::VROverlayInputMethod" Collapsed="true">
+    <Position X="25" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::VROverlayTransformType" Collapsed="true">
+    <Position X="26.75" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIIAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::VROverlayFlags" Collapsed="true">
+    <Position X="23.25" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAACAAAAAAACAACAAAQAAIAAAAABEA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EGamepadTextInputMode" Collapsed="true">
+    <Position X="28.5" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAACACAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EGamepadTextInputLineMode" Collapsed="true">
+    <Position X="26.75" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EOverlayDirection" Collapsed="true">
+    <Position X="30.25" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAACAAAAAgAAAAAAAAAAAAAAAAAAABIA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EVRRenderModelError" Collapsed="true">
+    <Position X="28.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIJAAAIgQAAAABAAAACAAAAAAAAgAAABAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vr::EVRComponentProperty" Collapsed="true">
+    <Position X="28.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAIAAAAAIAAAAAAAAAAgAAAAAACAAAAAAAA=</HashCode>
+      <FileName>E:\Source\Repos\Abertay\persodral\OpenVR\openvr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

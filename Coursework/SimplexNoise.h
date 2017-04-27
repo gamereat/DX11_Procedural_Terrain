@@ -18,7 +18,7 @@ Simplex Noise Class
 
 
 */
-class SimplexNoise
+static class SimplexNoise
 {
 
 
