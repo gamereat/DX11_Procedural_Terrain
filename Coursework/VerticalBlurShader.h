@@ -4,11 +4,11 @@
 #ifndef _VERTICALBLURSHADER_H_
 #define _VERTICALBLURSHADER_H_
 
-//#include "../DXFramework/DXF.h"
-#include "../DXFramework/BaseShader.h"
+ #include "../DXFramework/BaseShader.h"
 
 using namespace std;
 using namespace DirectX;
+/* See the file "LICENSE" for the full license governing this code. */
 
 
 class VerticalBlurShader : public BaseShader

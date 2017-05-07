@@ -3,6 +3,7 @@
 #include "..\DXFramework\BaseShader.h"
 #include "Scene.h"
 #include "../DXFramework/Light.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
 
 /*

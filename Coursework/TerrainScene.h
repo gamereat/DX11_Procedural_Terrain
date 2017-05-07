@@ -16,6 +16,7 @@
 #include <string>
 #include "WaterShader.h"
 #include <random>
+/* See the file "LICENSE" for the full license governing this code. */
 
 /*
 Terrain Scene 

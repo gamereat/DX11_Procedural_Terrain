@@ -1,5 +1,6 @@
 // Horizontal blur shader
 #include "horizontalblurshader.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
 
 HorizontalBlurShader::HorizontalBlurShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, hwnd)

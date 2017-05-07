@@ -4,6 +4,7 @@
 #include "ShaderBuffers.h"
 using namespace std;
 using namespace DirectX;
+/* See the file "LICENSE" for the full license governing this code. */
 
 /*
 * Water Shdaer

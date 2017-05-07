@@ -9,6 +9,7 @@
 #include "PostProccessingUpScale.h"
 #include "../DXFramework/D3D.h"
 #include "PostProcessingGaussianBlur.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
 /*
 	Adds any post processing effects to the scene 

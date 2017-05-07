@@ -1,6 +1,7 @@
 #include "LSystem.h"
 
 #include "../imgui/imgui.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
 LSystem::LSystem(ID3D11Device *myDevice, XMINT2 startPoint)
 {

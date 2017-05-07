@@ -1,4 +1,5 @@
 #include "PostProcessingGaussianBlur.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
  
 PostProcessingGaussianBlur::PostProcessingGaussianBlur(D3D * directX3D, HWND hwnd, float downscaleValue)

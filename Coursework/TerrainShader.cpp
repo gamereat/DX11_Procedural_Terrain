@@ -1,6 +1,7 @@
 #include "TerrainShader.h"
 
- 
+/* See the file "LICENSE" for the full license governing this code. */
+
 
 TerrainShader::TerrainShader(ID3D11Device * device, HWND hwnd) : BaseShader(device, hwnd)
 {

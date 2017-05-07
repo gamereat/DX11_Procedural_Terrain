@@ -2,7 +2,8 @@
 #include <random>
 #include <math.h>
 #include <algorithm>
- 
+/* See the file "LICENSE" for the full license governing this code. */
+
 DiamondSquare::DiamondSquare()
 {
 }

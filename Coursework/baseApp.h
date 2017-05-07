@@ -13,8 +13,8 @@
 #include "Sound.h"
 #include "TextureShader.h"
 #include "../OpenVR/openvr.h"
-/*
-*/
+/* See the file "LICENSE" for the full license governing this code. */
+
 
 /*
 * Base app 

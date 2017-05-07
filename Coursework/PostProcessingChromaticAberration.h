@@ -1,6 +1,7 @@
 #pragma once
 #include "PostProcessingBase.h"
 #include "ChromaticAberrationsShader.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
 
 /*

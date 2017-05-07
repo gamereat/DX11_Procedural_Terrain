@@ -268,6 +268,8 @@ void BaseApp::CreateMainMenuBar()
 			currentScene->ResetLights(lights);
 			lSystemScene->isEnbaled = true;
 			terrainScene->isEnbaled = false;
+		
+			m_Camera->SetPosition(0.0f, 0.0f, -10.0f);
 		}
 
 		ImGui::EndMenu();

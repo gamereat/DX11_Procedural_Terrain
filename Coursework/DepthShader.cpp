@@ -1,5 +1,6 @@
 // depth shader.cpp
 #include "depthshader.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
 
 DepthShader::DepthShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, hwnd)

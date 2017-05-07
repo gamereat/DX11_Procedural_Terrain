@@ -1,3 +1,5 @@
+/* See the file "LICENSE" for the full license governing this code. */
+
 cbuffer MatrixBuffer : register(cb0)
 {
     matrix worldMatrix;

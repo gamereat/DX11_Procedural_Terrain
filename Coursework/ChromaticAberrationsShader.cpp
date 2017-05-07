@@ -1,5 +1,6 @@
 #include "ChromaticAberrationsShader.h"
 
+/* See the file "LICENSE" for the full license governing this code. */
 
 
 ChromaticAberrationsShader::ChromaticAberrationsShader(ID3D11Device * device, HWND hwnd)

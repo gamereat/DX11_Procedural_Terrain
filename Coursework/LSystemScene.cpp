@@ -1,5 +1,6 @@
 #include "LSystemScene.h"
 #include "../imgui/imgui.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
 
 LSystemScene::LSystemScene(string sceneName)

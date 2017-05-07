@@ -1,5 +1,4 @@
-// Colour pixel/fragment shader
-// Basic fragment shader outputting a colour
+/* See the file "LICENSE" for the full license governing this code. */
 
 
 

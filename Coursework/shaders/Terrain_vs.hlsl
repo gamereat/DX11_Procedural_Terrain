@@ -1,5 +1,4 @@
-// texture vertex shader
-// Basic shader for rendering textured geometry
+/* See the file "LICENSE" for the full license governing this code. */
 
 cbuffer MatrixBuffer : register(cb0)
 {

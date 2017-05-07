@@ -6,6 +6,7 @@
 
 using namespace std;
 using namespace DirectX;
+/* See the file "LICENSE" for the full license governing this code. */
 
 /*
 * Texture Shader

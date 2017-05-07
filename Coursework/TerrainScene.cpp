@@ -4,6 +4,8 @@
 #include <random>
 
 #include  <algorithm>
+/* See the file "LICENSE" for the full license governing this code. */
+
 TerrainScene::TerrainScene(string sceneName)
 	: Scene(sceneName)
 {

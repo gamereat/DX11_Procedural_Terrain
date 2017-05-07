@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "bass.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
 
 struct SoundAttribute {

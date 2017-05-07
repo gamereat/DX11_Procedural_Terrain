@@ -1,4 +1,7 @@
 #pragma once
+/* See the file "LICENSE" for the full license governing this code. */
+
+
 // Based off 1d and 2d open soure code from 
 //http://weber.itn.liu.se/~stegu/simplexnoise/SimplexNoise.java
 

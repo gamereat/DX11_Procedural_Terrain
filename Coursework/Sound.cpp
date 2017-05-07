@@ -1,5 +1,8 @@
 #include "Sound.h"
 #include "../imgui/imgui.h"
+
+/* See the file "LICENSE" for the full license governing this code. */
+
   Sound::Sound()
 {
 }

@@ -5,6 +5,8 @@
 #include "SimplexNoise.h"
 #include "FractionalBrownianMotion.h"
 #include "DiamondSquare.h"
+/* See the file "LICENSE" for the full license governing this code. */
+
 Terrain::Terrain(std::string name, ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, int resolution)
 : PlaneMesh(name,device, deviceContext, textureFilename, resolution)
 {
@@ -79,6 +81,11 @@ bool Terrain::InitializeTerrain(ID3D11Device* device, int terrainWidth, int terr
 	} 
 
 
+	particleDepositionIterations = 15;
+
+
+	chanceOfNewHill = 75;
+	chanceOfRoll = 100;
 	// Initialize the vertex and index buffer that hold the geometry for the terrain.
 	InitBuffers(device); 
 	return true;

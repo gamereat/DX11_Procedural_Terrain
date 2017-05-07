@@ -1,3 +1,5 @@
+/* See the file "LICENSE" for the full license governing this code. */
+
 struct InputType
 {
     float4 position : SV_POSITION;

@@ -1,6 +1,7 @@
 #pragma once
 #include "PostProcessingBase.h"
 #include "TextureShader.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
 /*
 Post Proccessing upscaling scaling

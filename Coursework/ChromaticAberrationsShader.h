@@ -2,6 +2,7 @@
  
 #include "../DXFramework/BaseShader.h"
 
+/* See the file "LICENSE" for the full license governing this code. */
 
 using namespace std;
 using namespace DirectX;

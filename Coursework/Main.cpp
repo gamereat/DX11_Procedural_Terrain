@@ -2,6 +2,9 @@
 #include "../DXFramework/System.h"
 #include "BaseApp.h"
 #include "../ApplicationSettings.h"
+/* See the file "LICENSE" for the full license governing this code. */
+
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)
 {
  

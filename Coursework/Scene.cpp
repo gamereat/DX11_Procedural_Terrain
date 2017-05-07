@@ -3,6 +3,7 @@
 #include "../DXFramework/BaseApplication.h"
 
 #include "../ApplicationSettings.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
 Scene::Scene(std::string sceneName)
 {

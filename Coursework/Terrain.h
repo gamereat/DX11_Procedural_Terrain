@@ -4,6 +4,7 @@
 #include <d3d11.h>
  #include <stdio.h>
 #include "ShaderBuffers.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
  
 /*

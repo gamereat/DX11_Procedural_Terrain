@@ -1,5 +1,6 @@
 #include "SimplexNoise.h"
 #include <cstdint> 
+/* See the file "LICENSE" for the full license governing this code. */
 
 /*
 * FOR 1D and 2D implmenation 

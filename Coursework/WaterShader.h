@@ -2,6 +2,7 @@
 #include "..\DXFramework\BaseShader.h"
 #include "../DXFramework/Light.h"
 #include "ShaderBuffers.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
 /*
 * Water Shdaer 

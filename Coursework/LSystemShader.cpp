@@ -1,5 +1,6 @@
 // texture shader.cpp
 #include "LSystemShader.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
 
 LSystemShader::LSystemShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, hwnd)

@@ -2,6 +2,7 @@
 #include "PostProcessingBase.h"
 #include "HorizontalBlurShader.h"
 #include "VerticalBlurShader.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
 class PostProcessingGaussianBlur :
 	public PostProcessingBase

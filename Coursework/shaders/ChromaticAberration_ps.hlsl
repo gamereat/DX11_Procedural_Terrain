@@ -1,3 +1,6 @@
+/* See the file "LICENSE" for the full license governing this code. */
+
+
 Texture2D shaderTexture : register(t0);
  SamplerState SampleType : register(s0);
  

@@ -2,6 +2,7 @@
 #define _LINEMESH_H_
 
 #include "../DXFramework/BaseMesh.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
 using namespace DirectX;
 

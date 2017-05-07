@@ -1,6 +1,8 @@
-// colour vertex shader
+/* See the file "LICENSE" for the full license governing this code. */
+
 // Simple geometry pass
 // texture coordinates and normals will be ignored.
+
 
 cbuffer MatrixBuffer : register(cb0)
 {

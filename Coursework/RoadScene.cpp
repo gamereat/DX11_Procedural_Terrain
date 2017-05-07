@@ -1,5 +1,6 @@
 #include "RoadScene.h"
 
+/* See the file "LICENSE" for the full license governing this code. */
 
 
 RoadScene::RoadScene(string sceneName)

@@ -5,8 +5,8 @@
 #ifndef _HORIZONTALBLURSHADER_H_
 #define _HORIZONTALBLURSHADER_H_
 
-//#include "../DXFramework/DXF.h"
-#include "../DXFramework/BaseShader.h"
+ #include "../DXFramework/BaseShader.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
 
 using namespace std;

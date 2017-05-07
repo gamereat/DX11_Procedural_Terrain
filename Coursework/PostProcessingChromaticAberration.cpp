@@ -1,5 +1,6 @@
 #include "PostProcessingChromaticAberration.h"
 
+/* See the file "LICENSE" for the full license governing this code. */
 
 
 PostProcessingChromaticAberration::PostProcessingChromaticAberration(D3D * directX3D, HWND hwnd, float downscaleValue)

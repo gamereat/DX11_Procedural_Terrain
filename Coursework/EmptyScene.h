@@ -3,6 +3,7 @@
 #include "../DXFramework/DoubleTriangleMesh.h"
 #include "ColourShader.h"
 #include "Scene.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
 
 /*

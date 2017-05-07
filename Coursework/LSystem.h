@@ -11,6 +11,7 @@ using namespace DirectX;
 const int SIZE_OF_NETWORK = 1000;
 const int COLOUR_ON_TEXTURE = 3;
 typedef void(*LShapedConstant)(int iteration);
+/* See the file "LICENSE" for the full license governing this code. */
 
 
 /*

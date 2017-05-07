@@ -1,6 +1,7 @@
 // texture shader.cpp
 #include "colourshader.h"
 
+/* See the file "LICENSE" for the full license governing this code. */
 
 ColourShader::ColourShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, hwnd)
 {

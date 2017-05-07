@@ -1,5 +1,6 @@
 #include "EmptyScene.h"
 
+/* See the file "LICENSE" for the full license governing this code. */
 
 
 EmptyScene::EmptyScene(string sceneName)

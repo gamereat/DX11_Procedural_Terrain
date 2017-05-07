@@ -13,6 +13,7 @@
 #include "Sound.h"
 #include "TerrainShader.h"
  #include "LSystem.h"
+/* See the file "LICENSE" for the full license governing this code. */
 
 
 

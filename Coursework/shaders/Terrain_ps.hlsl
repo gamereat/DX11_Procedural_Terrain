@@ -1,5 +1,4 @@
-// Texture pixel/fragment shader
-// Basic fragment shader for rendering textured geometry
+/* See the file "LICENSE" for the full license governing this code. */
 
 
 Texture2D defaultTexture : register(t0);

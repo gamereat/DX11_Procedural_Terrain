@@ -307,7 +307,5 @@
     <None Include="Settings-Files\Graphics.ini">
       <Filter>Settings</Filter>
     </None>
-    <None Include="ClassDiagram.cd" />
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

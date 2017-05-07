@@ -5,6 +5,9 @@
 #include "../DXFramework/Camera.h"
 #include "../DXFramework/Timer.h"
 #include "Sound.h"
+
+/* See the file "LICENSE" for the full license governing this code. */
+
 /*
 A base scene interface to allow for different scene to be loaded
 */

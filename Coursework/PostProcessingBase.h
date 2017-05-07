@@ -4,6 +4,8 @@
 #include "../DXFramework/OrthoMesh.h"
 #include"../ApplicationSettings.h"
 #include "../DXFramework/D3D.h"
+/* See the file "LICENSE" for the full license governing this code. */
+
 class PostProcessingBase
 {
 public:
