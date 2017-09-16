@@ -5,7 +5,7 @@ This application shows diffrent implmentations for procedural techniques
 
 The application can be navigated using the build in Imgui gui interface
 
-(https://www.youtube.com/watch?v=3u6Kqr1FlsM&t=1s)[Video of applicaiton in action]
+[Video of applicaiton in action](https://www.youtube.com/watch?v=3u6Kqr1FlsM&t=1s)
 
 Orignally developed as part of a 3rd year procedural generation module at Abertay University . 
 
